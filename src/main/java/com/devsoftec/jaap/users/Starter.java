@@ -1,4 +1,4 @@
-package com.jaapec.users;
+package com.devsoftec.jaap.users;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

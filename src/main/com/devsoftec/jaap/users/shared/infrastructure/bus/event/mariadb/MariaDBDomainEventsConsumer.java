@@ -5,7 +5,7 @@ import com.devsoftec.jaap.users.shared.domain.Service;
 import com.devsoftec.jaap.users.shared.domain.Utils;
 import com.devsoftec.jaap.users.shared.domain.bus.event.DomainEvent;
 import com.devsoftec.jaap.users.shared.infrastructure.bus.event.DomainEventsInformation;
-import com.devsoftec.jaap.users.shared.infrastructure.event.spring.SpringApplicationEventBus;
+import com.devsoftec.jaap.users.shared.infrastructure.bus.event.spring.SpringApplicationEventBus;
 import jakarta.transaction.Transactional;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;

@@ -23,7 +23,6 @@ public class MariaDBDomainEventsConsumer {
     private final SessionFactory sessionFactory;
     private final DomainEventsInformation domainEventsInformation;
     private final SpringApplicationEventBus bus;
-    private Boolean shouldStop = false;
 
     public MariaDBDomainEventsConsumer(
             SessionFactory sessionFactory,
@@ -37,7 +36,6 @@ public class MariaDBDomainEventsConsumer {
 
     @Transactional
     public void consume() {
-        while (!shouldStop) {
             try (Session session = sessionFactory.openSession()) {
                 String sqlQuery = "SELECT id, aggregate_id, name, body, occurred_on FROM domain_events ORDER BY occurred_on LIMIT :chunk";
                 NativeQuery<Object[]> query = session.createNativeQuery(sqlQuery, Object[].class);
@@ -62,7 +60,6 @@ public class MariaDBDomainEventsConsumer {
                     }
                 }
             }
-        }
     }
 
     private void deleteEvent(String id) {
@@ -71,10 +68,6 @@ public class MariaDBDomainEventsConsumer {
             query.setParameter("id", id);
             query.executeUpdate();
         }
-    }
-
-    public void stop() {
-        shouldStop = true;
     }
 
     private void executeSubscribers(

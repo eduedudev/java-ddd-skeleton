@@ -1,25 +1,27 @@
 package com.devsoftec.jaap.users.shared.infrastructure.bus.query;
 
-import com.devsoftec.jaap.users.shared.domain.Service;
-import com.devsoftec.jaap.users.shared.domain.query.*;
 import org.springframework.context.ApplicationContext;
 
+import com.devsoftec.jaap.users.shared.domain.Service;
+import com.devsoftec.jaap.users.shared.domain.query.*;
+
 @Service
-public final class  InMemoryQueryBus implements QueryBus {
-    private final QueryHandlersInformation information;
-    private final ApplicationContext context;
+public final class InMemoryQueryBus implements QueryBus {
 
-    public InMemoryQueryBus(QueryHandlersInformation information, ApplicationContext context) {
-        this.information = information;
-        this.context     = context;
-    }
+	private final QueryHandlersInformation information;
+	private final ApplicationContext context;
 
-    @Override
-    public Response ask(Query query) throws QueryNotRegisteredError {
-        Class<? extends QueryHandler> queryHandlerClass = information.search(query.getClass());
+	public InMemoryQueryBus(QueryHandlersInformation information, ApplicationContext context) {
+		this.information = information;
+		this.context = context;
+	}
 
-        QueryHandler handler = context.getBean(queryHandlerClass);
+	@Override
+	public Response ask(Query query) throws QueryNotRegisteredError {
+		Class<? extends QueryHandler> queryHandlerClass = information.search(query.getClass());
 
-        return handler.handle(query);
-    }
+		QueryHandler handler = context.getBean(queryHandlerClass);
+
+		return handler.handle(query);
+	}
 }

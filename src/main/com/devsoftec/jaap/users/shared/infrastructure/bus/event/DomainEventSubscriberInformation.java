@@ -1,50 +1,50 @@
 package com.devsoftec.jaap.users.shared.infrastructure.bus.event;
 
+import java.util.List;
 
 import com.devsoftec.jaap.users.shared.domain.Utils;
 import com.devsoftec.jaap.users.shared.domain.bus.event.DomainEvent;
 
-import java.util.List;
-
 public final class DomainEventSubscriberInformation {
-    private final Class<?>                              subscriberClass;
-    private final List<Class<? extends DomainEvent>> subscribedEvents;
 
-    public DomainEventSubscriberInformation(
-            Class<?> subscriberClass,
-            List<Class<? extends DomainEvent>> subscribedEvents
-    ) {
-        this.subscriberClass  = subscriberClass;
-        this.subscribedEvents = subscribedEvents;
-    }
+	private final Class<?> subscriberClass;
+	private final List<Class<? extends DomainEvent>> subscribedEvents;
 
-    public Class<?> subscriberClass() {
-        return subscriberClass;
-    }
+	public DomainEventSubscriberInformation(
+		Class<?> subscriberClass,
+		List<Class<? extends DomainEvent>> subscribedEvents
+	) {
+		this.subscriberClass = subscriberClass;
+		this.subscribedEvents = subscribedEvents;
+	}
 
-    public String contextName() {
-        String[] nameParts = subscriberClass.getName().split("\\.");
+	public Class<?> subscriberClass() {
+		return subscriberClass;
+	}
 
-        return nameParts[2];
-    }
+	public String contextName() {
+		String[] nameParts = subscriberClass.getName().split("\\.");
 
-    public String moduleName() {
-        String[] nameParts = subscriberClass.getName().split("\\.");
+		return nameParts[2];
+	}
 
-        return nameParts[3];
-    }
+	public String moduleName() {
+		String[] nameParts = subscriberClass.getName().split("\\.");
 
-    public String className() {
-        String[] nameParts = subscriberClass.getName().split("\\.");
+		return nameParts[3];
+	}
 
-        return nameParts[nameParts.length - 1];
-    }
+	public String className() {
+		String[] nameParts = subscriberClass.getName().split("\\.");
 
-    public List<Class<? extends DomainEvent>> subscribedEvents() {
-        return subscribedEvents;
-    }
+		return nameParts[nameParts.length - 1];
+	}
 
-    public String formatRabbitMqQueueName() {
-        return String.format("jaap.%s.%s.%s", contextName(), moduleName(), Utils.toSnake(className()));
-    }
+	public List<Class<? extends DomainEvent>> subscribedEvents() {
+		return subscribedEvents;
+	}
+
+	public String formatRabbitMqQueueName() {
+		return String.format("jaap.%s.%s.%s", contextName(), moduleName(), Utils.toSnake(className()));
+	}
 }

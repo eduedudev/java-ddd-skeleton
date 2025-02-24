@@ -1,23 +1,24 @@
 package com.devsoftec.jaap.users.shared.domain;
 
-import com.devsoftec.jaap.users.shared.domain.bus.event.DomainEvent;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.devsoftec.jaap.users.shared.domain.bus.event.DomainEvent;
+
 public abstract class AggregateRoot {
-    private List<DomainEvent> domainEvents = new ArrayList<>();
 
-    final public List<DomainEvent> pullDomainEvents() {
-        List<DomainEvent> events = domainEvents;
+	private List<DomainEvent> domainEvents = new ArrayList<>();
 
-        domainEvents = Collections.emptyList();
+	public final List<DomainEvent> pullDomainEvents() {
+		List<DomainEvent> events = domainEvents;
 
-        return events;
-    }
+		domainEvents = Collections.emptyList();
 
-    final protected void record(DomainEvent event) {
-        domainEvents.add(event);
-    }
+		return events;
+	}
+
+	protected final void record(DomainEvent event) {
+		domainEvents.add(event);
+	}
 }

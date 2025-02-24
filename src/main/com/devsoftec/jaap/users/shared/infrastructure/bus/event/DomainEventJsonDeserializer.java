@@ -1,61 +1,62 @@
 package com.devsoftec.jaap.users.shared.infrastructure.bus.event;
 
-import com.devsoftec.jaap.users.shared.domain.Service;
-import com.devsoftec.jaap.users.shared.domain.Utils;
-import com.devsoftec.jaap.users.shared.domain.bus.event.DomainEvent;
-
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Optional;
 
+import com.devsoftec.jaap.users.shared.domain.Service;
+import com.devsoftec.jaap.users.shared.domain.Utils;
+import com.devsoftec.jaap.users.shared.domain.bus.event.DomainEvent;
+
 @Service
 public final class DomainEventJsonDeserializer {
-    private final DomainEventsInformation information;
 
-    public DomainEventJsonDeserializer(DomainEventsInformation information) {
-        this.information = information;
-    }
+	private final DomainEventsInformation information;
 
-    public DomainEvent deserialize(String body) throws ReflectiveOperationException {
-        HashMap<String, Serializable> eventData = Utils.jsonDecode(body);
-        if (eventData == null) {
-            throw new IllegalArgumentException("Invalid JSON: eventData is null");
-        }
+	public DomainEventJsonDeserializer(DomainEventsInformation information) {
+		this.information = information;
+	}
 
-        HashMap<String, Serializable> data = getMap(eventData, "data");
-        HashMap<String, Serializable> attributes = getMap(data, "attributes");
-        String type = (String) data.get("type");
+	public DomainEvent deserialize(String body) throws ReflectiveOperationException {
+		HashMap<String, Serializable> eventData = Utils.jsonDecode(body);
+		if (eventData == null) {
+			throw new IllegalArgumentException("Invalid JSON: eventData is null");
+		}
 
-        if (type == null) {
-            throw new IllegalArgumentException("Missing event type in data");
-        }
+		HashMap<String, Serializable> data = getMap(eventData, "data");
+		HashMap<String, Serializable> attributes = getMap(data, "attributes");
+		String type = (String) data.get("type");
 
-        Class<?> domainEventClass = information.forName(type);
-        DomainEvent nullInstance = (DomainEvent) domainEventClass.getConstructor().newInstance();
+		if (type == null) {
+			throw new IllegalArgumentException("Missing event type in data");
+		}
 
-        Method fromPrimitivesMethod = domainEventClass.getMethod(
-                "fromPrimitives",
-                String.class,
-                HashMap.class,
-                String.class,
-                String.class
-        );
+		Class<?> domainEventClass = information.forName(type);
+		DomainEvent nullInstance = (DomainEvent) domainEventClass.getConstructor().newInstance();
 
-        Object domainEvent = fromPrimitivesMethod.invoke(
-                nullInstance,
-                attributes.get("id").toString(),
-                attributes,
-                data.get("id").toString(),
-                data.get("occurred_on").toString()
-        );
-        return (DomainEvent) domainEvent;
-    }
+		Method fromPrimitivesMethod = domainEventClass.getMethod(
+			"fromPrimitives",
+			String.class,
+			HashMap.class,
+			String.class,
+			String.class
+		);
 
-    @SuppressWarnings("unchecked")
-    private HashMap<String, Serializable> getMap(HashMap<String, Serializable> source, String key) {
-        return Optional.ofNullable((HashMap<String, Serializable>) source.get(key))
-                .orElseThrow(() -> new IllegalArgumentException("Missing key: " + key));
-    }
+		Object domainEvent = fromPrimitivesMethod.invoke(
+			nullInstance,
+			attributes.get("id").toString(),
+			attributes,
+			data.get("id").toString(),
+			data.get("occurred_on").toString()
+		);
+		return (DomainEvent) domainEvent;
+	}
+
+	@SuppressWarnings("unchecked")
+	private HashMap<String, Serializable> getMap(HashMap<String, Serializable> source, String key) {
+		return Optional
+			.ofNullable((HashMap<String, Serializable>) source.get(key))
+			.orElseThrow(() -> new IllegalArgumentException("Missing key: " + key));
+	}
 }
-

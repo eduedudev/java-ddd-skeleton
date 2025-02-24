@@ -1,30 +1,31 @@
 package com.devsoftec.jaap.users.shared.infrastructure.config;
 
+import io.github.cdimascio.dotenv.Dotenv;
 
 import com.devsoftec.jaap.users.shared.domain.Service;
-import io.github.cdimascio.dotenv.Dotenv;
 
 @Service
 public final class Parameter {
-    private final Dotenv dotenv;
 
-    public Parameter(Dotenv dotenv) {
-        this.dotenv = dotenv;
-    }
+	private final Dotenv dotenv;
 
-    public String get(String key) throws ParameterNotExist {
-        String value = dotenv.get(key);
+	public Parameter(Dotenv dotenv) {
+		this.dotenv = dotenv;
+	}
 
-        if (null == value) {
-            throw new ParameterNotExist(key);
-        }
+	public String get(String key) throws ParameterNotExist {
+		String value = dotenv.get(key);
 
-        return value;
-    }
+		if (null == value) {
+			throw new ParameterNotExist(key);
+		}
 
-    public Integer getInt(String key) throws ParameterNotExist {
-        String value = get(key);
+		return value;
+	}
 
-        return Integer.parseInt(value);
-    }
+	public Integer getInt(String key) throws ParameterNotExist {
+		String value = get(key);
+
+		return Integer.parseInt(value);
+	}
 }

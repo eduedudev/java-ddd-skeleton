@@ -1,137 +1,143 @@
 package com.devsoftec.jaap.users.shared.infrastructure.bus.event.rabbitmq;
 
-
-import com.devsoftec.jaap.users.shared.infrastructure.bus.event.DomainEventSubscribersInformation;
-import com.devsoftec.jaap.users.shared.infrastructure.bus.event.DomainEventsInformation;
-import com.devsoftec.jaap.users.shared.infrastructure.config.Parameter;
-import com.devsoftec.jaap.users.shared.infrastructure.config.ParameterNotExist;
-
-import org.springframework.amqp.core.*;
-import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.amqp.core.*;
+import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+import com.devsoftec.jaap.users.shared.infrastructure.bus.event.DomainEventSubscribersInformation;
+import com.devsoftec.jaap.users.shared.infrastructure.bus.event.DomainEventsInformation;
+import com.devsoftec.jaap.users.shared.infrastructure.config.Parameter;
+import com.devsoftec.jaap.users.shared.infrastructure.config.ParameterNotExist;
+
 @Configuration
 public class RabbitMqEventBusConfiguration {
-    private final DomainEventSubscribersInformation domainEventSubscribersInformation;
-    private final DomainEventsInformation domainEventsInformation;
-    private final Parameter config;
-    private final String                            exchangeName;
 
-    public RabbitMqEventBusConfiguration(
-            DomainEventSubscribersInformation domainEventSubscribersInformation,
-            DomainEventsInformation domainEventsInformation,
-            Parameter config
-    ) throws ParameterNotExist {
-        this.domainEventSubscribersInformation = domainEventSubscribersInformation;
-        this.domainEventsInformation           = domainEventsInformation;
-        this.config                            = config;
-        this.exchangeName                      = config.get("RABBITMQ_EXCHANGE");
-    }
+	private final DomainEventSubscribersInformation domainEventSubscribersInformation;
+	private final DomainEventsInformation domainEventsInformation;
+	private final Parameter config;
+	private final String exchangeName;
 
-    @Bean
-    public CachingConnectionFactory connection() throws ParameterNotExist {
-        CachingConnectionFactory factory = new CachingConnectionFactory();
+	public RabbitMqEventBusConfiguration(
+		DomainEventSubscribersInformation domainEventSubscribersInformation,
+		DomainEventsInformation domainEventsInformation,
+		Parameter config
+	) throws ParameterNotExist {
+		this.domainEventSubscribersInformation = domainEventSubscribersInformation;
+		this.domainEventsInformation = domainEventsInformation;
+		this.config = config;
+		this.exchangeName = config.get("RABBITMQ_EXCHANGE");
+	}
 
-        factory.setHost(config.get("RABBITMQ_HOST"));
-        factory.setPort(config.getInt("RABBITMQ_PORT"));
-        factory.setUsername(config.get("RABBITMQ_LOGIN"));
-        factory.setPassword(config.get("RABBITMQ_PASSWORD"));
-        factory.setVirtualHost(config.get("RABBITMQ_VHOST"));
-        return factory;
-    }
+	@Bean
+	public CachingConnectionFactory connection() throws ParameterNotExist {
+		CachingConnectionFactory factory = new CachingConnectionFactory();
 
-    @Bean
-    public Declarables declaration() {
-        String retryExchangeName      = RabbitMqExchangeNameFormatter.retry(exchangeName);
-        String deadLetterExchangeName = RabbitMqExchangeNameFormatter.deadLetter(exchangeName);
+		factory.setHost(config.get("RABBITMQ_HOST"));
+		factory.setPort(config.getInt("RABBITMQ_PORT"));
+		factory.setUsername(config.get("RABBITMQ_LOGIN"));
+		factory.setPassword(config.get("RABBITMQ_PASSWORD"));
+		factory.setVirtualHost(config.get("RABBITMQ_VHOST"));
+		return factory;
+	}
 
-        TopicExchange domainEventsExchange           = new TopicExchange(exchangeName, true, false);
-        TopicExchange    retryDomainEventsExchange      = new TopicExchange(retryExchangeName, true, false);
-        TopicExchange    deadLetterDomainEventsExchange = new TopicExchange(deadLetterExchangeName, true, false);
-        List<Declarable> declarables                    = new ArrayList<>();
-        declarables.add(domainEventsExchange);
-        declarables.add(retryDomainEventsExchange);
-        declarables.add(deadLetterDomainEventsExchange);
+	@Bean
+	public Declarables declaration() {
+		String retryExchangeName = RabbitMqExchangeNameFormatter.retry(exchangeName);
+		String deadLetterExchangeName = RabbitMqExchangeNameFormatter.deadLetter(exchangeName);
 
-        Collection<Declarable> queuesAndBindings = declareQueuesAndBindings(
-                domainEventsExchange,
-                retryDomainEventsExchange,
-                deadLetterDomainEventsExchange
-        ).stream().flatMap(Collection::stream).collect(Collectors.toList());
+		TopicExchange domainEventsExchange = new TopicExchange(exchangeName, true, false);
+		TopicExchange retryDomainEventsExchange = new TopicExchange(retryExchangeName, true, false);
+		TopicExchange deadLetterDomainEventsExchange = new TopicExchange(deadLetterExchangeName, true, false);
+		List<Declarable> declarables = new ArrayList<>();
+		declarables.add(domainEventsExchange);
+		declarables.add(retryDomainEventsExchange);
+		declarables.add(deadLetterDomainEventsExchange);
 
-        declarables.addAll(queuesAndBindings);
+		Collection<Declarable> queuesAndBindings = declareQueuesAndBindings(
+			domainEventsExchange,
+			retryDomainEventsExchange,
+			deadLetterDomainEventsExchange
+		)
+			.stream()
+			.flatMap(Collection::stream)
+			.collect(Collectors.toList());
 
-        return new Declarables(declarables);
-    }
+		declarables.addAll(queuesAndBindings);
 
-    private Collection<Collection<Declarable>> declareQueuesAndBindings(
-            TopicExchange domainEventsExchange,
-            TopicExchange retryDomainEventsExchange,
-            TopicExchange deadLetterDomainEventsExchange
-    ) {
-        return domainEventSubscribersInformation.all().stream().map(information -> {
-            String queueName           = RabbitMqQueueNameFormatter.format(information);
-            String retryQueueName      = RabbitMqQueueNameFormatter.formatRetry(information);
-            String deadLetterQueueName = RabbitMqQueueNameFormatter.formatDeadLetter(information);
+		return new Declarables(declarables);
+	}
 
-            Queue queue = QueueBuilder.durable(queueName).build();
-            Queue retryQueue = QueueBuilder.durable(retryQueueName).withArguments(
-                    retryQueueArguments(domainEventsExchange, queueName)
-            ).build();
-            Queue deadLetterQueue = QueueBuilder.durable(deadLetterQueueName).build();
+	private Collection<Collection<Declarable>> declareQueuesAndBindings(
+		TopicExchange domainEventsExchange,
+		TopicExchange retryDomainEventsExchange,
+		TopicExchange deadLetterDomainEventsExchange
+	) {
+		return domainEventSubscribersInformation
+			.all()
+			.stream()
+			.map(information -> {
+				String queueName = RabbitMqQueueNameFormatter.format(information);
+				String retryQueueName = RabbitMqQueueNameFormatter.formatRetry(information);
+				String deadLetterQueueName = RabbitMqQueueNameFormatter.formatDeadLetter(information);
 
-            Binding fromExchangeSameQueueBinding = BindingBuilder
-                    .bind(queue)
-                    .to(domainEventsExchange)
-                    .with(queueName);
+				Queue queue = QueueBuilder.durable(queueName).build();
+				Queue retryQueue = QueueBuilder
+					.durable(retryQueueName)
+					.withArguments(retryQueueArguments(domainEventsExchange, queueName))
+					.build();
+				Queue deadLetterQueue = QueueBuilder.durable(deadLetterQueueName).build();
 
-            Binding fromRetryExchangeSameQueueBinding = BindingBuilder
-                    .bind(retryQueue)
-                    .to(retryDomainEventsExchange)
-                    .with(queueName);
+				Binding fromExchangeSameQueueBinding = BindingBuilder.bind(queue).to(domainEventsExchange).with(queueName);
 
-            Binding fromDeadLetterExchangeSameQueueBinding = BindingBuilder
-                    .bind(deadLetterQueue)
-                    .to(deadLetterDomainEventsExchange)
-                    .with(queueName);
+				Binding fromRetryExchangeSameQueueBinding = BindingBuilder
+					.bind(retryQueue)
+					.to(retryDomainEventsExchange)
+					.with(queueName);
 
-            List<Binding> fromExchangeDomainEventsBindings = information.subscribedEvents().stream().map(
-                    domainEventClass -> {
-                        String eventName = domainEventsInformation.forClass(domainEventClass);
-                        return BindingBuilder
-                                .bind(queue)
-                                .to(domainEventsExchange)
-                                .with(eventName);
-                    }).collect(Collectors.toList());
+				Binding fromDeadLetterExchangeSameQueueBinding = BindingBuilder
+					.bind(deadLetterQueue)
+					.to(deadLetterDomainEventsExchange)
+					.with(queueName);
 
-            List<Declarable> queuesAndBindings = new ArrayList<>();
-            queuesAndBindings.add(queue);
-            queuesAndBindings.add(fromExchangeSameQueueBinding);
-            queuesAndBindings.addAll(fromExchangeDomainEventsBindings);
+				List<Binding> fromExchangeDomainEventsBindings = information
+					.subscribedEvents()
+					.stream()
+					.map(domainEventClass -> {
+						String eventName = domainEventsInformation.forClass(domainEventClass);
+						return BindingBuilder.bind(queue).to(domainEventsExchange).with(eventName);
+					})
+					.collect(Collectors.toList());
 
-            queuesAndBindings.add(retryQueue);
-            queuesAndBindings.add(fromRetryExchangeSameQueueBinding);
+				List<Declarable> queuesAndBindings = new ArrayList<>();
+				queuesAndBindings.add(queue);
+				queuesAndBindings.add(fromExchangeSameQueueBinding);
+				queuesAndBindings.addAll(fromExchangeDomainEventsBindings);
 
-            queuesAndBindings.add(deadLetterQueue);
-            queuesAndBindings.add(fromDeadLetterExchangeSameQueueBinding);
+				queuesAndBindings.add(retryQueue);
+				queuesAndBindings.add(fromRetryExchangeSameQueueBinding);
 
-            return queuesAndBindings;
-        }).collect(Collectors.toList());
-    }
+				queuesAndBindings.add(deadLetterQueue);
+				queuesAndBindings.add(fromDeadLetterExchangeSameQueueBinding);
 
-    private HashMap<String, Object> retryQueueArguments(TopicExchange exchange, String routingKey) {
-        return new HashMap<String, Object>() {{
-            put("x-dead-letter-exchange", exchange.getName());
-            put("x-dead-letter-routing-key", routingKey);
-            put("x-message-ttl", 1000);
-        }};
-    }
+				return queuesAndBindings;
+			})
+			.collect(Collectors.toList());
+	}
+
+	private HashMap<String, Object> retryQueueArguments(TopicExchange exchange, String routingKey) {
+		return new HashMap<String, Object>() {
+			{
+				put("x-dead-letter-exchange", exchange.getName());
+				put("x-dead-letter-routing-key", routingKey);
+				put("x-message-ttl", 1000);
+			}
+		};
+	}
 }
-

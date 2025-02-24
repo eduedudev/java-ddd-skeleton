@@ -1,57 +1,56 @@
 package com.devsoftec.jaap.users.shared.infrastructure.bus.event;
 
-
-import com.devsoftec.jaap.users.shared.domain.Service;
-import com.devsoftec.jaap.users.shared.domain.bus.event.DomainEvent;
-import org.reflections.Reflections;
-
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
+import org.reflections.Reflections;
+
+import com.devsoftec.jaap.users.shared.domain.Service;
+import com.devsoftec.jaap.users.shared.domain.bus.event.DomainEvent;
+
 @Service
 public final class DomainEventsInformation {
-    Map<String, Class<? extends DomainEvent>> indexedDomainEvents;
 
-    public DomainEventsInformation() {
-        Reflections reflections = new Reflections("com.devsoftec");
-        Set<Class<? extends DomainEvent>> classes     = reflections.getSubTypesOf(DomainEvent.class);
+	Map<String, Class<? extends DomainEvent>> indexedDomainEvents;
 
-        try {
-            indexedDomainEvents = formatEvents(classes);
-        } catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
-    }
+	public DomainEventsInformation() {
+		Reflections reflections = new Reflections("com.devsoftec");
+		Set<Class<? extends DomainEvent>> classes = reflections.getSubTypesOf(DomainEvent.class);
 
-    public Class<? extends DomainEvent> forName(String name) {
-        return indexedDomainEvents.get(name);
-    }
+		try {
+			indexedDomainEvents = formatEvents(classes);
+		} catch (NoSuchMethodException | IllegalAccessException | InstantiationException | InvocationTargetException e) {
+			e.printStackTrace();
+		}
+	}
 
-    private Map<String, Class<? extends DomainEvent>> formatEvents(
-            Set<Class<? extends DomainEvent>> domainEvents
-    ) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        Map<String, Class<? extends DomainEvent>> events = new HashMap<>();
+	public Class<? extends DomainEvent> forName(String name) {
+		return indexedDomainEvents.get(name);
+	}
 
-        for (Class<? extends DomainEvent> domainEvent : domainEvents) {
-            DomainEvent nullInstance = domainEvent.getConstructor().newInstance();
+	private Map<String, Class<? extends DomainEvent>> formatEvents(Set<Class<? extends DomainEvent>> domainEvents)
+		throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+		Map<String, Class<? extends DomainEvent>> events = new HashMap<>();
 
-            events.put((String) domainEvent.getMethod("eventName").invoke(nullInstance), domainEvent);
-        }
+		for (Class<? extends DomainEvent> domainEvent : domainEvents) {
+			DomainEvent nullInstance = domainEvent.getConstructor().newInstance();
 
-        return events;
-    }
+			events.put((String) domainEvent.getMethod("eventName").invoke(nullInstance), domainEvent);
+		}
 
-    public String forClass(Class<? extends DomainEvent> domainEventClass) {
-        return indexedDomainEvents.entrySet()
-                .stream()
-                .filter(entry -> Objects.equals(entry.getValue(), domainEventClass))
-                .map(Map.Entry::getKey)
-                .findFirst().orElse("");
-    }
+		return events;
+	}
+
+	public String forClass(Class<? extends DomainEvent> domainEventClass) {
+		return indexedDomainEvents
+			.entrySet()
+			.stream()
+			.filter(entry -> Objects.equals(entry.getValue(), domainEventClass))
+			.map(Map.Entry::getKey)
+			.findFirst()
+			.orElse("");
+	}
 }
-
-
-

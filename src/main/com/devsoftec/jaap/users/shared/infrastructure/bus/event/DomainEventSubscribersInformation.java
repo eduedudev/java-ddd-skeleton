@@ -1,49 +1,51 @@
 package com.devsoftec.jaap.users.shared.infrastructure.bus.event;
 
-
-import com.devsoftec.jaap.users.shared.domain.Service;
-import org.reflections.Reflections;
-
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Set;
 
+import org.reflections.Reflections;
+
+import com.devsoftec.jaap.users.shared.domain.Service;
+
 @Service
 public final class DomainEventSubscribersInformation {
-    HashMap<Class<?>, DomainEventSubscriberInformation> information;
 
-    public DomainEventSubscribersInformation(HashMap<Class<?>, DomainEventSubscriberInformation> hashMap) {
-        Reflections reflections = new Reflections("com.devsoftec");
-        Set<Class<?>> classes     = reflections.getTypesAnnotatedWith(DomainEventSubscriber.class);
+	HashMap<Class<?>, DomainEventSubscriberInformation> information;
 
-        information = formatSubscribers(classes);
-    }
+	public DomainEventSubscribersInformation(HashMap<Class<?>, DomainEventSubscriberInformation> hashMap) {
+		Reflections reflections = new Reflections("com.devsoftec");
+		Set<Class<?>> classes = reflections.getTypesAnnotatedWith(DomainEventSubscriber.class);
 
-    public Collection<DomainEventSubscriberInformation> all() {
-        return information.values();
-    }
+		information = formatSubscribers(classes);
+	}
 
-    public String[] rabbitMqFormattedNames() {
-        return information.values()
-                .stream()
-                .map(DomainEventSubscriberInformation::formatRabbitMqQueueName)
-                .distinct()
-                .toArray(String[]::new);
-    }
+	public Collection<DomainEventSubscriberInformation> all() {
+		return information.values();
+	}
 
-    private HashMap<Class<?>, DomainEventSubscriberInformation> formatSubscribers(Set<Class<?>> subscribers) {
-        HashMap<Class<?>, DomainEventSubscriberInformation> subscribersInformation = new HashMap<>();
+	public String[] rabbitMqFormattedNames() {
+		return information
+			.values()
+			.stream()
+			.map(DomainEventSubscriberInformation::formatRabbitMqQueueName)
+			.distinct()
+			.toArray(String[]::new);
+	}
 
-        for (Class<?> subscriberClass : subscribers) {
-            DomainEventSubscriber annotation = subscriberClass.getAnnotation(DomainEventSubscriber.class);
+	private HashMap<Class<?>, DomainEventSubscriberInformation> formatSubscribers(Set<Class<?>> subscribers) {
+		HashMap<Class<?>, DomainEventSubscriberInformation> subscribersInformation = new HashMap<>();
 
-            subscribersInformation.put(
-                    subscriberClass,
-                    new DomainEventSubscriberInformation(subscriberClass, Arrays.asList(annotation.value()))
-            );
-        }
+		for (Class<?> subscriberClass : subscribers) {
+			DomainEventSubscriber annotation = subscriberClass.getAnnotation(DomainEventSubscriber.class);
 
-        return subscribersInformation;
-    }
+			subscribersInformation.put(
+				subscriberClass,
+				new DomainEventSubscriberInformation(subscriberClass, Arrays.asList(annotation.value()))
+			);
+		}
+
+		return subscribersInformation;
+	}
 }

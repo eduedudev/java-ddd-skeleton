@@ -1,26 +1,28 @@
 package com.devsoftec.jaap.users.shared.infrastructure.bus.event.spring;
 
+import java.util.List;
+
+import org.springframework.context.ApplicationEventPublisher;
+
 import com.devsoftec.jaap.users.shared.domain.Service;
 import com.devsoftec.jaap.users.shared.domain.bus.event.DomainEvent;
 import com.devsoftec.jaap.users.shared.domain.bus.event.EventBus;
-import org.springframework.context.ApplicationEventPublisher;
-
-import java.util.List;
 
 @Service
 public class SpringApplicationEventBus implements EventBus {
-    private final ApplicationEventPublisher publisher;
 
-    public SpringApplicationEventBus(ApplicationEventPublisher publisher) {
-        this.publisher = publisher;
-    }
+	private final ApplicationEventPublisher publisher;
 
-    @Override
-    public void publish(final List<DomainEvent> events) {
-        events.forEach(this::publish);
-    }
+	public SpringApplicationEventBus(ApplicationEventPublisher publisher) {
+		this.publisher = publisher;
+	}
 
-    private void publish(final DomainEvent event) {
-        this.publisher.publishEvent(event);
-    }
+	@Override
+	public void publish(final List<DomainEvent> events) {
+		events.forEach(this::publish);
+	}
+
+	private void publish(final DomainEvent event) {
+		this.publisher.publishEvent(event);
+	}
 }

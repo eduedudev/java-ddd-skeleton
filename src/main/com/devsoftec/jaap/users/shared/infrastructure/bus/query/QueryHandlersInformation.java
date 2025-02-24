@@ -1,48 +1,50 @@
 package com.devsoftec.jaap.users.shared.infrastructure.bus.query;
 
-import com.devsoftec.jaap.users.shared.domain.Service;
-import com.devsoftec.jaap.users.shared.domain.query.Query;
-import com.devsoftec.jaap.users.shared.domain.query.QueryHandler;
-import com.devsoftec.jaap.users.shared.domain.query.QueryNotRegisteredError;
-import org.reflections.Reflections;
-
 import java.lang.reflect.ParameterizedType;
 import java.util.HashMap;
 import java.util.Set;
 
+import org.reflections.Reflections;
+
+import com.devsoftec.jaap.users.shared.domain.Service;
+import com.devsoftec.jaap.users.shared.domain.query.Query;
+import com.devsoftec.jaap.users.shared.domain.query.QueryHandler;
+import com.devsoftec.jaap.users.shared.domain.query.QueryNotRegisteredError;
+
 @Service
 public final class QueryHandlersInformation {
-    HashMap<Class<? extends Query>, Class<? extends QueryHandler>> indexedQueryHandlers;
 
-    public QueryHandlersInformation() {
-        Reflections reflections = new Reflections("com.devsoftec");
-        Set<Class<? extends QueryHandler>> classes     = reflections.getSubTypesOf(QueryHandler.class);
+	HashMap<Class<? extends Query>, Class<? extends QueryHandler>> indexedQueryHandlers;
 
-        indexedQueryHandlers = formatHandlers(classes);
-    }
+	public QueryHandlersInformation() {
+		Reflections reflections = new Reflections("com.devsoftec");
+		Set<Class<? extends QueryHandler>> classes = reflections.getSubTypesOf(QueryHandler.class);
 
-    private HashMap<Class<? extends Query>, Class<? extends QueryHandler>> formatHandlers(
-            Set<Class<? extends QueryHandler>> queryHandlers
-    ) {
-        HashMap<Class<? extends Query>, Class<? extends QueryHandler>> handlers = new HashMap<>();
+		indexedQueryHandlers = formatHandlers(classes);
+	}
 
-        for (Class<? extends QueryHandler> handler : queryHandlers) {
-            ParameterizedType paramType  = (ParameterizedType) handler.getGenericInterfaces()[0];
-            Class<? extends Query> queryClass = (Class<? extends Query>) paramType.getActualTypeArguments()[0];
+	private HashMap<Class<? extends Query>, Class<? extends QueryHandler>> formatHandlers(
+		Set<Class<? extends QueryHandler>> queryHandlers
+	) {
+		HashMap<Class<? extends Query>, Class<? extends QueryHandler>> handlers = new HashMap<>();
 
-            handlers.put(queryClass, handler);
-        }
+		for (Class<? extends QueryHandler> handler : queryHandlers) {
+			ParameterizedType paramType = (ParameterizedType) handler.getGenericInterfaces()[0];
+			Class<? extends Query> queryClass = (Class<? extends Query>) paramType.getActualTypeArguments()[0];
 
-        return handlers;
-    }
+			handlers.put(queryClass, handler);
+		}
 
-    public Class<? extends QueryHandler> search(Class<? extends Query> queryClass) throws QueryNotRegisteredError {
-        Class<? extends QueryHandler> queryHandlerClass = indexedQueryHandlers.get(queryClass);
+		return handlers;
+	}
 
-        if (null == queryHandlerClass) {
-            throw new QueryNotRegisteredError(queryClass);
-        }
+	public Class<? extends QueryHandler> search(Class<? extends Query> queryClass) throws QueryNotRegisteredError {
+		Class<? extends QueryHandler> queryHandlerClass = indexedQueryHandlers.get(queryClass);
 
-        return queryHandlerClass;
-    }
+		if (null == queryHandlerClass) {
+			throw new QueryNotRegisteredError(queryClass);
+		}
+
+		return queryHandlerClass;
+	}
 }

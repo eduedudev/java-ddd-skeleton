@@ -1,139 +1,142 @@
 package com.devsoftec.jaap.users.shared.infrastructure.bus.event.rabbitmq;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessageBuilder;
+import org.springframework.amqp.core.MessagePropertiesBuilder;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer;
+import org.springframework.amqp.rabbit.listener.RabbitListenerEndpointRegistry;
+import org.springframework.context.ApplicationContext;
 
 import com.devsoftec.jaap.users.shared.domain.Service;
 import com.devsoftec.jaap.users.shared.domain.Utils;
 import com.devsoftec.jaap.users.shared.domain.bus.event.DomainEvent;
 import com.devsoftec.jaap.users.shared.infrastructure.bus.event.DomainEventJsonDeserializer;
 import com.devsoftec.jaap.users.shared.infrastructure.bus.event.DomainEventSubscribersInformation;
-import org.springframework.amqp.core.MessagePropertiesBuilder;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.amqp.rabbit.listener.AbstractMessageListenerContainer;
-import org.springframework.amqp.rabbit.listener.RabbitListenerEndpointRegistry;
-import org.springframework.amqp.core.Message;
-import org.springframework.amqp.core.MessageBuilder;
-
-import org.springframework.context.ApplicationContext;
-
-import java.util.HashMap;
-import java.lang.reflect.Method;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Map;
 
 @Service
 public final class RabbitMqDomainEventsConsumer {
-    private final String                      CONSUMER_NAME          = "domain_events_consumer";
-    private final DomainEventJsonDeserializer deserializer;
-    private final ApplicationContext context;
-    private final RabbitMqPublisher           publisher;
-    private final HashMap<String, Object> domainEventSubscribers = new HashMap<>();
-    RabbitListenerEndpointRegistry registry;
-    private DomainEventSubscribersInformation information;
 
-    public RabbitMqDomainEventsConsumer(
-            RabbitListenerEndpointRegistry registry,
-            DomainEventSubscribersInformation information,
-            DomainEventJsonDeserializer deserializer,
-            ApplicationContext context,
-            RabbitMqPublisher publisher
-    ) {
-        this.registry     = registry;
-        this.information  = information;
-        this.deserializer = deserializer;
-        this.context      = context;
-        this.publisher    = publisher;
-    }
+	private final String CONSUMER_NAME = "domain_events_consumer";
+	private final DomainEventJsonDeserializer deserializer;
+	private final ApplicationContext context;
+	private final RabbitMqPublisher publisher;
+	private final HashMap<String, Object> domainEventSubscribers = new HashMap<>();
+	RabbitListenerEndpointRegistry registry;
+	private DomainEventSubscribersInformation information;
 
-    public void consume() {
-        AbstractMessageListenerContainer container = (AbstractMessageListenerContainer) registry.getListenerContainer(
-                CONSUMER_NAME
-        );
+	public RabbitMqDomainEventsConsumer(
+		RabbitListenerEndpointRegistry registry,
+		DomainEventSubscribersInformation information,
+		DomainEventJsonDeserializer deserializer,
+		ApplicationContext context,
+		RabbitMqPublisher publisher
+	) {
+		this.registry = registry;
+		this.information = information;
+		this.deserializer = deserializer;
+		this.context = context;
+		this.publisher = publisher;
+	}
 
-        container.addQueueNames(information.rabbitMqFormattedNames());
+	public void consume() {
+		AbstractMessageListenerContainer container = (AbstractMessageListenerContainer) registry.getListenerContainer(
+			CONSUMER_NAME
+		);
 
-        container.start();
-    }
+		container.addQueueNames(information.rabbitMqFormattedNames());
 
-    @RabbitListener(id = CONSUMER_NAME, autoStartup = "false")
-    public void consumer(Message message) throws Exception {
-        String         serializedMessage = new String(message.getBody());
-        DomainEvent domainEvent       = deserializer.deserialize(serializedMessage);
+		container.start();
+	}
 
-        String queue = message.getMessageProperties().getConsumerQueue();
+	@RabbitListener(id = CONSUMER_NAME, autoStartup = "false")
+	public void consumer(Message message) throws Exception {
+		String serializedMessage = new String(message.getBody());
+		DomainEvent domainEvent = deserializer.deserialize(serializedMessage);
 
-        Object subscriber = domainEventSubscribers.containsKey(queue)
-                ? domainEventSubscribers.get(queue)
-                : subscriberFor(queue);
+		String queue = message.getMessageProperties().getConsumerQueue();
 
-        Method subscriberOnMethod = subscriber.getClass().getMethod("on", domainEvent.getClass());
+		Object subscriber = domainEventSubscribers.containsKey(queue)
+			? domainEventSubscribers.get(queue)
+			: subscriberFor(queue);
 
-        try {
-            subscriberOnMethod.invoke(subscriber, domainEvent);
-        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException error) {
-            throw new Exception(String.format(
-                    "The subscriber <%s> should implement a method `on` listening the domain event <%s>",
-                    queue,
-                    domainEvent.eventName()
-            ));
-        } catch (Exception error) {
-            handleConsumptionError(message, queue);
-        }
-    }
+		Method subscriberOnMethod = subscriber.getClass().getMethod("on", domainEvent.getClass());
 
-    private void handleConsumptionError(Message message, String queue) {
-        if (hasBeenRedeliveredTooMuch(message)) {
-            sendToDeadLetter(message, queue);
-        } else {
-            sendToRetry(message, queue);
-        }
-    }
+		try {
+			subscriberOnMethod.invoke(subscriber, domainEvent);
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException error) {
+			throw new Exception(
+				String.format(
+					"The subscriber <%s> should implement a method `on` listening the domain event <%s>",
+					queue,
+					domainEvent.eventName()
+				)
+			);
+		} catch (Exception error) {
+			handleConsumptionError(message, queue);
+		}
+	}
 
-    private void sendToRetry(Message message, String queue) {
-        sendMessageTo(RabbitMqExchangeNameFormatter.retry("domain_events"), message, queue);
-    }
+	private void handleConsumptionError(Message message, String queue) {
+		if (hasBeenRedeliveredTooMuch(message)) {
+			sendToDeadLetter(message, queue);
+		} else {
+			sendToRetry(message, queue);
+		}
+	}
 
-    private void sendToDeadLetter(Message message, String queue) {
-        sendMessageTo(RabbitMqExchangeNameFormatter.deadLetter("domain_events"), message, queue);
-    }
+	private void sendToRetry(Message message, String queue) {
+		sendMessageTo(RabbitMqExchangeNameFormatter.retry("domain_events"), message, queue);
+	}
 
-    private void sendMessageTo(String exchange, Message message, String queue) {
-        Map<String, Object> headers = message.getMessageProperties().getHeaders();
+	private void sendToDeadLetter(Message message, String queue) {
+		sendMessageTo(RabbitMqExchangeNameFormatter.deadLetter("domain_events"), message, queue);
+	}
 
-        headers.put("redelivery_count", (int) headers.getOrDefault("redelivery_count", 0) + 1);
+	private void sendMessageTo(String exchange, Message message, String queue) {
+		Map<String, Object> headers = message.getMessageProperties().getHeaders();
 
-        MessageBuilder.fromMessage(message).andProperties(
-                MessagePropertiesBuilder.newInstance()
-                        .setContentEncoding("utf-8")
-                        .setContentType("application/json")
-                        .copyHeaders(headers)
-                        .build());
+		headers.put("redelivery_count", (int) headers.getOrDefault("redelivery_count", 0) + 1);
 
-        publisher.publish(message, exchange, queue);
-    }
+		MessageBuilder
+			.fromMessage(message)
+			.andProperties(
+				MessagePropertiesBuilder
+					.newInstance()
+					.setContentEncoding("utf-8")
+					.setContentType("application/json")
+					.copyHeaders(headers)
+					.build()
+			);
 
-    private boolean hasBeenRedeliveredTooMuch(Message message) {
-        int MAX_RETRIES = 2;
-        return (int) message.getMessageProperties().getHeaders().getOrDefault("redelivery_count", 0) >= MAX_RETRIES;
-    }
+		publisher.publish(message, exchange, queue);
+	}
 
-    public void withSubscribersInformation(DomainEventSubscribersInformation information) {
-        this.information = information;
-    }
+	private boolean hasBeenRedeliveredTooMuch(Message message) {
+		int MAX_RETRIES = 2;
+		return (int) message.getMessageProperties().getHeaders().getOrDefault("redelivery_count", 0) >= MAX_RETRIES;
+	}
 
-    private Object subscriberFor(String queue) throws Exception {
-        String[] queueParts     = queue.split("\\.");
-        String   subscriberName = Utils.toCamelFirstLower(queueParts[queueParts.length - 1]);
+	public void withSubscribersInformation(DomainEventSubscribersInformation information) {
+		this.information = information;
+	}
 
-        try {
-            Object subscriber = context.getBean(subscriberName);
-            domainEventSubscribers.put(queue, subscriber);
+	private Object subscriberFor(String queue) throws Exception {
+		String[] queueParts = queue.split("\\.");
+		String subscriberName = Utils.toCamelFirstLower(queueParts[queueParts.length - 1]);
 
-            return subscriber;
-        } catch (Exception e) {
-            throw new Exception(String.format("There are not registered subscribers for <%s> queue", queue));
-        }
-    }
+		try {
+			Object subscriber = context.getBean(subscriberName);
+			domainEventSubscribers.put(queue, subscriber);
+
+			return subscriber;
+		} catch (Exception e) {
+			throw new Exception(String.format("There are not registered subscribers for <%s> queue", queue));
+		}
+	}
 }
-
-
-

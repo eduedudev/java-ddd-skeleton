@@ -5,9 +5,9 @@ import com.devsoftec.jaap.users.shared.domain.Utils;
 import com.devsoftec.jaap.users.shared.domain.bus.event.DomainEvent;
 
 import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.Optional;
 
 @Service
 public final class DomainEventJsonDeserializer {
@@ -17,13 +17,22 @@ public final class DomainEventJsonDeserializer {
         this.information = information;
     }
 
-    public DomainEvent deserialize(String body) throws InvocationTargetException, IllegalAccessException, NoSuchMethodException, InstantiationException {
-        HashMap<String, Serializable> eventData        = Utils.jsonDecode(body);
-        HashMap<String, Serializable> data             = (HashMap<String, Serializable>) eventData.get("data");
-        HashMap<String, Serializable> attributes       = (HashMap<String, Serializable>) data.get("attributes");
-        Class<? extends DomainEvent>  domainEventClass = information.forName((String) data.get("type"));
+    public DomainEvent deserialize(String body) throws ReflectiveOperationException {
+        HashMap<String, Serializable> eventData = Utils.jsonDecode(body);
+        if (eventData == null) {
+            throw new IllegalArgumentException("Invalid JSON: eventData is null");
+        }
 
-        DomainEvent nullInstance = domainEventClass.getConstructor().newInstance();
+        HashMap<String, Serializable> data = getMap(eventData, "data");
+        HashMap<String, Serializable> attributes = getMap(data, "attributes");
+        String type = (String) data.get("type");
+
+        if (type == null) {
+            throw new IllegalArgumentException("Missing event type in data");
+        }
+
+        Class<?> domainEventClass = information.forName(type);
+        DomainEvent nullInstance = (DomainEvent) domainEventClass.getConstructor().newInstance();
 
         Method fromPrimitivesMethod = domainEventClass.getMethod(
                 "fromPrimitives",
@@ -35,13 +44,18 @@ public final class DomainEventJsonDeserializer {
 
         Object domainEvent = fromPrimitivesMethod.invoke(
                 nullInstance,
-                (String) attributes.get("id"),
+                attributes.get("id").toString(),
                 attributes,
-                (String) data.get("id"),
-                (String) data.get("occurred_on")
+                data.get("id").toString(),
+                data.get("occurred_on").toString()
         );
-
         return (DomainEvent) domainEvent;
+    }
+
+    @SuppressWarnings("unchecked")
+    private HashMap<String, Serializable> getMap(HashMap<String, Serializable> source, String key) {
+        return Optional.ofNullable((HashMap<String, Serializable>) source.get(key))
+                .orElseThrow(() -> new IllegalArgumentException("Missing key: " + key));
     }
 }
 

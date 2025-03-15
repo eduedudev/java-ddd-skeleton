@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.Objects;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.stream.Collectors;
@@ -80,6 +81,6 @@ public abstract class Config {
 	}
 
 	private boolean isRunningFromJar() {
-		return getClass().getResource("/").toString().startsWith("jar:");
+		return Objects.requireNonNull(getClass().getResource("/")).toString().startsWith("jar:");
 	}
 }

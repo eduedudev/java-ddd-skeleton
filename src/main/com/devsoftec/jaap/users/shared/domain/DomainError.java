@@ -4,7 +4,6 @@ public abstract class DomainError extends RuntimeException {
 
 	private final String errorCode;
 	private final String errorMessage;
-
 	private final String reason;
 
 	public DomainError(String errorCode, String errorMessage, String reason) {

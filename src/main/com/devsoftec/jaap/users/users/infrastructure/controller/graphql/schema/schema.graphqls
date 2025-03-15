@@ -1,0 +1,24 @@
+type User {
+    id: ID!
+    name: String
+    email: String
+}
+
+input RequestUser {
+    id: ID!
+    name: String
+    email: String
+}
+
+extend type Query {
+    users: [User]
+    user(id: ID!): User
+}
+
+extend type Mutation {
+    createUser(request: RequestUser): Boolean
+}
+
+extend type Mutation {
+    updateUser(id: ID!, name: String, email: String): Boolean
+}

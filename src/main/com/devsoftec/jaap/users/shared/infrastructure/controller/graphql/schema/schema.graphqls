@@ -4,10 +4,10 @@ schema {
 }
 
 type Query {
-    _dummy: String
+    _empty: String
 }
 
 type Mutation {
-    _dummy: String
+    _empty: String
 }
 

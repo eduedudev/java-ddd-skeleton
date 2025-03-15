@@ -7,7 +7,7 @@ public abstract class Identifier {
 
 	protected final String value;
 	private static final Pattern UUID_PATTERN = Pattern.compile(
-			"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+		"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
 	);
 
 	public Identifier(String value) {
@@ -20,10 +20,9 @@ public abstract class Identifier {
 	}
 
 	private void ensureValidUuid(String value) throws IllegalArgumentException {
-		if(value !=null)
-			if (!UUID_PATTERN.matcher(value).matches())
-				throw new IllegalArgumentException("Invalid UUID format: " + value);
-
+		if (value != null) if (!UUID_PATTERN.matcher(value).matches()) throw new IllegalArgumentException(
+			"Invalid UUID format: " + value
+		);
 	}
 
 	@Override

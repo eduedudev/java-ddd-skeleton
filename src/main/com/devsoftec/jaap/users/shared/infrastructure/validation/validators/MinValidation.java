@@ -33,6 +33,10 @@ public class MinValidation implements FieldValidator {
 
 	@Override
 	public String errorMessage(String fieldName, @Nullable String rule) {
-		return String.format("The field %s must be greater than or equal to %s", fieldName, Objects.requireNonNull(rule).split(":")[1]);
+		return String.format(
+			"The field %s must be greater than or equal to %s",
+			fieldName,
+			Objects.requireNonNull(rule).split(":")[1]
+		);
 	}
 }

@@ -1,11 +1,14 @@
 package com.devsoftec.jaap.users.shared.domain.ValueObjects;
 
 import java.util.Objects;
-import java.util.UUID;
+import java.util.regex.Pattern;
 
 public abstract class Identifier {
 
 	protected final String value;
+	private static final Pattern UUID_PATTERN = Pattern.compile(
+			"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+	);
 
 	public Identifier(String value) {
 		ensureValidUuid(value);
@@ -17,7 +20,10 @@ public abstract class Identifier {
 	}
 
 	private void ensureValidUuid(String value) throws IllegalArgumentException {
-		if (value != null) UUID.fromString(value);
+		if(value !=null)
+			if (!UUID_PATTERN.matcher(value).matches())
+				throw new IllegalArgumentException("Invalid UUID format: " + value);
+
 	}
 
 	@Override

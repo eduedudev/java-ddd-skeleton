@@ -15,7 +15,7 @@ public abstract class Email {
 	}
 
 	public String value() {
-		return (value != null) ? value : null;
+		return value;
 	}
 
 	private void ensureValidEmail(String value) throws IllegalArgumentException {

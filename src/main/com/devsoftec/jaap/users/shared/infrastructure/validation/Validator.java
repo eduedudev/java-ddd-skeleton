@@ -39,7 +39,7 @@ public final class Validator {
 		for (Map.Entry<String, String> entry : combinedRules.entrySet()) {
 			String[] rules = entry.getValue().split("\\|");
 			for (String rule : rules) {
-				FieldValidator validator = null;
+				FieldValidator validator;
 				String ruleData = null;
 				if (rule.contains(":")) {
 					validator = validators.get(rule.split(":")[0]);

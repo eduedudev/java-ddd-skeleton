@@ -2,6 +2,7 @@ package com.devsoftec.jaap.users.shared.infrastructure.validation.validators;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Objects;
 
 import jakarta.annotation.Nullable;
 
@@ -32,6 +33,6 @@ public class MaxValidation implements FieldValidator {
 
 	@Override
 	public String errorMessage(String fieldName, @Nullable String rule) {
-		return String.format("The field %s must be greater than or equal to %s", fieldName, rule.split(":")[1]);
+		return String.format("The field %s must be greater than or equal to %s", fieldName, Objects.requireNonNull(rule).split(":")[1]);
 	}
 }

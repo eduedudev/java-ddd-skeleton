@@ -29,10 +29,10 @@ public class CustomDGSConfiguration extends Config {
 		SchemaParser schemaParser = new SchemaParser();
 		TypeDefinitionRegistry registry = new TypeDefinitionRegistry();
 
-		List<Resource> schemaResources = searchMappingFiles("/infrastructure/controller/graphql/", ".graphqls");
+		List<Resource> schemaResources = searchMappingFiles("/infrastructure/controller/graphql/schema/", ".graphqls");
 
 		if (schemaResources.isEmpty()) {
-			String defaultSchema = "type Query { _empty: String }";
+			String defaultSchema = "type Query { _empty: String } type Mutation { _empty: String }";
 			registry.merge(schemaParser.parse(defaultSchema));
 			return registry;
 		}

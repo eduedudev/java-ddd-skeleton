@@ -85,3 +85,10 @@ spotless {
         formatAnnotations()
     }
 }
+
+tasks.named('bootJar') {
+    archiveFileName = 'users-service.jar'
+    from('src/main'){
+        into('')
+    }
+}

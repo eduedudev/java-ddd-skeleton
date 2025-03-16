@@ -10,10 +10,9 @@ import org.junit.jupiter.api.BeforeEach;
 import com.devsoftec.jaap.users.shared.domain.UuidGenerator;
 import com.devsoftec.jaap.users.shared.domain.bus.event.DomainEvent;
 import com.devsoftec.jaap.users.shared.domain.bus.event.EventBus;
-import com.devsoftec.jaap.users.shared.domain.query.Query;
-import com.devsoftec.jaap.users.shared.domain.query.QueryBus;
-import com.devsoftec.jaap.users.shared.domain.query.QueryNotRegisteredError;
-import com.devsoftec.jaap.users.shared.domain.query.Response;
+import com.devsoftec.jaap.users.shared.domain.bus.query.Query;
+import com.devsoftec.jaap.users.shared.domain.bus.query.QueryBus;
+import com.devsoftec.jaap.users.shared.domain.bus.query.Response;
 
 public abstract class UnitTestCase {
 
@@ -44,7 +43,7 @@ public abstract class UnitTestCase {
 		when(uuidGenerator.generate()).thenReturn(uuid, others);
 	}
 
-	public void shouldAsk(Query query, Response response) throws QueryNotRegisteredError {
+	public void shouldAsk(Query query, Response response) {
 		when(queryBus.ask(query)).thenReturn(response);
 	}
 }

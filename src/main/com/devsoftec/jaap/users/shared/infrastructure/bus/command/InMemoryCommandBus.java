@@ -3,10 +3,7 @@ package com.devsoftec.jaap.users.shared.infrastructure.bus.command;
 import org.springframework.context.ApplicationContext;
 
 import com.devsoftec.jaap.users.shared.domain.Service;
-import com.devsoftec.jaap.users.shared.domain.bus.command.Command;
-import com.devsoftec.jaap.users.shared.domain.bus.command.CommandBus;
-import com.devsoftec.jaap.users.shared.domain.bus.command.CommandHandler;
-import com.devsoftec.jaap.users.shared.domain.bus.command.CommandNotRegisteredError;
+import com.devsoftec.jaap.users.shared.domain.bus.command.*;
 
 @Service
 public final class InMemoryCommandBus implements CommandBus {
@@ -20,11 +17,15 @@ public final class InMemoryCommandBus implements CommandBus {
 	}
 
 	@Override
-	public void dispatch(Command command) throws CommandNotRegisteredError {
-		Class<? extends CommandHandler> commandHandlerClass = information.search(command.getClass());
+	public void dispatch(Command command) throws CommandHandlerExecutionError {
+		try {
+			Class<? extends CommandHandler> commandHandlerClass = information.search(command.getClass());
 
-		CommandHandler handler = context.getBean(commandHandlerClass);
+			CommandHandler handler = context.getBean(commandHandlerClass);
 
-		handler.handle(command);
+			handler.handle(command);
+		} catch (Throwable error) {
+			throw new CommandHandlerExecutionError(error);
+		}
 	}
 }

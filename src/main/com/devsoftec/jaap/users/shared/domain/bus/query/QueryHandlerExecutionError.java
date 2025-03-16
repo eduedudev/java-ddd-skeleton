@@ -1,4 +1,4 @@
-package com.devsoftec.jaap.users.shared.domain.query;
+package com.devsoftec.jaap.users.shared.domain.bus.query;
 
 public final class QueryHandlerExecutionError extends RuntimeException {
 

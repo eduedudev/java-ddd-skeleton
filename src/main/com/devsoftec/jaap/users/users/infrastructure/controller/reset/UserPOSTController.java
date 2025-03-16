@@ -16,8 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.devsoftec.jaap.users.shared.domain.DomainError;
 import com.devsoftec.jaap.users.shared.domain.ResourceAlreadyExists;
 import com.devsoftec.jaap.users.shared.domain.bus.command.CommandBus;
-import com.devsoftec.jaap.users.shared.domain.bus.command.CommandNotRegisteredError;
-import com.devsoftec.jaap.users.shared.domain.query.QueryBus;
+import com.devsoftec.jaap.users.shared.domain.bus.query.QueryBus;
 import com.devsoftec.jaap.users.shared.infrastructure.spring.ApiController;
 import com.devsoftec.jaap.users.shared.infrastructure.validation.ValidationResponse;
 import com.devsoftec.jaap.users.shared.infrastructure.validation.Validator;
@@ -46,7 +45,7 @@ public final class UserPOSTController extends ApiController {
 
 	@PostMapping("/users")
 	public ResponseEntity<HashMap<String, Serializable>> createUser(@RequestBody RequestUser request)
-		throws IOException, CommandNotRegisteredError, ValidatorNotExist {
+		throws IOException, ValidatorNotExist {
 		ObjectMapper objectMapper = new ObjectMapper();
 		String requestJson = objectMapper.writeValueAsString(request);
 		ValidationResponse validationResponse = Validator.validate(requestJson, rules, repository);

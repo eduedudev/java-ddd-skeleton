@@ -14,8 +14,7 @@ import org.springframework.stereotype.Controller;
 import com.devsoftec.jaap.users.shared.domain.DomainError;
 import com.devsoftec.jaap.users.shared.domain.ResourceAlreadyExists;
 import com.devsoftec.jaap.users.shared.domain.bus.command.CommandBus;
-import com.devsoftec.jaap.users.shared.domain.bus.command.CommandNotRegisteredError;
-import com.devsoftec.jaap.users.shared.domain.query.QueryBus;
+import com.devsoftec.jaap.users.shared.domain.bus.query.QueryBus;
 import com.devsoftec.jaap.users.shared.infrastructure.controller.graphql.GraphQLCustomException;
 import com.devsoftec.jaap.users.shared.infrastructure.controller.graphql.GraphQLExceptionList;
 import com.devsoftec.jaap.users.shared.infrastructure.spring.ApiController;
@@ -45,8 +44,7 @@ public final class UserPostControllerGraphql extends ApiController {
 	};
 
 	@MutationMapping
-	public boolean createUser(@Argument RequestUser request)
-		throws JsonProcessingException, ValidatorNotExist, CommandNotRegisteredError {
+	public boolean createUser(@Argument RequestUser request) throws JsonProcessingException, ValidatorNotExist {
 		ObjectMapper objectMapper = new ObjectMapper();
 		String requestJson = objectMapper.writeValueAsString(request);
 		ValidationResponse validationResponse = Validator.validate(requestJson, rules, repository);

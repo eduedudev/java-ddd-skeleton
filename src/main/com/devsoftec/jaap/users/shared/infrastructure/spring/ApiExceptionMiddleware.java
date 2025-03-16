@@ -15,7 +15,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 import com.devsoftec.jaap.users.shared.domain.DomainError;
 import com.devsoftec.jaap.users.shared.domain.Utils;
 import com.devsoftec.jaap.users.shared.domain.bus.command.CommandHandlerExecutionError;
-import com.devsoftec.jaap.users.shared.domain.query.QueryHandlerExecutionError;
+import com.devsoftec.jaap.users.shared.domain.bus.query.QueryHandlerExecutionError;
 
 public final class ApiExceptionMiddleware implements Filter {
 

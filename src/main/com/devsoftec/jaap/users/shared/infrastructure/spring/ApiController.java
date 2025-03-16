@@ -12,11 +12,9 @@ import com.devsoftec.jaap.users.shared.domain.DomainError;
 import com.devsoftec.jaap.users.shared.domain.bus.command.Command;
 import com.devsoftec.jaap.users.shared.domain.bus.command.CommandBus;
 import com.devsoftec.jaap.users.shared.domain.bus.command.CommandHandlerExecutionError;
-import com.devsoftec.jaap.users.shared.domain.bus.command.CommandNotRegisteredError;
-import com.devsoftec.jaap.users.shared.domain.query.Query;
-import com.devsoftec.jaap.users.shared.domain.query.QueryBus;
-import com.devsoftec.jaap.users.shared.domain.query.QueryHandlerExecutionError;
-import com.devsoftec.jaap.users.shared.domain.query.QueryNotRegisteredError;
+import com.devsoftec.jaap.users.shared.domain.bus.query.Query;
+import com.devsoftec.jaap.users.shared.domain.bus.query.QueryBus;
+import com.devsoftec.jaap.users.shared.domain.bus.query.QueryHandlerExecutionError;
 
 public abstract class ApiController {
 
@@ -28,11 +26,11 @@ public abstract class ApiController {
 		this.commandBus = commandBus;
 	}
 
-	protected void dispatch(Command command) throws CommandHandlerExecutionError, CommandNotRegisteredError {
+	protected void dispatch(Command command) throws CommandHandlerExecutionError {
 		commandBus.dispatch(command);
 	}
 
-	protected <R> R ask(Query query) throws QueryHandlerExecutionError, QueryNotRegisteredError {
+	protected <R> R ask(Query query) throws QueryHandlerExecutionError {
 		return queryBus.ask(query);
 	}
 

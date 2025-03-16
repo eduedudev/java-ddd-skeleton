@@ -7,9 +7,9 @@ import java.util.Set;
 import org.reflections.Reflections;
 
 import com.devsoftec.jaap.users.shared.domain.Service;
-import com.devsoftec.jaap.users.shared.domain.query.Query;
-import com.devsoftec.jaap.users.shared.domain.query.QueryHandler;
-import com.devsoftec.jaap.users.shared.domain.query.QueryNotRegisteredError;
+import com.devsoftec.jaap.users.shared.domain.bus.query.Query;
+import com.devsoftec.jaap.users.shared.domain.bus.query.QueryHandler;
+import com.devsoftec.jaap.users.shared.domain.bus.query.QueryNotRegisteredError;
 
 @Service
 public final class QueryHandlersInformation {
@@ -17,10 +17,20 @@ public final class QueryHandlersInformation {
 	HashMap<Class<? extends Query>, Class<? extends QueryHandler>> indexedQueryHandlers;
 
 	public QueryHandlersInformation() {
-		Reflections reflections = new Reflections("com.devsoftec");
+		Reflections reflections = new Reflections("tv.codely");
 		Set<Class<? extends QueryHandler>> classes = reflections.getSubTypesOf(QueryHandler.class);
 
 		indexedQueryHandlers = formatHandlers(classes);
+	}
+
+	public Class<? extends QueryHandler> search(Class<? extends Query> queryClass) throws QueryNotRegisteredError {
+		Class<? extends QueryHandler> queryHandlerClass = indexedQueryHandlers.get(queryClass);
+
+		if (null == queryHandlerClass) {
+			throw new QueryNotRegisteredError(queryClass);
+		}
+
+		return queryHandlerClass;
 	}
 
 	private HashMap<Class<? extends Query>, Class<? extends QueryHandler>> formatHandlers(
@@ -36,15 +46,5 @@ public final class QueryHandlersInformation {
 		}
 
 		return handlers;
-	}
-
-	public Class<? extends QueryHandler> search(Class<? extends Query> queryClass) throws QueryNotRegisteredError {
-		Class<? extends QueryHandler> queryHandlerClass = indexedQueryHandlers.get(queryClass);
-
-		if (null == queryHandlerClass) {
-			throw new QueryNotRegisteredError(queryClass);
-		}
-
-		return queryHandlerClass;
 	}
 }

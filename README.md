@@ -1,7 +1,9 @@
+
 # Users Service 🚀
 
 ## Overview
-The **Users Service** is a microservice built with **Java Spring Boot**, following **Domain-Driven Design (DDD)** principles based on the **Codely guide**. It provides user and tenant management for a multi-tenant SaaS platform.
+The **Users Service** is a microservice built with **Java Spring Boot**, following **Domain-Driven Design (DDD)** principles based on the **CodelyTV Java DDD Example** ([repository](https://github.com/CodelyTV/java-ddd-example)).
+This project was optimized by **removing monorepo configurations**, **fixing issues preventing .jar generation**, and **adding support for GraphQL**, among other improvements.
 
 ## 📌 Key Features
 - **Domain-Driven Design (DDD)** architecture
@@ -10,6 +12,7 @@ The **Users Service** is a microservice built with **Java Spring Boot**, followi
 - **Event-driven architecture** using RabbitMQ
 - **MariaDB** with **Hibernate** for persistence
 - **Hexagonal Architecture** for better modularity
+- **Fixed Gradle build issues** that required executing the app without a .jar
 
 ## 📂 Project Structure
 
@@ -93,7 +96,6 @@ DATABASE_NAME=skeleton
 DATABASE_USER=root
 DATABASE_PASSWORD=
 
-
 # RabbitMQ
 RABBITMQ_HOST=
 RABBITMQ_PORT=5672
@@ -102,7 +104,6 @@ RABBITMQ_PASSWORD=
 RABBITMQ_EXCHANGE="domain_events"
 RABBITMQ_MAX_RETRIES=5
 RABBITMQ_VHOST=
-
 ```
 
 ### 3️⃣ Running the Application
@@ -135,5 +136,4 @@ cd users-service
 5. Create a Pull Request
 
 ---
-🚀 **Built with ❤️ using Java & Spring Boot** 🚀 by [DEVSOFTEC](https://www.devsoftec.com/jaap) team
-
+🚀 **Built with ❤️ using Java & Spring Boot** 🚀 by [Eduardo Guastay](https://eduedu.dev/jaap)

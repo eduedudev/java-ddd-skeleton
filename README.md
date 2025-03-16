@@ -312,4 +312,4 @@ cd users-service
 5. Create a Pull Request
 
 ---
-🚀 **Built with ❤️ using Java & Spring Boot** 🚀 by [Eduardo Guastay](https://eduedu.dev/jaap)
+🚀 **Built with ❤️ using Java & Spring Boot** 🚀 by [Eduardo Guastay](https://eduedu.dev)

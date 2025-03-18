@@ -1,15 +1,19 @@
-FROM maven:3-jdk-8-alpine as builder
+FROM openjdk:21-jdk-slim AS build
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
-COPY . /usr/src/app
-RUN mvn package
+COPY . .
 
-FROM openjdk:8-jre-alpine
+RUN chmod +x gradlew
 
-COPY --from=builder /usr/src/app/target/*.jar /app.jar
+RUN ./gradlew clean build -x test -x spotlessJavaCheck
+
+FROM openjdk:21-jdk-slim
+
+WORKDIR /app
+
+COPY --from=build /app/build/libs/users-service-0.0.1.jar /app/users-service.jar
 
 EXPOSE 8080
 
-ENTRYPOINT ["java"]
-CMD ["-jar", "/app.jar"]
+CMD ["java", "-jar", "users-service.jar"]

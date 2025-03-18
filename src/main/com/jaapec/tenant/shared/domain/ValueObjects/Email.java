@@ -1,0 +1,42 @@
+package com.jaapec.tenant.shared.domain.ValueObjects;
+
+import java.util.Objects;
+import java.util.regex.Pattern;
+
+public abstract class Email {
+
+	protected final String value;
+
+	public Email(String value) {
+		if (value != null) {
+			ensureValidEmail(value);
+		}
+		this.value = value;
+	}
+
+	public String value() {
+		return value;
+	}
+
+	private void ensureValidEmail(String value) throws IllegalArgumentException {
+		String EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+		if (!Pattern.matches(EMAIL_REGEX, value)) {
+			throw new IllegalArgumentException("The email is invalid");
+		}
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		Email email = (Email) o;
+
+		return Objects.equals(value, email.value);
+	}
+
+	@Override
+	public int hashCode() {
+		return value != null ? value.hashCode() : 0;
+	}
+}

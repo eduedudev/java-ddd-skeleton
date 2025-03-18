@@ -1,11 +1,315 @@
-### Java Spring template project
 
-This project is based on a GitLab [Project Template](https://docs.gitlab.com/ee/gitlab-basics/create-project.html).
+# Users Service 🚀
 
-Improvements can be proposed in the [original project](https://gitlab.com/gitlab-org/project-templates/spring).
+## Overview
+The **Users Service** is a microservice built with **Java Spring Boot**, following **Domain-Driven Design (DDD)** principles based on the **CodelyTV Java DDD Example** ([repository](https://github.com/CodelyTV/java-ddd-example)).
+This project was optimized by **removing monorepo configurations**, **fixing issues preventing .jar generation**, and **adding support for GraphQL**, among other improvements.
 
-### CI/CD with Auto DevOps
+## 📌 Key Features
+- **Domain-Driven Design (DDD)** architecture
+- **CQRS pattern** with Command & Query separation
+- **GraphQL API** for user and tenant management
+- **Event-driven architecture** using RabbitMQ
+- **MariaDB** with **Hibernate** for persistence
+- **Hexagonal Architecture** for better modularity
+- **Fixed Gradle build issues** that required executing the app without a .jar
 
-This template is compatible with [Auto DevOps](https://docs.gitlab.com/ee/topics/autodevops/).
+## 📂 Project Structure
 
-If Auto DevOps is not already enabled for this project, you can [turn it on](https://docs.gitlab.com/ee/topics/autodevops/#enabling-auto-devops) in the project settings.
+```
+├── main
+│   ├── com
+│   │   └── devsoftec
+│   │       └── jaap
+│   │           └── users
+│   │               ├── healt_checker
+│   │               │   └── infrastructure
+│   │               │       └── rest
+│   │               │           └── HealthCheckGetController.java
+│   │               ├── shared
+│   │               │   ├── domain
+│   │               │   │   ├── AggregateRoot.java
+│   │               │   │   ├── bus
+│   │               │   │   │   ├── command
+│   │               │   │   │   │   ├── CommandBus.java
+│   │               │   │   │   │   ├── CommandHandlerExecutionError.java
+│   │               │   │   │   │   ├── CommandHandler.java
+│   │               │   │   │   │   ├── Command.java
+│   │               │   │   │   │   └── CommandNotRegisteredError.java
+│   │               │   │   │   ├── event
+│   │               │   │   │   │   ├── DomainEvent.java
+│   │               │   │   │   │   └── EventBus.java
+│   │               │   │   │   └── query
+│   │               │   │   │       ├── QueryBus.java
+│   │               │   │   │       ├── QueryHandlerExecutionError.java
+│   │               │   │   │       ├── QueryHandler.java
+│   │               │   │   │       ├── Query.java
+│   │               │   │   │       ├── QueryNotRegisteredError.java
+│   │               │   │   │       └── Response.java
+│   │               │   │   ├── criteria
+│   │               │   │   │   ├── Criteria.java
+│   │               │   │   │   ├── FilterField.java
+│   │               │   │   │   ├── Filter.java
+│   │               │   │   │   ├── FilterOperator.java
+│   │               │   │   │   ├── Filters.java
+│   │               │   │   │   ├── FilterValue.java
+│   │               │   │   │   ├── OrderBy.java
+│   │               │   │   │   ├── Order.java
+│   │               │   │   │   └── OrderType.java
+│   │               │   │   ├── DomainError.java
+│   │               │   │   ├── Logger.java
+│   │               │   │   ├── Repository.java
+│   │               │   │   ├── ResourceAlreadyExists.java
+│   │               │   │   ├── ResourceNotExist.java
+│   │               │   │   ├── Service.java
+│   │               │   │   ├── Utils.java
+│   │               │   │   ├── UuidGenerator.java
+│   │               │   │   └── ValueObjects
+│   │               │   │       ├── BigDecimalValueObject.java
+│   │               │   │       ├── BooleanValueObject.java
+│   │               │   │       ├── CreatedAt.java
+│   │               │   │       ├── DateTimeValueObject.java
+│   │               │   │       ├── DateValueObject.java
+│   │               │   │       ├── Email.java
+│   │               │   │       ├── Identifier.java
+│   │               │   │       ├── IntValueObject.java
+│   │               │   │       ├── StringValueObject.java
+│   │               │   │       └── UpdatedAt.java
+│   │               │   └── infrastructure
+│   │               │       ├── bus
+│   │               │       │   ├── command
+│   │               │       │   │   ├── CommandHandlersInformation.java
+│   │               │       │   │   └── InMemoryCommandBus.java
+│   │               │       │   ├── event
+│   │               │       │   │   ├── DomainEventJsonDeserializer.java
+│   │               │       │   │   ├── DomainEventJsonSerializer.java
+│   │               │       │   │   ├── DomainEventsInformation.java
+│   │               │       │   │   ├── DomainEventSubscriberInformation.java
+│   │               │       │   │   ├── DomainEventSubscriber.java
+│   │               │       │   │   ├── DomainEventSubscribersInformation.java
+│   │               │       │   │   ├── mariadb
+│   │               │       │   │   │   ├── MariaDBDomainEventsConsumer.java
+│   │               │       │   │   │   ├── MariaDBDomainEventsScheduler.java
+│   │               │       │   │   │   └── MariaDBEventBus.java
+│   │               │       │   │   ├── rabbitmq
+│   │               │       │   │   │   ├── RabbitMqDomainEventsConsumer.java
+│   │               │       │   │   │   ├── RabbitMQDomainEventsScheduler.java
+│   │               │       │   │   │   ├── RabbitMqEventBusConfiguration.java
+│   │               │       │   │   │   ├── RabbitMqEventBus.java
+│   │               │       │   │   │   ├── RabbitMqExchangeNameFormatter.java
+│   │               │       │   │   │   ├── RabbitMqPublisher.java
+│   │               │       │   │   │   └── RabbitMqQueueNameFormatter.java
+│   │               │       │   │   └── spring
+│   │               │       │   │       └── SpringApplicationEventBus.java
+│   │               │       │   └── query
+│   │               │       │       ├── InMemoryQueryBus.java
+│   │               │       │       └── QueryHandlersInformation.java
+│   │               │       ├── cli
+│   │               │       │   └── ConsoleCommand.java
+│   │               │       ├── config
+│   │               │       │   ├── EnvironmentConfig.java
+│   │               │       │   ├── Parameter.java
+│   │               │       │   └── ParameterNotExist.java
+│   │               │       ├── Config.java
+│   │               │       ├── controller
+│   │               │       │   └── graphql
+│   │               │       │       ├── CustomDGSConfiguration.java
+│   │               │       │       ├── GraphQLCustomException.java
+│   │               │       │       ├── GraphQLExceptionList.java
+│   │               │       │       ├── GraphQLExceptionResolver.java
+│   │               │       │       └── schema
+│   │               │       │           └── schema.graphqls
+│   │               │       ├── JavaUuidGenerator.java
+│   │               │       ├── persistence
+│   │               │       │   └── hibernate
+│   │               │       │       ├── HibernateConfiguration.java
+│   │               │       │       ├── HibernateCriteriaConverter.java
+│   │               │       │       └── HibernateRepository.java
+│   │               │       ├── spring
+│   │               │       │   ├── ApiController.java
+│   │               │       │   ├── ApiExceptionMiddleware.java
+│   │               │       │   └── log
+│   │               │       │       ├── Log4j2Logger.java
+│   │               │       │       └── LoggerConfig.java
+│   │               │       └── validation
+│   │               │           ├── ValidationResponse.java
+│   │               │           ├── Validator.java
+│   │               │           ├── ValidatorNotExist.java
+│   │               │           └── validators
+│   │               │               ├── BigDecimalValidator.java
+│   │               │               ├── DateTimeValidator.java
+│   │               │               ├── DateValidator.java
+│   │               │               ├── DoubleValidator.java
+│   │               │               ├── EmailValidator.java
+│   │               │               ├── EnumValidator.java
+│   │               │               ├── FieldValidator.java
+│   │               │               ├── MaxValidation.java
+│   │               │               ├── MinValidation.java
+│   │               │               ├── NotEmptyValidator.java
+│   │               │               ├── RegexValidation.java
+│   │               │               ├── RequiredValidator.java
+│   │               │               ├── StringValidator.java
+│   │               │               ├── UniqueFieldValidator.java
+│   │               │               └── UuidValidator.java
+│   │               ├── Starter.java
+│   │               ├── template
+│   │               │   ├── application
+│   │               │   ├── domain
+│   │               │   │   ├── events
+│   │               │   │   └── ValueObjects
+│   │               │   └── infrastructure
+│   │               │       ├── controller
+│   │               │       │   ├── graphql
+│   │               │       │   └── reset
+│   │               │       └── persistence
+│   │               │           └── hibernate
+│   │               └── users
+│   │                   ├── application
+│   │                   │   └── create
+│   │                   │       ├── CreateUserCommandHandler.java
+│   │                   │       ├── CreateUserCommand.java
+│   │                   │       └── UserCreator.java
+│   │                   ├── domain
+│   │                   │   ├── events
+│   │                   │   │   └── UserCreatedDomainEvent.java
+│   │                   │   ├── UserEmail.java
+│   │                   │   ├── UserId.java
+│   │                   │   ├── User.java
+│   │                   │   ├── UserName.java
+│   │                   │   └── UserRepository.java
+│   │                   └── infrastructure
+│   │                       ├── controller
+│   │                       │   ├── graphql
+│   │                       │   │   ├── schema
+│   │                       │   │   │   └── schema.graphqls
+│   │                       │   │   └── UserPostControllerGraphql.java
+│   │                       │   ├── RequestUser.java
+│   │                       │   └── reset
+│   │                       │       └── UserPOSTController.java
+│   │                       └── persistence
+│   │                           ├── hibernate
+│   │                           │   └── User.orm.xml
+│   │                           └── MariaDBUserRepository.java
+│   └── resources
+│       ├── application.properties
+│       └── schema.sql
+└── test
+    ├── com
+    │   └── devsoftec
+    │       └── jaap
+    │           └── users
+    │               ├── healt_checker
+    │               │   └── infrastructure
+    │               │       └── rest
+    │               │           └── HealthCheckGetControllerShould.java
+    │               ├── RequestTestCase.java
+    │               ├── shared
+    │               │   ├── domain
+    │               │   │   ├── MotherCreator.java
+    │               │   │   ├── UuidMother.java
+    │               │   │   └── WordMother.java
+    │               │   └── infrastructure
+    │               │       ├── ApplicationTestCase.java
+    │               │       ├── bus
+    │               │       │   └── event
+    │               │       │       ├── mariadb
+    │               │       │       │   └── MariaDBEventBusShould.java
+    │               │       │       └── rabbitmq
+    │               │       │           ├── RabbitMqEventBusShould.java
+    │               │       │           └── TestAllWorksOnRabbitMqEventsPublished.java
+    │               │       └── InfrastructureTestCase.java
+    │               ├── users
+    │               │   ├── application
+    │               │   │   └── create
+    │               │   │       ├── CreateUserCommandHandlerShould.java
+    │               │   │       └── CreateUserCommandMother.java
+    │               │   ├── domain
+    │               │   │   ├── UserCreatedDomainEventMother.java
+    │               │   │   ├── UserEmailMother.java
+    │               │   │   ├── UserIdMother.java
+    │               │   │   ├── UserMother.java
+    │               │   │   └── UserNameMother.java
+    │               │   ├── infrastructure
+    │               │   │   ├── controller
+    │               │   │   │   ├── grapghql
+    │               │   │   │   │   └── UserPostControllerGraphqlShould.java
+    │               │   │   │   └── reset
+    │               │   │   │       └── UserPOSTControllerShould.java
+    │               │   │   ├── persistence
+    │               │   │   │   └── hibernate
+    │               │   │   │       └── MariaDBUserRepositoryShould.java
+    │               │   │   └── UnitTestCase.java
+    │               │   ├── UsersModuleInfrastructureTestCase.java
+    │               │   └── UsersModuleUnitTestCase.java
+    │               └── UsersServiceApplicationTests.java
+    └── resources
+```
+
+## 🛠 Technologies Used
+- **Java 21+**
+- **Spring Boot**
+- **GraphQL**
+- **MariaDB** + **Hibernate**
+- **RabbitMQ** (for event-driven communication)
+- **Docker** (for containerized deployment)
+
+## ⚙️ Configuration
+
+### 1️⃣ Prerequisites
+Ensure you have the following installed:
+- **Java 21+**
+- **Gradle**
+- **Docker & Docker Compose** (for MariaDB & RabbitMQ setup)
+
+### 2️⃣ Environment Variables
+Create a `.env` file with the following:
+
+```
+# DATABASE MARIADB
+DATABASE_HOST=localhost
+DATABASE_PORT=3306
+DATABASE_NAME=skeleton
+DATABASE_USER=root
+DATABASE_PASSWORD=
+
+# RabbitMQ
+RABBITMQ_HOST=
+RABBITMQ_PORT=5672
+RABBITMQ_LOGIN=
+RABBITMQ_PASSWORD=
+RABBITMQ_EXCHANGE="domain_events"
+RABBITMQ_MAX_RETRIES=5
+RABBITMQ_VHOST=
+```
+
+### 3️⃣ Running the Application
+
+#### Start the database and RabbitMQ
+```sh
+docker-compose up -d
+```
+
+#### Build & Run
+```sh
+git clone https://github.com/your-repo/users-service.git
+cd users-service
+./gradlew clean build
+./gradlew bootRun --args='--spring.profiles.active=local'
+```
+
+## 🔗 API Endpoints
+
+### GraphQL API
+- `createUser(username: String, email: String): User` → Create a new user
+- `getUser(id: String): User` → Get user details
+- `searchUsers(criteria: SearchCriteria): [User]` → Search users with filters
+
+## 🛠 Contributing
+1. Fork the repo
+2. Create a new branch (`git checkout -b feature-xyz`)
+3. Commit your changes (`git commit -m 'Added feature xyz'`)
+4. Push to the branch (`git push origin feature-xyz`)
+5. Create a Pull Request
+
+---
+🚀 **Built with ❤️ using Java & Spring Boot** 🚀 by [Eduardo Guastay](https://eduedu.dev)

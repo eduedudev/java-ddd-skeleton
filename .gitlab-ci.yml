@@ -41,7 +41,7 @@ test:
     # Esperar a que RabbitMQ esté listo
     - |
       echo "⌛ Esperando a que RabbitMQ esté listo..."
-      until curl -s -u "$RABBITMQ_LOGIN:$RABBITMQ_PASSWORD" "http://localhost:15672/api/healthchecks/node"; do
+      until curl -s -u "$RABBITMQ_LOGIN:$RABBITMQ_PASSWORD" "http://rabbitmq:15672/api/healthchecks/node"; do
         echo "⏳ Aún no está disponible RabbitMQ..."
         sleep 2
       done

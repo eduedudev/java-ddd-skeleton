@@ -1,4 +1,4 @@
-image: openjdk:21-jdk-slim 
+image: openjdk:21-jdk-slim
 
 variables:
   DOCKER_TLS_CERTDIR: ""
@@ -33,8 +33,11 @@ infra:
 
 test:
   stage: test
-  image: openjdk:21-jdk-slim 
+  image: openjdk:21-jdk-slim
   script:
+    - apt-get update && apt-get install -y mysql-client curl
+    - mysql -h "$DATABASE_HOST" -u"$DATABASE_USER" -p"$DATABASE_PASSWORD" -e "SELECT 1;"
+    - curl -s -u "$RABBITMQ_LOGIN:$RABBITMQ_PASSWORD" "http://rabbitmq:15672/api/healthchecks/node"
     - chmod +x gradlew
     - ./gradlew test
   dependencies:

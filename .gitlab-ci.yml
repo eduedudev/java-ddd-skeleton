@@ -1,14 +1,50 @@
-
 stages:
-  - qodana
   - build
   - test
-  - deploy
+  - deploy_dev
+  - deploy_prod
 
-include:
-  - template: Security/Dependency-Scanning.gitlab-ci.yml
+variables:
+  MYSQL_ROOT_PASSWORD: rootpassword
+  MYSQL_DATABASE: jaap_users_service
+  MYSQL_USER: dbuser
+  MYSQL_PASSWORD: dbpasss
+  RABBITMQ_DEFAULT_USER: kcrqwise
+  RABBITMQ_DEFAULT_PASS: I3SCFxjoQT8zExp7vrx6k5Xr9uOaGx6a
+  RABBITMQ_DEFAULT_VHOST: kcrqwise
 
+# Etapa de Build
+build:
+  stage: build
+  image: gradle:8.7-jdk21
+  script:
+    - ./gradlew build -x test --no-daemon
+  artifacts:
+    paths:
+      - build/libs/*.jar
+    expire_in: 1h
+
+# Etapa de Test
+test:
+  stage: test
+  image: gradle:8.7-jdk17
+  services:
+    - name: mariadb:10.7
+      alias: mariadb
+    - name: rabbitmq:3-management
+      alias: rabbitmq
+  before_script:
+    - echo "Esperando que los servicios de DB y RabbitMQ arranquen..."
+    - sleep 10 # Espera que los servicios estén listos
+  script:
+    - ./gradlew test
+  artifacts:
+    reports:
+      junit: build/test-results/test/*.xml
+
+# Análisis de código con Qodana
 qodana:
+  stage: test
   image:
     name: jetbrains/qodana-jvm:2024.3
     entrypoint: [""]
@@ -23,34 +59,40 @@ qodana:
     QODANA_TOKEN: $QODANA_TOKEN
     QODANA_ENDPOINT: "https://qodana.cloud"
   script:
-    - echo "QODANA_TOKEN starts with $QODANA_TOKEN"
     - qodana --cache-dir=$CI_PROJECT_DIR/.qodana/cache
+  allow_failure: true
 
-
-
-build-job:
-  stage: build
+# Despliegue a Desarrollo (Automático)
+deploy_dev:
+  stage: deploy_dev
+  image: docker:latest
+  services:
+    - docker:dind
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
-    - echo "Compiling the code..."
-    - echo "Compile complete."
+    - docker build -t $CI_REGISTRY_IMAGE:dev .
+    - docker push $CI_REGISTRY_IMAGE:dev
+  environment:
+    name: development
+    url: https://dev.myapp.com
+  only:
+    - dev
 
-unit-test-job:
-  stage: test
+# Despliegue a Producción (Manual)
+deploy_prod:
+  stage: deploy_prod
+  image: docker:latest
+  services:
+    - docker:dind
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   script:
-    - echo "Running unit tests... This will take about 60 seconds."
-    - sleep 60
-    - echo "Code coverage is 90%"
-
-lint-test-job:
-  stage: test
-  script:
-    - echo "Linting code... This will take about 10 seconds."
-    - sleep 10
-    - echo "No lint issues found."
-
-deploy-job:
-  environment: production
-  stage: deploy
-  script:
-    - echo "Deploying application..."
-    - echo "Application successfully deployed."
+    - docker build -t $CI_REGISTRY_IMAGE:latest .
+    - docker push $CI_REGISTRY_IMAGE:latest
+  environment:
+    name: production
+    url: https://myapp.com
+  when: manual
+  only:
+    - main

@@ -17,14 +17,18 @@ build:
     expire_in: 1h
 
 # Etapa de Test
+# Etapa de Test
 test:
   stage: test
-  image: gradle:8.7-jdk21
+  image: docker:19.03.12
   services:
     - docker:19.03.12-dind
   before_script:
     - echo "Esperando que los servicios de DB y RabbitMQ arranquen..."
-    - docker-compose -f docker-compose.yml up -d
+    - apt-get update && apt-get install -y curl
+    - curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+    - chmod +x /usr/local/bin/docker-compose
+    - docker-compose -f docker-compose-test.yml up -d
     - sleep 20  # Esperar a que los servicios se inicien correctamente
   script:
     - chmod +x gradlew

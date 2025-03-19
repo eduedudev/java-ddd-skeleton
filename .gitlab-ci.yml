@@ -15,6 +15,28 @@ test:
   image: docker:24.0.5
   services:
     - docker:24.0.5-dind
+  before_script:
+    - docker-compose -f docker-compose-test.yml up -d
+    # Esperar a que MariaDB esté listo
+    - |
+      echo "⌛ Esperando a que MariaDB esté listo..."
+      until docker exec mariadb mysql -u"$DATABASE_USER" -p"$DATABASE_PASSWORD" -e "SELECT 1;"; do
+        echo "⏳ Aún no está disponible MariaDB..."
+        sleep 2
+      done
+
+    # Esperar a que RabbitMQ esté listo
+    - |
+      echo "⌛ Esperando a que RabbitMQ esté listo..."
+      until curl -s -u "$RABBITMQ_LOGIN:$RABBITMQ_PASSWORD" "http://localhost:15672/api/healthchecks/node"; do
+        echo "⏳ Aún no está disponible RabbitMQ..."
+        sleep 2
+      done
   script:
-    - docker info
-    - docker run hello-world
+    - chmod +x gradlew
+    - ./gradlew test
+  after_script:
+    - docker-compose -f docker-compose-test.yml down
+  artifacts:
+    reports:
+      junit: build/test-results/test/*.xml

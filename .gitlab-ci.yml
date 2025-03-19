@@ -30,7 +30,7 @@ test:
   before_script:
     - docker-compose -f docker-compose-test.yml up -d
     - docker network ls
-    - docker network inspect jaap-network
+    - docker network inspect tenant-service_jaap-network # Nombre completo de la red
     - docker logs rabbitmq
     # Esperar a que MariaDB esté listo
     - |
@@ -45,7 +45,7 @@ test:
       echo "⌛ Esperando a que RabbitMQ esté listo..."
       until curl -s -u "$RABBITMQ_LOGIN:$RABBITMQ_PASSWORD" "http://rabbitmq:15672/api/healthchecks/node"; do
         echo "⏳ Aún no está disponible RabbitMQ..."
-        sleep 5 # Aumenta el tiempo de espera
+        sleep 5
       done
   script:
     - chmod +x gradlew

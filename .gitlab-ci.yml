@@ -1,4 +1,4 @@
-image: gradle:8.3-jdk21
+image: gradle:8.13-jdk21-corretto
 
 services:
   - docker:dind

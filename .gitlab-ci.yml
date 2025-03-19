@@ -18,6 +18,7 @@ build:
   stage: build
   image: gradle:8.7-jdk21
   script:
+    - chmod +X gradlew
     - ./gradlew build -x test --no-daemon
   artifacts:
     paths:
@@ -37,6 +38,7 @@ test:
     - echo "Esperando que los servicios de DB y RabbitMQ arranquen..."
     - sleep 10 # Espera que los servicios estén listos
   script:
+    - chmod +X gradlew
     - ./gradlew test
   artifacts:
     reports:

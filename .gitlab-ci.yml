@@ -37,9 +37,9 @@ build:
 
 test:
   stage: test
-  image: docker:latest
+  image: docker:24.0.5
   services:
-    - docker:dind
+    - docker:24.0.5-dind
   before_script:
     - docker-compose -f docker-compose-test.yml up -d
     # Esperar a que MariaDB esté listo

@@ -6,7 +6,7 @@ stages:
 
 variables:
   MYSQL_ROOT_PASSWORD: rootpassword
-  MYSQL_DATABASE: jaap_users_service
+  MYSQL_DATABASE: jaap_tenant-service
   MYSQL_USER: dbuser
   MYSQL_PASSWORD: dbpasss
   RABBITMQ_DEFAULT_USER: kcrqwise
@@ -27,7 +27,7 @@ build:
 # Etapa de Test
 test:
   stage: test
-  image: gradle:8.7-jdk17
+  image: gradle:8.7-jdk21
   services:
     - name: mariadb:10.7
       alias: mariadb

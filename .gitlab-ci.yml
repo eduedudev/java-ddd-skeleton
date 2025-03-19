@@ -39,14 +39,6 @@ test:
         echo "⏳ Aún no está disponible MariaDB..."
         sleep 2
       done
-
-    # Esperar a que RabbitMQ esté listo
-    - |
-      echo "⌛ Esperando a que RabbitMQ esté listo..."
-      until curl -s -u "$RABBITMQ_LOGIN:$RABBITMQ_PASSWORD" "http://rabbitmq:15672/api/healthchecks/node"; do
-        echo "⏳ Aún no está disponible RabbitMQ..."
-        sleep 5
-      done
   script:
     - chmod +x gradlew
     - ./gradlew test

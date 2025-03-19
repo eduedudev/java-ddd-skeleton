@@ -1,5 +1,9 @@
 image: gradle:8.13-jdk21-corretto
 
+variables:
+  DOCKER_HOST: tcp://docker:2375
+  DOCKER_TLS_CERTDIR: ""
+
 stages:
   - build
   - test

@@ -34,10 +34,10 @@ services:
     restart: always
 
   # Servicio de Spring Boot
-  users-service:
+  tenant-service:
     build:
       context: .
-    container_name: users-service
+    container_name: tenant-service
     environment:
       # Variables de entorno para la aplicación Spring Boot
       DATABASE_HOST: db

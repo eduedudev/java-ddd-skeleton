@@ -23,7 +23,7 @@ qodana:
     QODANA_TOKEN: $QODANA_TOKEN
     QODANA_ENDPOINT: "https://qodana.cloud"
   script:
-    - echo "QODANA_TOKEN: $QODANA_TOKEN"
+    - echo "$QODANA_TOKEN"
     - qodana --cache-dir=$CI_PROJECT_DIR/.qodana/cache
 
 build-job:

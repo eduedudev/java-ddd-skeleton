@@ -7,7 +7,7 @@ variables:
   DOCKER_DRIVER: overlay2
   DATABASE_HOST: db
   DATABASE_PORT: 3306
-  DATABASE_NAME: jaap_users_service
+  DATABASE_NAME: jaapec_tenant_service
   DATABASE_USER: dbuser
   DATABASE_PASSWORD: dbpasss
   RABBITMQ_HOST: rabbitmq
@@ -16,54 +16,14 @@ variables:
   RABBITMQ_PASSWORD: I3SCFxjoQT8zExp7vrx6k5Xr9uOaGx6a
   RABBITMQ_EXCHANGE: domain_events
   RABBITMQ_MAX_RETRIES: 5
-  RABBITMQ_VHOST: kcrqwise  
+  RABBITMQ_VHOST: kcrqwise
 
 stages:
-  - setup
   - build
   - test
   - deploy_dev
   - deploy_prod
 
-before_script:
-  - echo "🔧 Instalando herramientas necesarias..."
-  - apt-get update && apt-get install -y netcat curl
-  - curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-  - chmod +x /usr/local/bin/docker-compose
-  - docker-compose version  # Verificar instalación
-
-
-setup_services:
-  stage: setup
-  script:
-    - echo "🚀 Iniciando MariaDB, RabbitMQ y el servicio Spring Boot..."
-    - docker-compose up -d
-
-    # Esperar a que MariaDB esté listo
-    - |
-      echo "⌛ Esperando a que MariaDB esté listo..."
-      until docker exec mariadb mysqladmin ping -h "$DATABASE_HOST" -u"$DATABASE_USER" -p"$DATABASE_PASSWORD" --silent; do
-        echo "⏳ Aún no está disponible MariaDB..."
-        sleep 2
-      done
-
-    # Esperar a que RabbitMQ esté listo
-    - |
-      echo "⌛ Esperando a que RabbitMQ esté listo..."
-      until curl -s -u "$RABBITMQ_LOGIN:$RABBITMQ_PASSWORD" "http://localhost:15672/api/healthchecks/node"; do
-        echo "⏳ Aún no está disponible RabbitMQ..."
-        sleep 2
-      done
-
-    # Esperar a que el servicio Spring Boot responda
-    - |
-      echo "⌛ Esperando a que el servicio Spring Boot esté listo..."
-      until curl -s http://localhost:8080/actuator/health | grep "UP"; do
-        echo "⏳ Aún no está disponible el servicio..."
-        sleep 5
-      done  
-
-# Etapa de Build
 build:
   stage: build
   image: gradle:8.7-jdk21
@@ -75,30 +35,37 @@ build:
       - build/libs/*.jar
     expire_in: 1h
 
-# Etapa de Test
-# Etapa de Test
 test:
   stage: test
-  image: docker:19.03.12
+  image: docker:latest
   services:
-    - docker:19.03.12-dind
+    - docker:dind
   before_script:
-    - echo "Esperando que los servicios de DB y RabbitMQ arranquen..."
-    - apt-get update && apt-get install -y curl
-    - curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-    - chmod +x /usr/local/bin/docker-compose
     - docker-compose -f docker-compose-test.yml up -d
-    - sleep 20  # Esperar a que los servicios se inicien correctamente
+    # Esperar a que MariaDB esté listo
+    - |
+      echo "⌛ Esperando a que MariaDB esté listo..."
+      until docker exec mariadb mysql -u"$DATABASE_USER" -p"$DATABASE_PASSWORD" -e "SELECT 1;"; do
+        echo "⏳ Aún no está disponible MariaDB..."
+        sleep 2
+      done
+
+    # Esperar a que RabbitMQ esté listo
+    - |
+      echo "⌛ Esperando a que RabbitMQ esté listo..."
+      until curl -s -u "$RABBITMQ_LOGIN:$RABBITMQ_PASSWORD" "http://localhost:15672/api/healthchecks/node"; do
+        echo "⏳ Aún no está disponible RabbitMQ..."
+        sleep 2
+      done
   script:
     - chmod +x gradlew
     - ./gradlew test
   after_script:
-    - docker-compose -f docker-compose-test.yml down  # Apagar los servicios después de las pruebas
+    - docker-compose -f docker-compose-test.yml down
   artifacts:
     reports:
       junit: build/test-results/test/*.xml
 
-# Análisis de código con Qodana
 qodana:
   stage: test
   image:
@@ -118,7 +85,6 @@ qodana:
     - qodana --cache-dir=$CI_PROJECT_DIR/.qodana/cache
   allow_failure: true
 
-# Despliegue a Desarrollo (Automático)
 deploy_dev:
   stage: deploy_dev
   image: docker:latest
@@ -135,7 +101,6 @@ deploy_dev:
   only:
     - dev
 
-# Despliegue a Producción (Manual)
 deploy_prod:
   stage: deploy_prod
   image: docker:latest

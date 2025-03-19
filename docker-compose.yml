@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # Servicio de MariaDB
   db:
@@ -12,8 +10,6 @@ services:
       MYSQL_PASSWORD: dbpasss
     volumes:
       - db_data:/var/lib/mysql
-    ports:
-      - "3306:3306"
     networks:
       - jaap-network
     restart: always
@@ -22,9 +18,6 @@ services:
   rabbitmq:
     image: rabbitmq:3-management
     container_name: rabbitmq
-    ports:
-      - "5672:5672" # Puerto para conexión de cliente AMQP
-      - "15672:15672" # Puerto para la UI de gestión de RabbitMQ (opcional)
     environment:
       RABBITMQ_DEFAULT_USER: kcrqwise
       RABBITMQ_DEFAULT_PASS: I3SCFxjoQT8zExp7vrx6k5Xr9uOaGx6a
@@ -42,7 +35,7 @@ services:
       # Variables de entorno para la aplicación Spring Boot
       DATABASE_HOST: db
       DATABASE_PORT: 3306
-      DATABASE_NAME: jaap_users_service
+      DATABASE_NAME: jaapec_tenant_service
       DATABASE_USER: dbuser
       DATABASE_PASSWORD: dbpasss
       RABBITMQ_HOST: rabbitmq
@@ -52,8 +45,6 @@ services:
       RABBITMQ_EXCHANGE: domain_events
       RABBITMQ_MAX_RETRIES: 5
       RABBITMQ_VHOST: kcrqwise
-    ports:
-      - "8080:8080"
     depends_on:
       - db
       - rabbitmq

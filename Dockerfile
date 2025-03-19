@@ -12,8 +12,8 @@ FROM openjdk:21-jdk-slim
 
 WORKDIR /app
 
-COPY --from=build /app/build/libs/users-service-0.0.1.jar /app/users-service.jar
+COPY --from=build /app/build/libs/*.jar /app/service.jar
 
 EXPOSE 8080
 
-CMD ["java", "-jar", "users-service.jar"]
+CMD ["java", "-jar", "service.jar"]

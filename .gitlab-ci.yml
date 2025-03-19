@@ -19,11 +19,18 @@ build:
   image: gradle:8.7-jdk21
   script:
     - chmod +x gradlew
-    - ./gradlew build -x test --no-daemon
+    - ./gradlew build -x test -x spotlessJavaCheck --no-daemon
   artifacts:
     paths:
       - build/libs/*.jar
     expire_in: 1h
+
+spotlessJavaCheck:
+  stage: test
+  image: gradle:8.7-jdk21
+  script:
+    - chmod +x gradlew
+    - ./gradlew spotlessJavaCheck --no-daemon
 
 # Etapa de Test
 test:

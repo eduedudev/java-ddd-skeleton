@@ -3,6 +3,19 @@ image: gradle:8.13-jdk21-corretto
 variables:
   DOCKER_HOST: tcp://docker:2375
   DOCKER_TLS_CERTDIR: ""
+  DOCKER_DRIVER: overlay2
+  DATABASE_HOST: db
+  DATABASE_PORT: 3306
+  DATABASE_NAME: jaapec_tenant_service
+  DATABASE_USER: dbuser
+  DATABASE_PASSWORD: dbpasss
+  RABBITMQ_HOST: rabbitmq
+  RABBITMQ_PORT: 5672
+  RABBITMQ_LOGIN: kcrqwise
+  RABBITMQ_PASSWORD: I3SCFxjoQT8zExp7vrx6k5Xr9uOaGx6a
+  RABBITMQ_EXCHANGE: domain_events
+  RABBITMQ_MAX_RETRIES: 5
+  RABBITMQ_VHOST: kcrqwise
 
 stages:
   - build

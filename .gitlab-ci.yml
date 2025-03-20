@@ -33,6 +33,7 @@ stages:
 integration-tests:
   stage: test
   script:
+    - touch src/main/resources/.env
     - echo "DATABASE_HOST=db" > src/main/resources/.env
     - echo "DATABASE_PORT=3306" >> src/main/resources/.env
     - echo "DATABASE_NAME=jaapec_tenant_service" >> src/main/resources/.env

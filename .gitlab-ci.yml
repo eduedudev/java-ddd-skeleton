@@ -1,5 +1,22 @@
 image: openjdk:21-jdk-slim  # Usa una imagen base con Java 21
 
+stages:
+  - build
+  - test
+  - deploy_dev
+  - deploy_prod
+
+build:
+  stage: build
+  image: gradle:8.7-jdk21
+  script:
+    - chmod +x gradlew
+    - ./gradlew build -x test -x spotlessJavaCheck --no-daemon
+  artifacts:
+    paths:
+      - build/libs/*.jar
+    expire_in: 1h  
+
 services:
   - name: mariadb:10.7
     alias: db
@@ -27,10 +44,7 @@ variables:
   RABBITMQ_PASSWORD: I3SCFxjoQT8zExp7vrx6k5Xr9uOaGx6a
   RABBITMQ_VHOST: kcrqwise
 
-stages:
-  - test
-
-integration-tests:
+tests:
   stage: test
   script:
     - echo "DEBUG=true" > src/main/resources/.env
@@ -49,3 +63,56 @@ integration-tests:
     - cat src/main/resources/.env
     - chmod +x gradlew
     - ./gradlew test
+
+qodana:
+  stage: test
+  image:
+    name: jetbrains/qodana-jvm:2024.3
+    entrypoint: [""]
+  cache:
+    - key: qodana-2024.3-$CI_DEFAULT_BRANCH-$CI_COMMIT_REF_SLUG
+      fallback_keys:
+        - qodana-2024.3-$CI_DEFAULT_BRANCH-
+        - qodana-2024.3-
+      paths:
+        - .qodana/cache
+  variables:
+    QODANA_TOKEN: $QODANA_TOKEN
+    QODANA_ENDPOINT: "https://qodana.cloud"
+  script:
+    - qodana --cache-dir=$CI_PROJECT_DIR/.qodana/cache
+  allow_failure: true
+
+deploy_dev:
+  stage: deploy_dev
+  image: docker:latest
+  services:
+    - docker:dind
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - docker build -t $CI_REGISTRY_IMAGE:dev .
+    - docker push $CI_REGISTRY_IMAGE:dev
+  environment:
+    name: development
+    url: https://dev.myapp.com
+  only:
+    - dev
+
+deploy_prod:
+  stage: deploy_prod
+  image: docker:latest
+  services:
+    - docker:dind
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  script:
+    - docker build -t $CI_REGISTRY_IMAGE:latest .
+    - docker push $CI_REGISTRY_IMAGE:latest
+  environment:
+    name: production
+    url: https://myapp.com
+  when: manual
+  only:
+    - main
+

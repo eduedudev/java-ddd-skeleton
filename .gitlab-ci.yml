@@ -1,7 +1,7 @@
 image: openjdk:21-jdk-slim  # Usa una imagen base con Java 21
 
 stages:
-  - dependency_scanning
+  - security
   - build
   - test
 
@@ -90,14 +90,7 @@ qodana:
   allow_failure: true
 
 dependency_scanning:
-  stage: dependency_scanning
-  image: aquasec/trivy:latest
-  script:
-    - trivy fs --exit-code 0 --severity LOW,MEDIUM .
-    - trivy fs --exit-code 1 --severity HIGH,CRITICAL .
-  allow_failure: true
-  artifacts:
-    reports:
-      dependency_scanning: trivy-report.json
-    expire_in: 1h
+  stage: security
+  variables:
+    DS_ANALYZER_IMAGES: "gemnasium-maven" # Aunque diga "maven", también funciona para Gradle
 

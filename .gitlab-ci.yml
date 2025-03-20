@@ -93,6 +93,9 @@ dependency_scanning:
   stage: security
   variables:
     DS_ANALYZER_IMAGES: "gemnasium-maven" # Compatible con proyectos Gradle
+  artifacts:
+    paths:
+      - dependencies.lock  
   rules:
     - when: always
 

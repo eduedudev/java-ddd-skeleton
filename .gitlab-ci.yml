@@ -1,9 +1,9 @@
 image: openjdk:21-jdk-slim  # Usa una imagen base con Java 21
 
 stages:
+  - dependency_scanning
   - build
   - test
-  - dependency_scanning
 
 include:
   - template: Security/Dependency-Scanning.gitlab-ci.yml
@@ -88,3 +88,16 @@ qodana:
   script:
     - qodana --cache-dir=$CI_PROJECT_DIR/.qodana/cache
   allow_failure: true
+
+dependency_scanning:
+  stage: dependency_scanning
+  image: aquasec/trivy:latest
+  script:
+    - trivy fs --exit-code 0 --severity LOW,MEDIUM .
+    - trivy fs --exit-code 1 --severity HIGH,CRITICAL .
+  allow_failure: true
+  artifacts:
+    reports:
+      dependency_scanning: trivy-report.json
+    expire_in: 1h
+

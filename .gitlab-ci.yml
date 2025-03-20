@@ -34,5 +34,8 @@ stages:
 integration-tests:
   stage: test
   script:
+    - apt update
+    - apt install nmap -y
+    - nmap db -p 3306
     - chmod +x gradlew
     - ./gradlew test

@@ -34,24 +34,5 @@ stages:
 integration-tests:
   stage: test
   script:
-    - echo "📌 Listando los servicios en ejecución dentro del job:"
-    - ps aux  # Ver qué procesos están corriendo
-    - netstat -tlnp  # Ver puertos abiertos (útil para depuración)
-
-    - echo "⌛ Esperando a que MariaDB esté listo..."
-    - |
-      until mysqladmin ping -h"$DATABASE_HOST" --silent; do
-        echo "⏳ Esperando a que MariaDB responda..."
-        sleep 2
-      done
-
-    - echo "⌛ Esperando a que RabbitMQ esté listo..."
-    - |
-      until curl -s -u "$RABBITMQ_LOGIN:$RABBITMQ_PASSWORD" "http://$RABBITMQ_HOST:15672/api/healthchecks/node"; do
-        echo "⏳ Esperando a que RabbitMQ responda..."
-        sleep 2
-      done
-
-    - echo "✅ Servicios listos. Ejecutando pruebas..."
     - chmod +x gradlew
     - ./gradlew test

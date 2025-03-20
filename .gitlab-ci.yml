@@ -43,9 +43,6 @@ integration-tests:
     - echo "RABBITMQ_LOGIN=kcrqwise" >> src/main/resources/.env
     - echo "RABBITMQ_PASSWORD=I3SCFxjoQT8zExp7vrx6k5Xr9uOaGx6a" >> src/main/resources/.env
     - echo "RABBITMQ_VHOST=kcrqwise" >> src/main/resources/.env
-    - apt update
-    - apt install nmap -y
-    - nmap db
-    - nmap rabbitmq
+    - ls src/main/resources
     - chmod +x gradlew
-    - ./gradlew bootRun
+    - ./gradlew test

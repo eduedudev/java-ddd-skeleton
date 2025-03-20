@@ -33,7 +33,6 @@ stages:
 integration-tests:
   stage: test
   script:
-    - touch src/main/resources/.env
     - echo "DATABASE_HOST=db" > src/main/resources/.env
     - echo "DATABASE_PORT=3306" >> src/main/resources/.env
     - echo "DATABASE_NAME=jaapec_tenant_service" >> src/main/resources/.env
@@ -44,6 +43,7 @@ integration-tests:
     - echo "RABBITMQ_LOGIN=kcrqwise" >> src/main/resources/.env
     - echo "RABBITMQ_PASSWORD=I3SCFxjoQT8zExp7vrx6k5Xr9uOaGx6a" >> src/main/resources/.env
     - echo "RABBITMQ_VHOST=kcrqwise" >> src/main/resources/.env
-    - ls src/main/resources
+    - ls -l src/main/resources
+    - cat src/main/resources/.env
     - chmod +x gradlew
     - ./gradlew test

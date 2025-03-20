@@ -93,5 +93,6 @@ dependency_scanning:
   stage: security
   variables:
     DS_ANALYZER_IMAGES: "gemnasium-maven" # Aunque diga "maven", también funciona para Gradle
-  when: always  # Opcional: Ejecutar siempre (elimina filtros)
+  rules:
+    - when: always
 

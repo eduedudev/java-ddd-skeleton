@@ -42,11 +42,6 @@ test:
     - ./gradlew test
   dependencies:
     - infra
-  after_script:
-    - apt install curl -y
-    - curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-    - chmod +x /usr/local/bin/docker-compose
-    - docker-compose -f docker-compose-test.yml down
   artifacts:
     reports:
       junit: build/test-results/test/*.xml

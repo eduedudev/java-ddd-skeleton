@@ -92,10 +92,7 @@ qodana:
 dependency_scanning:
   stage: security
   variables:
-    DS_ANALYZER_IMAGES: "gemnasium-maven" # Aunque diga "maven", también funciona para Gradle
-  artifacts:
-    paths:
-      - gradle.lockfile
+    DS_ANALYZER_IMAGES: "gemnasium-maven" # Compatible con proyectos Gradle
   rules:
     - when: always
 

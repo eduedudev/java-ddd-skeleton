@@ -1,4 +1,4 @@
-package com.jaapec.tenant.tenant.domain;
+package com.jaapec.tenant.tenants.domain;
 
 import java.util.Objects;
 

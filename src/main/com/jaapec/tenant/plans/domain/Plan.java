@@ -2,10 +2,10 @@ package com.jaapec.tenant.plans.domain;
 
 import java.util.Objects;
 
-import com.jaapec.tenant.Plans.domain.ValueObjects.*;
 import com.jaapec.tenant.plans.domain.ValueObjects.*;
+import com.jaapec.tenant.shared.domain.AggregateRoot;
 
-public final class Plan {
+public final class Plan extends AggregateRoot {
 
 	private final PlanId id;
 	private final PlanName name;

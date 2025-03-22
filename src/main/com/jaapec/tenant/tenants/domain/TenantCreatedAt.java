@@ -1,4 +1,4 @@
-package com.jaapec.tenant.tenant.domain;
+package com.jaapec.tenant.tenants.domain;
 
 import com.jaapec.tenant.shared.domain.ValueObjects.DateTimeValueObject;
 

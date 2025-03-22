@@ -1,23 +1,27 @@
-package com.jaapec.tenant.Plans.domain.ValueObjects;
+package com.jaapec.tenant.tenant.domain;
 
 import java.util.Objects;
 
-public record PlanStatus(String value) {
+public record TenantStatus(String value) {
+
 	private enum status {
 		ACTIVE,
 		INACTIVE,
+		PENDING,
+		SUSPENDED,
 	}
 
 	@Override
 	public String value() {
-		return PlanStatus.status.valueOf(value).toString();
+		return TenantStatus.status.valueOf(value).toString();
 	}
 
 	@Override
 	public boolean equals(Object o) {
 		if (o == null || getClass() != o.getClass()) return false;
 
-		PlanStatus that = (PlanStatus) o;
+		TenantStatus that = (TenantStatus) o;
 		return Objects.equals(value, that.value);
 	}
+
 }

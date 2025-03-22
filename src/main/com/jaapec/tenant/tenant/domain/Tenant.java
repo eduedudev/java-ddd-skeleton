@@ -1,6 +1,6 @@
-package com.jaapec.tenant.Tenant.domain;
+package com.jaapec.tenant.tenant.domain;
 
-import com.jaapec.tenant.Plans.domain.Plan;
+import com.jaapec.tenant.plans.domain.Plan;
 
 import java.util.Objects;
 

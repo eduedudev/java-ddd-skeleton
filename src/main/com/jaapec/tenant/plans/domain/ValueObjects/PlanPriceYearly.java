@@ -1,4 +1,4 @@
-package com.jaapec.tenant.Plans.domain.ValueObjects;
+package com.jaapec.tenant.plans.domain.ValueObjects;
 
 import java.math.BigDecimal;
 

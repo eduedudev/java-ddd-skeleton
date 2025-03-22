@@ -1,4 +1,4 @@
-package com.jaapec.tenant.Tenant.domain;
+package com.jaapec.tenant.tenant.domain;
 
 import com.jaapec.tenant.shared.domain.ValueObjects.StringValueObject;
 

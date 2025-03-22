@@ -1,8 +1,9 @@
-package com.jaapec.tenant.Plans.domain;
+package com.jaapec.tenant.plans.domain;
 
 import java.util.Objects;
 
 import com.jaapec.tenant.Plans.domain.ValueObjects.*;
+import com.jaapec.tenant.plans.domain.ValueObjects.*;
 
 public final class Plan {
 

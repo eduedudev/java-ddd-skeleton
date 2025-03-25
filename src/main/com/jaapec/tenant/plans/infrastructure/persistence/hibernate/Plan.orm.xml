@@ -1,0 +1,55 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.jaapec.tenant.plans.domain.Plan" table="plans">
+        <composite-id name="id" class="com.jaapec.tenant.plans.domain.ValueObjects.PlanId" access="field">
+            <key-property column="id" name="value" access="field" type="string" length="255"/>
+        </composite-id>
+        <component name="name" class="com.jaapec.tenant.plans.domain.ValueObjects.PlanName" access="field">
+            <property name="value" column="name" length="255" access="field" not-null="true" unique="true"/>
+        </component>
+        <component name="description" class="com.jaapec.tenant.plans.domain.ValueObjects.PlanDescription"
+                   access="field">
+            <property name="value" column="description" length="255" access="field" not-null="true"/>
+        </component>
+        <component name="priceMonthly" class="com.jaapec.tenant.plans.domain.ValueObjects.PlanPriceMonthly"
+                   access="field">
+            <property name="value" column="price_monthly" length="255" access="field" not-null="true"/>
+        </component>
+        <component name="priceYearly" class="com.jaapec.tenant.plans.domain.ValueObjects.PlanPriceYearly"
+                   access="field">
+            <property name="value" column="price_yearly" length="255" access="field" not-null="true"/>
+        </component>
+        <component name="maxUsers" class="com.jaapec.tenant.plans.domain.ValueObjects.PlanMaxUsers" access="field">
+            <property name="value" column="max_users" length="255" access="field" not-null="true"/>
+        </component>
+        <component name="maxRoles" class="com.jaapec.tenant.plans.domain.ValueObjects.PlanMaxRoles" access="field">
+            <property name="value" column="max_roles" length="255" access="field" not-null="true"/>
+        </component>
+        <component name="maxAccounts" class="com.jaapec.tenant.plans.domain.ValueObjects.PlanMaxAccounts"
+                   access="field">
+            <property name="value" column="max_accounts" length="255" access="field" not-null="true"/>
+        </component>
+        <component name="maxInvoices" class="com.jaapec.tenant.plans.domain.ValueObjects.PlanMaxInvoices"
+                   access="field">
+            <property name="value" column="max_invoices" length="255" access="field" not-null="true"/>
+        </component>
+        <component name="status" class="com.jaapec.tenant.plans.domain.ValueObjects.PlanStatus" access="field">
+            <property name="value" column="status" length="255" access="field" not-null="true"/>
+        </component>
+        <component name="visibility" class="com.jaapec.tenant.plans.domain.ValueObjects.PlanVisibility" access="field">
+            <property name="value" column="visibility" length="255" access="field" not-null="true"/>
+        </component>
+        <component name="trialDays" class="com.jaapec.tenant.plans.domain.ValueObjects.PlanTrialDays" access="field">
+            <property name="value" column="trial_days" length="255" access="field" not-null="true"/>
+        </component>
+        <component name="createdAt" class="com.jaapec.tenant.plans.domain.ValueObjects.PlanCreatedAt" access="field">
+            <property name="value" column="created_at" length="255" access="field" not-null="true"/>
+        </component>
+        <component name="updatedAt" class="com.jaapec.tenant.plans.domain.ValueObjects.PlanUpdatedAt" access="field">
+            <property name="value" column="updated_at" length="255" access="field" not-null="true"/>
+        </component>
+    </class>
+</hibernate-mapping>

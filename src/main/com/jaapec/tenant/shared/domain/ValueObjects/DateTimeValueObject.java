@@ -38,16 +38,14 @@ public abstract class DateTimeValueObject {
 
 	@Override
 	public boolean equals(Object o) {
-		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 
-		DateTimeValueObject that = (DateTimeValueObject) o;
-
+		final DateTimeValueObject that = (DateTimeValueObject) o;
 		return Objects.equals(value, that.value);
 	}
 
 	@Override
 	public int hashCode() {
-		return value != null ? value.hashCode() : 0;
+		return Objects.hashCode(value);
 	}
 }

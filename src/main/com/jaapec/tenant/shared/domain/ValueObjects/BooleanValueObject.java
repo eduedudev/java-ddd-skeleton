@@ -3,6 +3,7 @@ package com.jaapec.tenant.shared.domain.ValueObjects;
 import java.util.Objects;
 
 public abstract class BooleanValueObject {
+
 	private final Boolean value;
 
 	public BooleanValueObject(Boolean value) {
@@ -15,9 +16,7 @@ public abstract class BooleanValueObject {
 
 	@Override
 	public String toString() {
-		return "BoleanValueObject{" +
-			"value=" + value +
-			'}';
+		return "BooleanValueObject{" + "value=" + value + '}';
 	}
 
 	@Override

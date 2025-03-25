@@ -28,6 +28,7 @@ public final class Validator {
 			put("datetime", new DateTimeValidator());
 			put("double", new DoubleValidator());
 			put("bigdecimal", new BigDecimalValidator());
+			put("integer", new IntegerValidator());
 		}
 	};
 

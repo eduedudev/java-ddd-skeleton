@@ -26,7 +26,12 @@ public class MaxValidation implements FieldValidator {
 		assert rule != null;
 		if (rule.contains(":") && rule.split(":")[0].equals("max")) {
 			int max = Integer.parseInt(rule.split(":")[1]);
-			return fieldValue.toString().length() <= max;
+			if (fieldValue instanceof Number) {
+				return ((Number) fieldValue).doubleValue() <= max;
+			}
+			if (fieldValue instanceof String) {
+				return fieldValue.toString().length() <= max;
+			}
 		}
 		return false;
 	}

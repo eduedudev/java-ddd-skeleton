@@ -3,7 +3,9 @@ package com.jaapec.tenant.plans.domain;
 import java.util.Objects;
 
 import com.jaapec.tenant.plans.domain.ValueObjects.*;
+import com.jaapec.tenant.plans.domain.events.PlanCreatedDomainEvent;
 import com.jaapec.tenant.shared.domain.AggregateRoot;
+import com.jaapec.tenant.shared.domain.CurrentDate;
 
 public final class Plan extends AggregateRoot {
 
@@ -127,11 +129,63 @@ public final class Plan extends AggregateRoot {
 		return updatedAt;
 	}
 
+	public static Plan create(
+		PlanId id,
+		PlanName name,
+		PlanDescription description,
+		PlanPriceMonthly priceMonthly,
+		PlanPriceYearly priceYearly,
+		PlanMaxUsers maxUsers,
+		PlanMaxRoles maxRoles,
+		PlanMaxAccounts maxAccounts,
+		PlanMaxInvoices maxInvoices,
+		PlanStatus status,
+		PlanVisibility visibility,
+		PlanTrialDays trialDays
+	) {
+		String now = CurrentDate.now();
+		Plan plan = new Plan(
+			id,
+			name,
+			description,
+			priceMonthly,
+			priceYearly,
+			maxUsers,
+			maxRoles,
+			maxAccounts,
+			maxInvoices,
+			status,
+			visibility,
+			trialDays,
+			new PlanCreatedAt(now),
+			new PlanUpdatedAt(now)
+		);
+		plan.record(
+			new PlanCreatedDomainEvent(
+				id.value(),
+				name.value(),
+				description.value(),
+				priceMonthly.value().toString(),
+				priceYearly.value().toString(),
+				maxUsers.value().toString(),
+				maxRoles.value().toString(),
+				maxAccounts.value().toString(),
+				maxInvoices.value().toString(),
+				status.value(),
+				visibility.value(),
+				trialDays.value().toString(),
+				plan.createdAt().value(),
+				plan.updatedAt().value()
+			)
+		);
+		return plan;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (o == null || getClass() != o.getClass()) return false;
 
-		Plan plan = (Plan) o;
+		final Plan plan = (Plan) o;
 		return (
 			Objects.equals(id, plan.id) &&
 			Objects.equals(name, plan.name) &&
@@ -144,9 +198,7 @@ public final class Plan extends AggregateRoot {
 			Objects.equals(maxInvoices, plan.maxInvoices) &&
 			Objects.equals(status, plan.status) &&
 			Objects.equals(visibility, plan.visibility) &&
-			Objects.equals(trialDays, plan.trialDays) &&
-			Objects.equals(createdAt, plan.createdAt) &&
-			Objects.equals(updatedAt, plan.updatedAt)
+			Objects.equals(trialDays, plan.trialDays)
 		);
 	}
 
@@ -164,8 +216,6 @@ public final class Plan extends AggregateRoot {
 		result = 31 * result + Objects.hashCode(status);
 		result = 31 * result + Objects.hashCode(visibility);
 		result = 31 * result + Objects.hashCode(trialDays);
-		result = 31 * result + Objects.hashCode(createdAt);
-		result = 31 * result + Objects.hashCode(updatedAt);
 		return result;
 	}
 }

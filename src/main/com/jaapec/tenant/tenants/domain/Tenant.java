@@ -1,8 +1,8 @@
 package com.jaapec.tenant.tenants.domain;
 
-import com.jaapec.tenant.plans.domain.Plan;
-
 import java.util.Objects;
+
+import com.jaapec.tenant.plans.domain.Plan;
 
 public final class Tenant {
 
@@ -44,7 +44,7 @@ public final class Tenant {
 		this.updatedAt = updatedAt;
 	}
 
-	public Tenant(){
+	public Tenant() {
 		this.id = null;
 		this.name = null;
 		this.plan = null;
@@ -107,7 +107,19 @@ public final class Tenant {
 		if (o == null || getClass() != o.getClass()) return false;
 
 		Tenant tenant = (Tenant) o;
-		return Objects.equals(id, tenant.id) && Objects.equals(name, tenant.name) && Objects.equals(plan, tenant.plan) && Objects.equals(dateSubscribed, tenant.dateSubscribed) && Objects.equals(status, tenant.status) && Objects.equals(ownerId, tenant.ownerId) && Objects.equals(expirationDate, tenant.expirationDate) && Objects.equals(gracePeriod, tenant.gracePeriod) && Objects.equals(autoRenew, tenant.autoRenew) && Objects.equals(createdAt, tenant.createdAt) && Objects.equals(updatedAt, tenant.updatedAt);
+		return (
+			Objects.equals(id, tenant.id) &&
+			Objects.equals(name, tenant.name) &&
+			Objects.equals(plan, tenant.plan) &&
+			Objects.equals(dateSubscribed, tenant.dateSubscribed) &&
+			Objects.equals(status, tenant.status) &&
+			Objects.equals(ownerId, tenant.ownerId) &&
+			Objects.equals(expirationDate, tenant.expirationDate) &&
+			Objects.equals(gracePeriod, tenant.gracePeriod) &&
+			Objects.equals(autoRenew, tenant.autoRenew) &&
+			Objects.equals(createdAt, tenant.createdAt) &&
+			Objects.equals(updatedAt, tenant.updatedAt)
+		);
 	}
 
 	@Override

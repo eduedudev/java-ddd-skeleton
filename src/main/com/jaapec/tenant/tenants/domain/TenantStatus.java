@@ -3,7 +3,6 @@ package com.jaapec.tenant.tenants.domain;
 import java.util.Objects;
 
 public record TenantStatus(String value) {
-
 	private enum status {
 		ACTIVE,
 		INACTIVE,
@@ -23,5 +22,4 @@ public record TenantStatus(String value) {
 		TenantStatus that = (TenantStatus) o;
 		return Objects.equals(value, that.value);
 	}
-
 }

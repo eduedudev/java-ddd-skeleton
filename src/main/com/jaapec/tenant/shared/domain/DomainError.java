@@ -5,12 +5,22 @@ public abstract class DomainError extends RuntimeException {
 	private final String errorCode;
 	private final String errorMessage;
 	private final String reason;
+	private final String value;
 
-	public DomainError(String errorCode, String errorMessage, String reason) {
+	/**
+	 * Create a new {@code DomainError} with the specified error code, error
+	 *
+	 * @param errorCode    the error code
+	 * @param errorMessage the error message
+	 * @param reason       the reason for the error
+	 * @param value        the value that caused the error
+	 */
+	public DomainError(String errorCode, String errorMessage, String reason, String value) {
 		super(errorMessage);
 		this.errorCode = errorCode;
 		this.errorMessage = errorMessage;
 		this.reason = reason;
+		this.value = value;
 	}
 
 	public String errorCode() {
@@ -23,5 +33,9 @@ public abstract class DomainError extends RuntimeException {
 
 	public String reason() {
 		return reason;
+	}
+
+	public String value() {
+		return value;
 	}
 }

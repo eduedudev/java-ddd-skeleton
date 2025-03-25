@@ -2,22 +2,37 @@ package com.jaapec.tenant.plans.domain.ValueObjects;
 
 import java.util.Objects;
 
-public record PlanVisibility(String value) {
+public class PlanVisibility {
+
+	private final String value;
+
+	public PlanVisibility(String value) {
+		this.value = value;
+	}
+
+	public PlanVisibility() {
+		this.value = null;
+	}
+
 	private enum visibility {
 		PUBLIC,
 		PRIVATE,
 	}
 
-	@Override
 	public String value() {
-		return visibility.valueOf(value).toString();
+		return PlanVisibility.visibility.valueOf(value).toString();
 	}
 
 	@Override
 	public boolean equals(Object o) {
 		if (o == null || getClass() != o.getClass()) return false;
 
-		PlanVisibility that = (PlanVisibility) o;
+		final PlanVisibility that = (PlanVisibility) o;
 		return Objects.equals(value, that.value);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(value);
 	}
 }

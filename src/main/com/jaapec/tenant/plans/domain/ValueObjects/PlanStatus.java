@@ -2,22 +2,37 @@ package com.jaapec.tenant.plans.domain.ValueObjects;
 
 import java.util.Objects;
 
-public record PlanStatus(String value) {
+public class PlanStatus {
+
+	private final String value;
+
+	public PlanStatus(String value) {
+		this.value = value;
+	}
+
+	public PlanStatus() {
+		this.value = null;
+	}
+
+	public String value() {
+		return PlanStatus.status.valueOf(value).toString();
+	}
+
 	private enum status {
 		ACTIVE,
 		INACTIVE,
 	}
 
 	@Override
-	public String value() {
-		return PlanStatus.status.valueOf(value).toString();
-	}
-
-	@Override
 	public boolean equals(Object o) {
 		if (o == null || getClass() != o.getClass()) return false;
 
-		PlanStatus that = (PlanStatus) o;
+		final PlanStatus that = (PlanStatus) o;
 		return Objects.equals(value, that.value);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(value);
 	}
 }

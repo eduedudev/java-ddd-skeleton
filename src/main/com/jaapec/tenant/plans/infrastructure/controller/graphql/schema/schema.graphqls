@@ -1,0 +1,27 @@
+enum PlanStatus{
+    ACTIVE
+    INACTIVE
+}
+
+enum PlanVisibility{
+    PUBLIC
+    PRIVATE
+}
+
+input RequestPlan {
+    name: String!
+    description: String!
+    priceMonthly: Float!
+    priceYearly: Float!
+    maxUsers: Int!
+    maxRoles: Int!
+    maxAccounts: Int!
+    maxInvoices: Int!
+    status: PlanStatus!
+    visibility: PlanVisibility!
+    trialDays: Int!
+}
+
+extend type Mutation {
+    createPlan(request: RequestPlan!): Boolean!
+}

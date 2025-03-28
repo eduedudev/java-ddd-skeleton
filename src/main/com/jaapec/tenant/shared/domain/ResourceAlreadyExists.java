@@ -2,6 +2,9 @@ package com.jaapec.tenant.shared.domain;
 
 public final class ResourceAlreadyExists extends DomainError {
 
+	private static final String errorCode = "E409";
+	private static final String messageKey = "error.resource.exists";
+
 	/**
 	 * Create a new {@code ResourceAlreadyExists} with the specified reason, unique field and value
 	 *
@@ -10,6 +13,6 @@ public final class ResourceAlreadyExists extends DomainError {
 	 * @param value        the value that caused the error
 	 */
 	public ResourceAlreadyExists(String reason, String uniqueField, String value) {
-		super("E409", String.format("The %s with %s %s already exists", reason, uniqueField, value), uniqueField, value);
+		super(errorCode, new Message(messageKey, new Object[] { reason, uniqueField, value }), uniqueField, value);
 	}
 }

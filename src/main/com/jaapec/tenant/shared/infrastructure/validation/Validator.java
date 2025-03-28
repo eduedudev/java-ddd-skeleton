@@ -7,10 +7,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.jaapec.tenant.shared.domain.MessageTranslator;
 import com.jaapec.tenant.shared.domain.Repository;
+import com.jaapec.tenant.shared.domain.Service;
 import com.jaapec.tenant.shared.infrastructure.validation.validators.*;
 
+@Service
 public final class Validator {
+
+	@Autowired
+	private MessageTranslator translator;
 
 	private static final HashMap<String, FieldValidator> validators = new HashMap<String, FieldValidator>() {
 		{
@@ -32,7 +40,7 @@ public final class Validator {
 		}
 	};
 
-	public static ValidationResponse validate(String input, HashMap<String, String> combinedRules, Repository repository)
+	public ValidationResponse validate(String input, HashMap<String, String> combinedRules, Repository repository)
 		throws ValidatorNotExist {
 		HashMap<String, List<String>> validationErrors = new HashMap<>();
 
@@ -54,7 +62,12 @@ public final class Validator {
 
 				if (!validator.isValid(entry.getKey(), jsonDecode(input), repository, ruleData)) {
 					List<String> existingErrors = validationErrors.getOrDefault(entry.getKey(), new ArrayList<>());
-					existingErrors.add(validator.errorMessage(entry.getKey(), ruleData));
+					existingErrors.add(
+						translator.translate(
+							validator.errorMessage(entry.getKey(), ruleData).messageKey(),
+							validator.errorMessage(entry.getKey(), ruleData).args()
+						)
+					);
 
 					validationErrors.put(entry.getKey(), existingErrors);
 				}

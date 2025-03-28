@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 
 import jakarta.annotation.Nullable;
 
+import com.jaapec.tenant.shared.domain.Message;
 import com.jaapec.tenant.shared.domain.Repository;
 
 public class RegexValidation implements FieldValidator {
@@ -35,7 +36,7 @@ public class RegexValidation implements FieldValidator {
 	}
 
 	@Override
-	public String errorMessage(String fieldName, @Nullable String rule) {
-		return String.format("The field %s does not meet the established requirements.", fieldName);
+	public Message errorMessage(String fieldName, @Nullable String rule) {
+		return new Message("error.regex.invalid", new Object[] { fieldName });
 	}
 }

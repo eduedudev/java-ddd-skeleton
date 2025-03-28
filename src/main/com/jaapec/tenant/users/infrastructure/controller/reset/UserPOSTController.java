@@ -31,12 +31,20 @@ import com.jaapec.tenant.users.infrastructure.controller.RequestUser;
 public final class UserPOSTController extends ApiController {
 
 	UserRepository repository;
+	private final Validator validator;
 	private final Logger logger;
 
 	@Autowired
-	public UserPOSTController(QueryBus queryBus, CommandBus commandBus, UserRepository repository, Logger logger) {
+	public UserPOSTController(
+		QueryBus queryBus,
+		CommandBus commandBus,
+		UserRepository repository,
+		Validator validator,
+		Logger logger
+	) {
 		super(queryBus, commandBus);
 		this.repository = repository;
+		this.validator = validator;
 		this.logger = logger;
 	}
 
@@ -54,7 +62,7 @@ public final class UserPOSTController extends ApiController {
 		logger.info("Creating user");
 		ObjectMapper objectMapper = new ObjectMapper();
 		String requestJson = objectMapper.writeValueAsString(request);
-		ValidationResponse validationResponse = Validator.validate(requestJson, rules, repository);
+		ValidationResponse validationResponse = validator.validate(requestJson, rules, repository);
 		HashMap<String, List<String>> validationErrors = new HashMap<>();
 		if (validationResponse.hasErrors()) {
 			validationResponse
@@ -69,7 +77,6 @@ public final class UserPOSTController extends ApiController {
 		return dataResponse(false, ResponseEntity.status(201), HttpStatus.CREATED.value(), null);
 	}
 
-	@Override
 	public HashMap<Class<? extends DomainError>, HttpStatus> errorMapping() {
 		return new HashMap<Class<? extends DomainError>, HttpStatus>() {
 			{

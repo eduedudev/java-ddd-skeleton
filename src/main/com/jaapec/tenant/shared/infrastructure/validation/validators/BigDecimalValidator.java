@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import javax.annotation.Nullable;
 
+import com.jaapec.tenant.shared.domain.Message;
 import com.jaapec.tenant.shared.domain.Repository;
 
 public final class BigDecimalValidator implements FieldValidator {
@@ -31,7 +32,7 @@ public final class BigDecimalValidator implements FieldValidator {
 	}
 
 	@Override
-	public String errorMessage(String fieldName, @Nullable String rule) {
-		return "The field " + fieldName + " must be a big decimal";
+	public Message errorMessage(String fieldName, @Nullable String rule) {
+		return new Message("error.bigdecimal.invalid", new Object[] { fieldName });
 	}
 }

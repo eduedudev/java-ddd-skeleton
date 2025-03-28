@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import org.jetbrains.annotations.Nullable;
 
+import com.jaapec.tenant.shared.domain.Message;
 import com.jaapec.tenant.shared.domain.Repository;
 
 public final class IntegerValidator implements FieldValidator {
@@ -20,7 +21,7 @@ public final class IntegerValidator implements FieldValidator {
 	}
 
 	@Override
-	public String errorMessage(String fieldName, @Nullable String rule) {
-		return "The field " + fieldName + " must be an integer";
+	public Message errorMessage(String fieldName, @Nullable String rule) {
+		return new Message("error.integer.invalid", new Object[] { fieldName });
 	}
 }

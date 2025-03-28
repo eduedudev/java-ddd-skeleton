@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 
 import jakarta.annotation.Nullable;
 
+import com.jaapec.tenant.shared.domain.Message;
 import com.jaapec.tenant.shared.domain.Repository;
 
 public final class UuidValidator implements FieldValidator {
@@ -28,7 +29,7 @@ public final class UuidValidator implements FieldValidator {
 	}
 
 	@Override
-	public String errorMessage(String fieldName, @Nullable String rule) {
-		return String.format("The field %s is not a valid uuid", fieldName);
+	public Message errorMessage(String fieldName, @Nullable String rule) {
+		return new Message("error.uuid.invalid", new Object[] { fieldName });
 	}
 }

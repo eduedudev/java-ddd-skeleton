@@ -3,7 +3,7 @@ package com.jaapec.tenant.shared.domain;
 public abstract class DomainError extends RuntimeException {
 
 	private final String errorCode;
-	private final String errorMessage;
+	private final Message errorMessage;
 	private final String reason;
 	private final String value;
 
@@ -15,8 +15,8 @@ public abstract class DomainError extends RuntimeException {
 	 * @param reason       the reason for the error
 	 * @param value        the value that caused the error
 	 */
-	public DomainError(String errorCode, String errorMessage, String reason, String value) {
-		super(errorMessage);
+	public DomainError(String errorCode, Message errorMessage, String reason, String value) {
+		super(errorMessage.messageKey());
 		this.errorCode = errorCode;
 		this.errorMessage = errorMessage;
 		this.reason = reason;
@@ -27,7 +27,7 @@ public abstract class DomainError extends RuntimeException {
 		return errorCode;
 	}
 
-	public String errorMessage() {
+	public Message errorMessage() {
 		return errorMessage;
 	}
 

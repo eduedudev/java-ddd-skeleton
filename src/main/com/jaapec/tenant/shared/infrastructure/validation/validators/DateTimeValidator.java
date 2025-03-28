@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import jakarta.annotation.Nullable;
 
+import com.jaapec.tenant.shared.domain.Message;
 import com.jaapec.tenant.shared.domain.Repository;
 
 public class DateTimeValidator implements FieldValidator {
@@ -31,7 +32,7 @@ public class DateTimeValidator implements FieldValidator {
 	}
 
 	@Override
-	public String errorMessage(String fieldName, @Nullable String rule) {
-		return String.format("The field %s is not a valid datetime", fieldName);
+	public Message errorMessage(String fieldName, @Nullable String rule) {
+		return new Message("error.datetime.invalid", new Object[] { fieldName });
 	}
 }

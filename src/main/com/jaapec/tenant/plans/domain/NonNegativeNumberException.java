@@ -1,8 +1,12 @@
 package com.jaapec.tenant.plans.domain;
 
 import com.jaapec.tenant.shared.domain.DomainError;
+import com.jaapec.tenant.shared.domain.Message;
 
 public class NonNegativeNumberException extends DomainError {
+
+	private static final String errorCode = "E422";
+	private static final String messageKey = "error.resource.negative";
 
 	/**
 	 * Create a new {@code NonNegativeNumberException} with the specified reason and value
@@ -10,6 +14,6 @@ public class NonNegativeNumberException extends DomainError {
 	 * @param value  the value that caused the error
 	 */
 	public NonNegativeNumberException(String reason, String value) {
-		super("E422", String.format("The %s must be a non negative number", reason), reason, value);
+		super(errorCode, new Message(messageKey, new Object[] { reason }), reason, value);
 	}
 }

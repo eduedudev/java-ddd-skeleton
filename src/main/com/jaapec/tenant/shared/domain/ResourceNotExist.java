@@ -2,6 +2,9 @@ package com.jaapec.tenant.shared.domain;
 
 public final class ResourceNotExist extends DomainError {
 
+	private static final String errorCode = "E404";
+	private static final String messageKey = "error.resource.not.found";
+
 	/**
 	 * Create a new {@code ResourceNotExist} with the specified reason and value
 	 *
@@ -9,6 +12,6 @@ public final class ResourceNotExist extends DomainError {
 	 * @param value  the value that caused the error
 	 */
 	public ResourceNotExist(String reason, String value) {
-		super("E404", String.format("The %s doesn't exist", reason), reason, value);
+		super(errorCode, new Message(messageKey, new Object[] { reason }), reason, value);
 	}
 }

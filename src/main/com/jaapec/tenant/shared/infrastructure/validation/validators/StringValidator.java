@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import jakarta.annotation.Nullable;
 
+import com.jaapec.tenant.shared.domain.Message;
 import com.jaapec.tenant.shared.domain.Repository;
 
 public final class StringValidator implements FieldValidator {
@@ -16,11 +17,11 @@ public final class StringValidator implements FieldValidator {
 		@Nullable Repository repository,
 		@Nullable String rule
 	) {
-		return true;
+		return fields.get(fieldName) instanceof String;
 	}
 
 	@Override
-	public String errorMessage(String fieldName, @Nullable String rule) {
-		return String.format("The field %s should be of type string", fieldName);
+	public Message errorMessage(String fieldName, @Nullable String rule) {
+		return new Message("error.string.invalid", new Object[] { fieldName });
 	}
 }

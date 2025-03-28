@@ -6,6 +6,7 @@ import java.util.Objects;
 
 import jakarta.annotation.Nullable;
 
+import com.jaapec.tenant.shared.domain.Message;
 import com.jaapec.tenant.shared.domain.Repository;
 
 public class MinValidation implements FieldValidator {
@@ -39,11 +40,7 @@ public class MinValidation implements FieldValidator {
 	}
 
 	@Override
-	public String errorMessage(String fieldName, @Nullable String rule) {
-		return String.format(
-			"The field %s must be greater than or equal to %s",
-			fieldName,
-			Objects.requireNonNull(rule).split(":")[1]
-		);
+	public Message errorMessage(String fieldName, @Nullable String rule) {
+		return new Message("error.min.invalid", new Object[] { fieldName, Objects.requireNonNull(rule).split(":")[1] });
 	}
 }

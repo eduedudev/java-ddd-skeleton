@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import jakarta.annotation.Nullable;
 
+import com.jaapec.tenant.shared.domain.Message;
 import com.jaapec.tenant.shared.domain.Repository;
 
 public class EnumValidator implements FieldValidator {
@@ -34,7 +35,7 @@ public class EnumValidator implements FieldValidator {
 	}
 
 	@Override
-	public String errorMessage(String fieldName, @Nullable String rule) {
-		return String.format("The field %s should be of type enum", fieldName);
+	public Message errorMessage(String fieldName, @Nullable String rule) {
+		return new Message("error.enum.invalid", new Object[] { fieldName });
 	}
 }

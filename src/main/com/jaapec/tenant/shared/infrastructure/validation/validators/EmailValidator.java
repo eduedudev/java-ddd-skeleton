@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 
 import jakarta.annotation.Nullable;
 
+import com.jaapec.tenant.shared.domain.Message;
 import com.jaapec.tenant.shared.domain.Repository;
 
 public class EmailValidator implements FieldValidator {
@@ -27,15 +28,11 @@ public class EmailValidator implements FieldValidator {
 
 		Pattern emailPattern = Pattern.compile(EMAIL_REGEX);
 
-		if (fieldValue instanceof String && emailPattern.matcher((String) fieldValue).matches()) {
-			return true;
-		}
-
-		return false;
+		return fieldValue instanceof String && emailPattern.matcher((String) fieldValue).matches();
 	}
 
 	@Override
-	public String errorMessage(String fieldName, @Nullable String rule) {
-		return String.format("The field %s should be of type email", fieldName);
+	public Message errorMessage(String fieldName, @Nullable String rule) {
+		return new Message("error.email.invalid", new Object[] { fieldName });
 	}
 }

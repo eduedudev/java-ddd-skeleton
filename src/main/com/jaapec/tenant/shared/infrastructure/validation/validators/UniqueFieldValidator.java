@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import jakarta.annotation.Nullable;
 
+import com.jaapec.tenant.shared.domain.Message;
 import com.jaapec.tenant.shared.domain.Repository;
 
 public class UniqueFieldValidator implements FieldValidator {
@@ -27,7 +28,7 @@ public class UniqueFieldValidator implements FieldValidator {
 	}
 
 	@Override
-	public String errorMessage(String fieldName, @Nullable String rule) {
-		return String.format("The %s already exists.", fieldName);
+	public Message errorMessage(String fieldName, @Nullable String rule) {
+		return new Message("error.unique.invalid", new Object[] { fieldName });
 	}
 }

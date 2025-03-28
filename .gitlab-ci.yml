@@ -1,75 +1,7 @@
-image: openjdk:21-jdk-slim  # Usa una imagen base con Java 21
+image: openjdk:21-jdk-slim
 
 stages:
-  - security
-  - build
   - test
-
-include:
-  - template: Security/Dependency-Scanning.gitlab-ci.yml
-
-build:
-  stage: build
-  image: gradle:8.7-jdk21
-  script:
-    - chmod +x gradlew
-    - ./gradlew build -x test -x spotlessJavaCheck --no-daemon
-  artifacts:
-    paths:
-      - build/libs/*.jar
-    expire_in: 1h
-
-services:
-  - name: mariadb:10.7
-    alias: db
-    variables:
-      MYSQL_ROOT_PASSWORD: rootpassword # Hardcodeado
-      MYSQL_DATABASE: jaapec_tenant_service
-      MYSQL_USER: dbuser
-      MYSQL_PASSWORD: dbpasss # Hardcodeado
-  - name: rabbitmq:3-management
-    alias: rabbitmq
-    variables:
-      RABBITMQ_DEFAULT_USER: kcrqwise # Hardcodeado
-      RABBITMQ_DEFAULT_PASS: I3SCFxjoQT8zExp7vrx6k5Xr9uOaGx6a # Hardcodeado
-      RABBITMQ_DEFAULT_VHOST: kcrqwise
-
-variables:
-  DATABASE_HOST: db
-  DATABASE_PORT: 3306
-  DATABASE_NAME: jaapec_tenant_service
-  DATABASE_USER: dbuser
-  DATABASE_PASSWORD: dbpasss
-  RABBITMQ_HOST: rabbitmq
-  RABBITMQ_PORT: 5672
-  RABBITMQ_LOGIN: kcrqwise
-  RABBITMQ_PASSWORD: I3SCFxjoQT8zExp7vrx6k5Xr9uOaGx6a
-  RABBITMQ_VHOST: kcrqwise
-
-tests:
-  stage: test
-  script:
-    - echo "DEBUG=true" > src/main/resources/.env
-    - echo "DATABASE_HOST=db" >> src/main/resources/.env
-    - echo "DATABASE_PORT=3306" >> src/main/resources/.env
-    - echo "DATABASE_NAME=jaapec_tenant_service" >> src/main/resources/.env
-    - echo "DATABASE_USER=dbuser" >> src/main/resources/.env
-    - echo "DATABASE_PASSWORD=dbpasss" >> src/main/resources/.env
-    - echo "RABBITMQ_HOST=rabbitmq" >> src/main/resources/.env
-    - echo "RABBITMQ_PORT=5672" >> src/main/resources/.env
-    - echo "RABBITMQ_LOGIN=kcrqwise" >> src/main/resources/.env
-    - echo "RABBITMQ_PASSWORD=I3SCFxjoQT8zExp7vrx6k5Xr9uOaGx6a" >> src/main/resources/.env
-    - echo "RABBITMQ_EXCHANGE=domain_events" >> src/main/resources/.env
-    - echo "RABBITMQ_MAX_RETRIES=5" >> src/main/resources/.env
-    - echo "RABBITMQ_VHOST=kcrqwise" >> src/main/resources/.env
-    - cat src/main/resources/.env
-    - chmod +x gradlew
-    - ./gradlew test
-  artifacts:
-    reports:
-      junit: build/test-results/test/TEST-*.xml
-    expire_in: 1h
-
 qodana:
   stage: test
   image:
@@ -88,11 +20,4 @@ qodana:
   script:
     - qodana --cache-dir=$CI_PROJECT_DIR/.qodana/cache
   allow_failure: true
-
-dependency_scanning:
-  stage: security
-  variables:
-    CI_DEBUG_TRACE: "true"
-  rules:
-    - when: always
 

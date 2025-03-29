@@ -1,5 +1,6 @@
 package com.jaapec.tenant.shared.infrastructure;
 
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -12,6 +13,8 @@ import java.util.Map;
 
 import com.netflix.graphql.dgs.DgsQueryExecutor;
 import com.netflix.graphql.dgs.exceptions.QueryException;
+import graphql.ExecutionResult;
+import graphql.GraphQLError;
 import org.intellij.lang.annotations.Language;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -65,6 +68,21 @@ public abstract class ApplicationTestCase {
 			}
 		);
 		assertEquals(expectedResponse, exception.getMessage());
+	}
+
+	protected void assertErrorResponse(
+		@Language("GraphQL") String mutation,
+		Map<String, Object> variables,
+		String expectedMessage,
+		Map<String, Object> expectedExtensions
+	) throws Exception {
+		ExecutionResult result = dgsQueryExecutor.execute(mutation, variables);
+
+		assertFalse(result.getErrors().isEmpty());
+		GraphQLError error = result.getErrors().getFirst();
+
+		assertEquals(expectedMessage, error.getMessage());
+		assertThat(error.getExtensions()).containsAllEntriesOf(expectedExtensions);
 	}
 
 	protected void assertResponse(

@@ -29,10 +29,17 @@ import com.jaapec.tenant.users.infrastructure.controller.RequestUser;
 public final class UserPostControllerGraphql extends ApiController {
 
 	UserRepository repository;
+	private final Validator validator;
 
-	public UserPostControllerGraphql(QueryBus queryBus, CommandBus commandBus, UserRepository repository) {
+	public UserPostControllerGraphql(
+		QueryBus queryBus,
+		CommandBus commandBus,
+		UserRepository repository,
+		Validator validator
+	) {
 		super(queryBus, commandBus);
 		this.repository = repository;
+		this.validator = validator;
 	}
 
 	private final HashMap<String, String> rules = new HashMap<String, String>() {
@@ -47,7 +54,7 @@ public final class UserPostControllerGraphql extends ApiController {
 	public boolean createUser(@Argument RequestUser request) throws JsonProcessingException, ValidatorNotExist {
 		ObjectMapper objectMapper = new ObjectMapper();
 		String requestJson = objectMapper.writeValueAsString(request);
-		ValidationResponse validationResponse = Validator.validate(requestJson, rules, repository);
+		ValidationResponse validationResponse = validator.validate(requestJson, rules, repository);
 		List<GraphQLCustomException> errors = new ArrayList<>();
 		if (validationResponse.hasErrors()) {
 			validationResponse
@@ -61,7 +68,6 @@ public final class UserPostControllerGraphql extends ApiController {
 		return true;
 	}
 
-	@Override
 	public HashMap<Class<? extends DomainError>, HttpStatus> errorMapping() {
 		return new HashMap<Class<? extends DomainError>, HttpStatus>() {
 			{

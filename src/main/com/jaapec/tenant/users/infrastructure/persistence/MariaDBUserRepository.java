@@ -1,13 +1,11 @@
 package com.jaapec.tenant.users.infrastructure.persistence;
 
-import java.util.List;
 import java.util.Optional;
 
 import jakarta.transaction.Transactional;
 import org.hibernate.SessionFactory;
 
 import com.jaapec.tenant.shared.domain.Service;
-import com.jaapec.tenant.shared.domain.criteria.*;
 import com.jaapec.tenant.shared.infrastructure.persistence.hibernate.HibernateRepository;
 import com.jaapec.tenant.users.domain.User;
 import com.jaapec.tenant.users.domain.UserId;
@@ -33,11 +31,6 @@ public class MariaDBUserRepository extends HibernateRepository<User> implements 
 
 	@Override
 	public boolean uniqueField(String fieldName, String value) {
-		Filter filter = new Filter(new FilterField(fieldName), FilterOperator.EQUAL, new FilterValue(value));
-		Filters filters = new Filters(List.of(filter));
-
-		Criteria criteria = new Criteria(filters, new Order(null, OrderType.NONE), Optional.empty(), Optional.empty());
-		List<User> account = byCriteria(criteria);
-		return account.isEmpty();
+		return isFieldValueUnique(fieldName, value);
 	}
 }

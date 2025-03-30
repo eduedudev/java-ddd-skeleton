@@ -17,15 +17,15 @@ import com.jaapec.tenant.plans.domain.ValueObjects.PlanId;
 import com.jaapec.tenant.plans.infrastructure.controller.RequestPlan;
 import com.jaapec.tenant.shared.domain.bus.command.CommandBus;
 import com.jaapec.tenant.shared.domain.bus.query.QueryBus;
+import com.jaapec.tenant.shared.infrastructure.controller.graphql.GraphQLApiController;
 import com.jaapec.tenant.shared.infrastructure.controller.graphql.GraphQLCustomException;
 import com.jaapec.tenant.shared.infrastructure.controller.graphql.GraphQLExceptionList;
-import com.jaapec.tenant.shared.infrastructure.spring.ApiController;
 import com.jaapec.tenant.shared.infrastructure.validation.ValidationResponse;
 import com.jaapec.tenant.shared.infrastructure.validation.Validator;
 import com.jaapec.tenant.shared.infrastructure.validation.ValidatorNotExist;
 
 @Controller
-public final class PlanPostControllerGraphql extends ApiController {
+public final class PlanPostControllerGraphql extends GraphQLApiController {
 
 	private final Validator validator;
 

@@ -21,16 +21,14 @@ public abstract class IntValueObject {
 
 	@Override
 	public boolean equals(Object o) {
-		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 
 		IntValueObject that = (IntValueObject) o;
-
 		return Objects.equals(value, that.value);
 	}
 
 	@Override
 	public int hashCode() {
-		return value != null ? value.hashCode() : 0;
+		return Objects.hashCode(value);
 	}
 }

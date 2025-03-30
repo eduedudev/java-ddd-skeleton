@@ -37,10 +37,15 @@ public abstract class DateTimeValueObject {
 	}
 
 	@Override
+	public String toString() {
+		return "DateTimeValueObject{" + "value=" + value + '}';
+	}
+
+	@Override
 	public boolean equals(Object o) {
 		if (o == null || getClass() != o.getClass()) return false;
 
-		final DateTimeValueObject that = (DateTimeValueObject) o;
+		DateTimeValueObject that = (DateTimeValueObject) o;
 		return Objects.equals(value, that.value);
 	}
 

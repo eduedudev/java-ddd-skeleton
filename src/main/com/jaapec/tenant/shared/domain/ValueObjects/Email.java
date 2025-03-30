@@ -26,17 +26,20 @@ public abstract class Email {
 	}
 
 	@Override
+	public String toString() {
+		return "Email{" + "value='" + value + '\'' + '}';
+	}
+
+	@Override
 	public boolean equals(Object o) {
-		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 
 		Email email = (Email) o;
-
 		return Objects.equals(value, email.value);
 	}
 
 	@Override
 	public int hashCode() {
-		return value != null ? value.hashCode() : 0;
+		return Objects.hashCode(value);
 	}
 }

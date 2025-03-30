@@ -15,9 +15,9 @@ import com.jaapec.tenant.shared.domain.DomainError;
 import com.jaapec.tenant.shared.domain.ResourceAlreadyExists;
 import com.jaapec.tenant.shared.domain.bus.command.CommandBus;
 import com.jaapec.tenant.shared.domain.bus.query.QueryBus;
+import com.jaapec.tenant.shared.infrastructure.controller.graphql.GraphQLApiController;
 import com.jaapec.tenant.shared.infrastructure.controller.graphql.GraphQLCustomException;
 import com.jaapec.tenant.shared.infrastructure.controller.graphql.GraphQLExceptionList;
-import com.jaapec.tenant.shared.infrastructure.spring.ApiController;
 import com.jaapec.tenant.shared.infrastructure.validation.ValidationResponse;
 import com.jaapec.tenant.shared.infrastructure.validation.Validator;
 import com.jaapec.tenant.shared.infrastructure.validation.ValidatorNotExist;
@@ -26,7 +26,7 @@ import com.jaapec.tenant.users.domain.UserRepository;
 import com.jaapec.tenant.users.infrastructure.controller.RequestUser;
 
 @Controller
-public final class UserPostControllerGraphql extends ApiController {
+public final class UserPostControllerGraphql extends GraphQLApiController {
 
 	UserRepository repository;
 	private final Validator validator;
@@ -44,7 +44,7 @@ public final class UserPostControllerGraphql extends ApiController {
 
 	private final HashMap<String, String> rules = new HashMap<String, String>() {
 		{
-			put("id", "required|unique|not_empty|uuid");
+			put("id", "required|not_empty|uuid");
 			put("name", "required|not_empty|max:255");
 			put("email", "required|not_empty|email");
 		}

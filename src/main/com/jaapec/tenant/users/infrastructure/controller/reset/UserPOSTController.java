@@ -19,7 +19,7 @@ import com.jaapec.tenant.shared.domain.Logger;
 import com.jaapec.tenant.shared.domain.ResourceAlreadyExists;
 import com.jaapec.tenant.shared.domain.bus.command.CommandBus;
 import com.jaapec.tenant.shared.domain.bus.query.QueryBus;
-import com.jaapec.tenant.shared.infrastructure.spring.ApiController;
+import com.jaapec.tenant.shared.infrastructure.spring.RestApiController;
 import com.jaapec.tenant.shared.infrastructure.validation.ValidationResponse;
 import com.jaapec.tenant.shared.infrastructure.validation.Validator;
 import com.jaapec.tenant.shared.infrastructure.validation.ValidatorNotExist;
@@ -28,7 +28,7 @@ import com.jaapec.tenant.users.domain.UserRepository;
 import com.jaapec.tenant.users.infrastructure.controller.RequestUser;
 
 @RestController
-public final class UserPOSTController extends ApiController {
+public final class UserPOSTController extends RestApiController {
 
 	UserRepository repository;
 	private final Validator validator;
@@ -50,7 +50,7 @@ public final class UserPOSTController extends ApiController {
 
 	private final HashMap<String, String> rules = new HashMap<String, String>() {
 		{
-			put("id", "required|unique|not_empty|uuid");
+			put("id", "required|not_empty|uuid");
 			put("name", "required|not_empty|max:255");
 			put("email", "required|not_empty|email");
 		}
@@ -77,6 +77,7 @@ public final class UserPOSTController extends ApiController {
 		return dataResponse(false, ResponseEntity.status(201), HttpStatus.CREATED.value(), null);
 	}
 
+	@Override
 	public HashMap<Class<? extends DomainError>, HttpStatus> errorMapping() {
 		return new HashMap<Class<? extends DomainError>, HttpStatus>() {
 			{

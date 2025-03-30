@@ -107,19 +107,7 @@ public final class Tenant {
 		if (o == null || getClass() != o.getClass()) return false;
 
 		Tenant tenant = (Tenant) o;
-		return (
-			Objects.equals(id, tenant.id) &&
-			Objects.equals(name, tenant.name) &&
-			Objects.equals(plan, tenant.plan) &&
-			Objects.equals(dateSubscribed, tenant.dateSubscribed) &&
-			Objects.equals(status, tenant.status) &&
-			Objects.equals(ownerId, tenant.ownerId) &&
-			Objects.equals(expirationDate, tenant.expirationDate) &&
-			Objects.equals(gracePeriod, tenant.gracePeriod) &&
-			Objects.equals(autoRenew, tenant.autoRenew) &&
-			Objects.equals(createdAt, tenant.createdAt) &&
-			Objects.equals(updatedAt, tenant.updatedAt)
-		);
+		return Objects.equals(id, tenant.id) && Objects.equals(name, tenant.name) && Objects.equals(plan, tenant.plan) && Objects.equals(status, tenant.status) && Objects.equals(ownerId, tenant.ownerId) && Objects.equals(dateSubscribed, tenant.dateSubscribed) && Objects.equals(expirationDate, tenant.expirationDate) && Objects.equals(gracePeriod, tenant.gracePeriod) && Objects.equals(autoRenew, tenant.autoRenew);
 	}
 
 	@Override
@@ -127,14 +115,12 @@ public final class Tenant {
 		int result = Objects.hashCode(id);
 		result = 31 * result + Objects.hashCode(name);
 		result = 31 * result + Objects.hashCode(plan);
-		result = 31 * result + Objects.hashCode(dateSubscribed);
 		result = 31 * result + Objects.hashCode(status);
 		result = 31 * result + Objects.hashCode(ownerId);
+		result = 31 * result + Objects.hashCode(dateSubscribed);
 		result = 31 * result + Objects.hashCode(expirationDate);
 		result = 31 * result + Objects.hashCode(gracePeriod);
 		result = 31 * result + Objects.hashCode(autoRenew);
-		result = 31 * result + Objects.hashCode(createdAt);
-		result = 31 * result + Objects.hashCode(updatedAt);
 		return result;
 	}
 }

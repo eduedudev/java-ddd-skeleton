@@ -36,8 +36,8 @@ public final class HibernateCriteriaConverter<T> {
 		hibernateCriteria.where(formatPredicates(criteria.filters().filters(), root));
 
 		if (criteria.order().hasOrder()) {
-			Path<Object> orderBy = root.get(criteria.order().orderBy().value());
-			Order order = criteria.order().orderType().isAsc() ? builder.asc(orderBy) : builder.desc(orderBy);
+			Path<Object> orderBy = root.get(criteria.order().field());
+			Order order = criteria.order().direction().isAsc() ? builder.asc(orderBy) : builder.desc(orderBy);
 
 			hibernateCriteria.orderBy(order);
 		}

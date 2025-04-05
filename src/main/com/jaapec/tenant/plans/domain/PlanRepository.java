@@ -14,7 +14,9 @@ public interface PlanRepository extends Repository {
 
 	void update(Plan plan);
 
-	Optional<Plan> search(PlanId id);
+	Optional<Plan> find(PlanId id);
 
 	List<Plan> matching(Criteria criteria);
+
+	long count(Criteria criteria);
 }

@@ -107,7 +107,17 @@ public final class Tenant {
 		if (o == null || getClass() != o.getClass()) return false;
 
 		Tenant tenant = (Tenant) o;
-		return Objects.equals(id, tenant.id) && Objects.equals(name, tenant.name) && Objects.equals(plan, tenant.plan) && Objects.equals(status, tenant.status) && Objects.equals(ownerId, tenant.ownerId) && Objects.equals(dateSubscribed, tenant.dateSubscribed) && Objects.equals(expirationDate, tenant.expirationDate) && Objects.equals(gracePeriod, tenant.gracePeriod) && Objects.equals(autoRenew, tenant.autoRenew);
+		return (
+			Objects.equals(id, tenant.id) &&
+			Objects.equals(name, tenant.name) &&
+			Objects.equals(plan, tenant.plan) &&
+			Objects.equals(status, tenant.status) &&
+			Objects.equals(ownerId, tenant.ownerId) &&
+			Objects.equals(dateSubscribed, tenant.dateSubscribed) &&
+			Objects.equals(expirationDate, tenant.expirationDate) &&
+			Objects.equals(gracePeriod, tenant.gracePeriod) &&
+			Objects.equals(autoRenew, tenant.autoRenew)
+		);
 	}
 
 	@Override

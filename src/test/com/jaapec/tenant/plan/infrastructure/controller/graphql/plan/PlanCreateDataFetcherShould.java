@@ -1,4 +1,4 @@
-package com.jaapec.tenant.plan.infrastructure.controller.graphql;
+package com.jaapec.tenant.plan.infrastructure.controller.graphql.plan;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,7 +11,7 @@ import com.jaapec.tenant.plans.application.create.CreatePlanCommand;
 import com.jaapec.tenant.shared.infrastructure.ApplicationTestCase;
 
 @Transactional
-class PlanPostControllerGraphqlShould extends ApplicationTestCase {
+class PlanCreateDataFetcherShould extends ApplicationTestCase {
 
 	@Test
 	void createAValidPlan() throws Exception {

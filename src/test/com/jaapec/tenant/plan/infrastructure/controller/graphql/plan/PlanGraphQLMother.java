@@ -1,4 +1,4 @@
-package com.jaapec.tenant.plan.infrastructure.controller.graphql;
+package com.jaapec.tenant.plan.infrastructure.controller.graphql.plan;
 
 import java.util.HashMap;
 import java.util.Map;

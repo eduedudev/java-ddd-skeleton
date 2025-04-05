@@ -1,5 +1,7 @@
 package com.jaapec.tenant.plan.domain;
 
+import java.util.UUID;
+
 import com.jaapec.tenant.plans.application.create.CreatePlanCommand;
 import com.jaapec.tenant.plans.domain.Plan;
 import com.jaapec.tenant.plans.domain.ValueObjects.*;
@@ -54,9 +56,12 @@ public final class PlanMother {
 	}
 
 	public static Plan random() {
+		String name = UUID.randomUUID().toString().substring(0, 8);
+		name = name.replaceAll("-", "");
+		name = name.concat(PlanNameMother.random().value());
 		return create(
 			PlanIdMother.random(),
-			PlanNameMother.random(),
+			PlanNameMother.create(name),
 			PlanDescriptionMother.random(),
 			PlanPriceMonthlyMother.random(),
 			PlanPriceYearlyMother.random(),
@@ -66,6 +71,46 @@ public final class PlanMother {
 			PlanMaxInvoicesMother.random(),
 			PlanStatusMother.random(),
 			PlanVisibilityMother.random(),
+			PlanTrialDaysMother.random()
+		);
+	}
+
+	public static Plan createWithStatus(String status) {
+		String name = UUID.randomUUID().toString().substring(0, 8);
+		name = name.replaceAll("-", "");
+		name = name.concat(PlanNameMother.random().value());
+		return create(
+			PlanIdMother.random(),
+			PlanNameMother.create(name),
+			PlanDescriptionMother.random(),
+			PlanPriceMonthlyMother.random(),
+			PlanPriceYearlyMother.random(),
+			PlanMaxUsersMother.random(),
+			PlanMaxRolesMother.random(),
+			PlanMaxAccountsMother.random(),
+			PlanMaxInvoicesMother.random(),
+			PlanStatusMother.create(status),
+			PlanVisibilityMother.random(),
+			PlanTrialDaysMother.random()
+		);
+	}
+
+	public static Plan createWithVisibilityAndStatus(String visibility, String active) {
+		String name = UUID.randomUUID().toString().substring(0, 8);
+		name = name.replaceAll("-", "");
+		name = name.concat(PlanNameMother.random().value());
+		return create(
+			PlanIdMother.random(),
+			PlanNameMother.create(name),
+			PlanDescriptionMother.random(),
+			PlanPriceMonthlyMother.random(),
+			PlanPriceYearlyMother.random(),
+			PlanMaxUsersMother.random(),
+			PlanMaxRolesMother.random(),
+			PlanMaxAccountsMother.random(),
+			PlanMaxInvoicesMother.random(),
+			PlanStatusMother.create(active),
+			PlanVisibilityMother.create(visibility),
 			PlanTrialDaysMother.random()
 		);
 	}

@@ -16,10 +16,10 @@ public enum FilterOperator {
 
 	public static FilterOperator fromValue(String value) {
 		return switch (value) {
-			case "=" -> FilterOperator.EQUAL;
-			case "!=" -> FilterOperator.NOT_EQUAL;
-			case ">" -> FilterOperator.GT;
-			case "<" -> FilterOperator.LT;
+			case "=", "EQUALS" -> FilterOperator.EQUAL;
+			case "!=", "NOT_EQUALS" -> FilterOperator.NOT_EQUAL;
+			case ">", "GT" -> FilterOperator.GT;
+			case "<", "LT" -> FilterOperator.LT;
 			case "CONTAINS" -> FilterOperator.CONTAINS;
 			case "NOT_CONTAINS" -> FilterOperator.NOT_CONTAINS;
 			default -> throw new IllegalArgumentException(String.format("Invalid operator %s", value));

@@ -1,4 +1,4 @@
-package com.jaapec.tenant.plans.infrastructure.controller.graphql;
+package com.jaapec.tenant.plans.infrastructure.controller.graphql.plan;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,7 +25,7 @@ import com.jaapec.tenant.shared.infrastructure.validation.Validator;
 import com.jaapec.tenant.shared.infrastructure.validation.ValidatorNotExist;
 
 @Controller
-public final class PlanPostControllerGraphql extends GraphQLApiController {
+public final class PlanCreateDataFetcher extends GraphQLApiController {
 
 	private final Validator validator;
 
@@ -46,7 +46,7 @@ public final class PlanPostControllerGraphql extends GraphQLApiController {
 		}
 	};
 
-	public PlanPostControllerGraphql(
+	public PlanCreateDataFetcher(
 		QueryBus queryBus,
 		CommandBus commandBus,
 		Validator validator,

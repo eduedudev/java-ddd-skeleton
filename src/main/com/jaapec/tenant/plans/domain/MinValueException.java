@@ -12,7 +12,7 @@ public class MinValueException extends DomainError {
 	 * Create a new {@code MinValueException} with the specified reason and value
 	 *
 	 * @param reason the reason for the error
-	 * @param value  the value that caused the error
+	 * @param value the value that caused the error
 	 */
 	public MinValueException(String reason, String value) {
 		super(errorCode, new Message(messageKey, new Object[] { reason, value }), reason, value);

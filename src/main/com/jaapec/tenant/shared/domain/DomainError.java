@@ -10,10 +10,10 @@ public abstract class DomainError extends RuntimeException {
 	/**
 	 * Create a new {@code DomainError} with the specified error code, error
 	 *
-	 * @param errorCode    the error code
+	 * @param errorCode the error code
 	 * @param errorMessage the error message
-	 * @param reason       the reason for the error
-	 * @param value        the value that caused the error
+	 * @param reason the reason for the error
+	 * @param value the value that caused the error
 	 */
 	public DomainError(String errorCode, Message errorMessage, String reason, String value) {
 		super(errorMessage.messageKey());

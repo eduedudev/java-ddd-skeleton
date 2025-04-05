@@ -10,6 +10,8 @@ public final class PlanNameMother {
 	}
 
 	public static PlanName random() {
+		String name = MotherCreator.random().lorem().word();
+		while (name.length() < 3) name = MotherCreator.random().lorem().word();
 		return create(MotherCreator.random().lorem().word());
 	}
 }

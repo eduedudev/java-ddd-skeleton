@@ -29,11 +29,11 @@ public class MariaDBPlanRepositoryShould extends PlanModuleInfrastructureTestCas
 
 		mariadbPlanRepository.save(plan);
 
-		assertEquals(Optional.of(plan), mariadbPlanRepository.search(plan.id()));
+		assertEquals(Optional.of(plan), mariadbPlanRepository.find(plan.id()));
 	}
 
 	@Test
 	void not_return_a_non_existing_plan() {
-		assertFalse(mariadbPlanRepository.search(PlanIdMother.random()).isPresent());
+		assertFalse(mariadbPlanRepository.find(PlanIdMother.random()).isPresent());
 	}
 }

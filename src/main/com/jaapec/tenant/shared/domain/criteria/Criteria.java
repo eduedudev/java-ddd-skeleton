@@ -1,8 +1,6 @@
 package com.jaapec.tenant.shared.domain.criteria;
 
-import java.util.Optional;
-
-public record Criteria(Filters filters, Order order, Optional<Integer> limit, Optional<Integer> offset) {
+public record Criteria(Filters filters, Order order, Pagination pagination) {
 	public boolean hasFilters() {
 		return !filters.filters().isEmpty();
 	}

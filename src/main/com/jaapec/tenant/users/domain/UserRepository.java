@@ -6,5 +6,6 @@ import com.jaapec.tenant.shared.domain.Repository;
 
 public interface UserRepository extends Repository {
 	void save(User user);
+
 	Optional<User> search(UserId id);
 }

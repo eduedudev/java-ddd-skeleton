@@ -42,7 +42,8 @@ public abstract class HibernateRepository<T> {
 	 * Returns an instance of the aggregate class with the given id.
 	 *
 	 * @param id The id of the instance to retrieve
-	 * @return An instance of the aggregate class with the given id, or null if no instance with the given id exists
+	 * @return An instance of the aggregate class with the given id, or null if no instance with the
+	 *     given id exists
 	 */
 	protected Optional<T> byId(Identifier id) {
 		return Optional.ofNullable(sessionFactory.getCurrentSession().byId(aggregateClass).load(id));
@@ -57,7 +58,23 @@ public abstract class HibernateRepository<T> {
 	protected List<T> byCriteria(Criteria criteria) {
 		CriteriaQuery<T> hibernateCriteria = criteriaConverter.convert(criteria, aggregateClass);
 
-		return sessionFactory.getCurrentSession().createQuery(hibernateCriteria).getResultList();
+		return sessionFactory
+			.getCurrentSession()
+			.createQuery(hibernateCriteria)
+			.setFirstResult(criteria.pagination().offset())
+			.setMaxResults(criteria.pagination().limit())
+			.getResultList();
+	}
+
+	/**
+	 * Counts the number of entities of the aggregate class that match the given criteria.
+	 *
+	 * @param criteria The criteria object containing filters, order, and pagination details to apply to the count query.
+	 * @return The total count of entities matching the given criteria.
+	 */
+	protected long countByCriteria(Criteria criteria) {
+		CriteriaQuery<T> hibernateCriteria = criteriaConverter.convert(criteria, aggregateClass);
+		return sessionFactory.getCurrentSession().createQuery(hibernateCriteria).getResultStream().count();
 	}
 
 	/**
@@ -77,14 +94,14 @@ public abstract class HibernateRepository<T> {
 	 * Checks if a field value is unique in the database.
 	 *
 	 * @param fieldName The name of the field to check
-	 * @param value     The value of the field to check
+	 * @param value The value of the field to check
 	 * @return true if the field value is unique, false otherwise
 	 */
 	protected boolean isFieldValueUnique(String fieldName, String value) {
 		Filter filter = new Filter(new FilterField(fieldName), FilterOperator.EQUAL, new FilterValue(value));
 		Filters filters = new Filters(List.of(filter));
-
-		Criteria criteria = new Criteria(filters, new Order(null, OrderType.NONE), Optional.empty(), Optional.empty());
+		Pagination pagination = Pagination.defaults();
+		Criteria criteria = new Criteria(filters, Order.defaultOrder(), pagination);
 		List<T> account = byCriteria(criteria);
 		return !account.isEmpty();
 	}

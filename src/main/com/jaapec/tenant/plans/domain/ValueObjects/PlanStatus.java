@@ -18,7 +18,7 @@ public class PlanStatus {
 		return PlanStatus.status.valueOf(value).toString();
 	}
 
-	private enum status {
+	public enum status {
 		ACTIVE,
 		INACTIVE,
 	}

@@ -1,0 +1,97 @@
+package com.jaapec.tenant.plan.application.search;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import com.jaapec.tenant.plan.PlanModuleUnitTestCase;
+import com.jaapec.tenant.plan.domain.PlanMother;
+import com.jaapec.tenant.plans.application.search.PlanSearcher;
+import com.jaapec.tenant.plans.application.search.SearchPlanQuery;
+import com.jaapec.tenant.plans.application.search.SearchPlanQueryHandler;
+import com.jaapec.tenant.plans.domain.Plan;
+import com.jaapec.tenant.plans.domain.ValueObjects.PlanStatus;
+import com.jaapec.tenant.shared.domain.criteria.*;
+
+public final class SearchPlanQueryHandlerShould extends PlanModuleUnitTestCase {
+
+	private SearchPlanQueryHandler handler;
+
+	@BeforeEach
+	protected void setUp() {
+		super.setUp();
+
+		handler = new SearchPlanQueryHandler(new PlanSearcher(repository));
+	}
+
+	@Test
+	void shouldFilterByStatusActive() {
+		Filter filter = new Filter(new FilterField("status"), FilterOperator.EQUAL, new FilterValue("ACTIVE"));
+		SearchPlanQuery query = new SearchPlanQuery(List.of(filter), null, null, Pagination.defaults());
+		when(repository.matching(any())).thenReturn(List.of());
+		handler.handle(query);
+		verify(repository)
+			.matching(
+				argThat(criteria ->
+					criteria.filters().filters().getFirst().field().value().equals("status") &&
+					criteria.filters().filters().getFirst().value().value().equals("ACTIVE")
+				)
+			);
+	}
+
+	@Test
+	void shouldApplyPagination() {
+		Pagination pagination = new Pagination(10, 20);
+		SearchPlanQuery query = new SearchPlanQuery(List.of(), null, null, pagination);
+		when(repository.matching(any())).thenReturn(List.of());
+		handler.handle(query);
+		verify(repository)
+			.matching(
+				argThat(criteria -> criteria.pagination().limit() == 10 && criteria.pagination().offset() == 19 // Adjusted for zero-based index
+				)
+			);
+	}
+
+	@Test
+	void shouldOrderByNameDesc() {
+		SearchPlanQuery query = new SearchPlanQuery(List.of(), "name", "desc", Pagination.defaults());
+		when(repository.matching(any())).thenReturn(List.of());
+		handler.handle(query);
+		verify(repository)
+			.matching(argThat(criteria -> criteria.order().field().equals("name") && criteria.order().direction().isDesc()));
+	}
+
+	@Test
+	void shouldReturnFilteredPlans_WhenFilteringByStatus() {
+		List<Plan> mockPlans = Stream
+			.concat(
+				IntStream.range(0, 10).mapToObj(i -> PlanMother.createWithStatus(PlanStatus.status.ACTIVE.toString())),
+				IntStream.range(0, 5).mapToObj(i -> PlanMother.createWithStatus(PlanStatus.status.INACTIVE.toString()))
+			)
+			.toList();
+
+		when(
+			repository.matching(argThat(criteria -> criteria.filters().filters().getFirst().value().value().equals("ACTIVE")))
+		)
+			.thenAnswer(inv -> {
+				Criteria criteria = inv.getArgument(0);
+				Pagination pagination = criteria.pagination();
+
+				List<Plan> filteredPlans = mockPlans
+					.stream()
+					.filter(plan -> Objects.equals(plan.status().value(), PlanStatus.status.ACTIVE.toString()))
+					.toList();
+
+				return filteredPlans.stream().skip(pagination.offset()).limit(pagination.limit()).toList();
+			});
+	}
+}

@@ -1,18 +1,42 @@
 package com.jaapec.tenant.shared.domain.criteria;
 
-public record Order(OrderBy orderBy, OrderType orderType) {
-	public static Order fromValues(String orderBy, String orderType) {
-		OrderBy orderByObj = orderBy == null || orderBy.isEmpty() ? new OrderBy("") : new OrderBy(orderBy);
-		OrderType orderTypeObj = OrderType.valueOf(orderType == null || orderType.isEmpty() ? "ASC" : orderType);
+import javax.annotation.Nullable;
 
-		return new Order(orderByObj, orderTypeObj);
+public record Order(String field, Direction direction) {
+	public static Order from(@Nullable String field, @Nullable String direction) {
+		return new Order(
+			field != null ? field : "createdAt", // default field
+			Direction.fromString(direction)
+		);
 	}
-
-	private static Order none() {
-		return new Order(new OrderBy(""), OrderType.NONE);
+	public static Order defaultOrder() {
+		return new Order("createdAt", Direction.DESC);
 	}
 
 	public boolean hasOrder() {
-		return !orderType.isNone();
+		return Direction.NONE != defaultOrder().direction();
+	}
+
+	public enum Direction {
+		ASC,
+		DESC,
+		NONE;
+
+		public boolean isAsc() {
+			return ASC == this;
+		}
+
+		public boolean isDesc() {
+			return DESC == this;
+		}
+
+		public static Direction fromString(@Nullable String value) {
+			if (value == null) return NONE;
+			try {
+				return valueOf(value.toUpperCase());
+			} catch (IllegalArgumentException e) {
+				return NONE;
+			}
+		}
 	}
 }

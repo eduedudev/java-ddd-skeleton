@@ -33,13 +33,18 @@ public class MariaDBPlanRepository extends HibernateRepository<Plan> implements 
 	public void update(Plan plan) {}
 
 	@Override
-	public Optional<Plan> search(PlanId id) {
+	public Optional<Plan> find(PlanId id) {
 		return byId(id);
 	}
 
 	@Override
 	public List<Plan> matching(Criteria criteria) {
-		return List.of();
+		return byCriteria(criteria);
+	}
+
+	@Override
+	public long count(Criteria criteria) {
+		return countByCriteria(criteria);
 	}
 
 	@Override

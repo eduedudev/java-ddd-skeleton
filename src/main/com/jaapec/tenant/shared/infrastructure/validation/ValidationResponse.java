@@ -18,4 +18,8 @@ public final class ValidationResponse {
 	public HashMap<String, List<String>> errors() {
 		return validationErrors;
 	}
+
+	public void addError(HashMap<String, List<String>> errors) {
+		validationErrors.putAll(errors);
+	}
 }

@@ -30,7 +30,9 @@ public class MariaDBPlanRepository extends HibernateRepository<Plan> implements 
 	public void delete(PlanId id) {}
 
 	@Override
-	public void update(Plan plan) {}
+	public void update(Plan plan) {
+		merge(plan);
+	}
 
 	@Override
 	public Optional<Plan> find(PlanId id) {

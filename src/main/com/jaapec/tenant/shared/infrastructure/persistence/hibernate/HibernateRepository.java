@@ -38,6 +38,12 @@ public abstract class HibernateRepository<T> {
 		sessionFactory.getCurrentSession().clear();
 	}
 
+	protected void merge(T entity) {
+		sessionFactory.getCurrentSession().merge(entity);
+		sessionFactory.getCurrentSession().flush();
+		sessionFactory.getCurrentSession().clear();
+	}
+
 	/**
 	 * Returns an instance of the aggregate class with the given id.
 	 *
@@ -102,7 +108,7 @@ public abstract class HibernateRepository<T> {
 		Filters filters = new Filters(List.of(filter));
 		Pagination pagination = Pagination.defaults();
 		Criteria criteria = new Criteria(filters, Order.defaultOrder(), pagination);
-		List<T> account = byCriteria(criteria);
-		return !account.isEmpty();
+		long count = countByCriteria(criteria);
+		return count != 0;
 	}
 }

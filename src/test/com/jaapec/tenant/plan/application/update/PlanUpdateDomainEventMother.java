@@ -1,13 +1,13 @@
-package com.jaapec.tenant.plan.domain;
+package com.jaapec.tenant.plan.application.update;
 
+import com.jaapec.tenant.plan.domain.*;
 import com.jaapec.tenant.plans.domain.Plan;
 import com.jaapec.tenant.plans.domain.ValueObjects.*;
-import com.jaapec.tenant.plans.domain.events.PlanCreatedDomainEvent;
-import com.jaapec.tenant.shared.domain.CurrentDate;
+import com.jaapec.tenant.plans.domain.events.PlanUpdatedDomainEvent;
 
-public final class PlanCreatedDomainEventMother {
+public class PlanUpdateDomainEventMother {
 
-	public static PlanCreatedDomainEvent create(
+	public static PlanUpdatedDomainEvent create(
 		PlanId id,
 		PlanName name,
 		PlanDescription description,
@@ -23,7 +23,7 @@ public final class PlanCreatedDomainEventMother {
 		PlanCreatedAt createdAt,
 		PlanUpdatedAt updatedAt
 	) {
-		return new PlanCreatedDomainEvent(
+		return new PlanUpdatedDomainEvent(
 			id.value(),
 			name.value(),
 			description.value(),
@@ -41,9 +41,9 @@ public final class PlanCreatedDomainEventMother {
 		);
 	}
 
-	public static PlanCreatedDomainEvent fromPlan(Plan plan) {
+	public static PlanUpdatedDomainEvent fromPlan(PlanId id, Plan plan) {
 		return create(
-			plan.id(),
+			id,
 			plan.name(),
 			plan.description(),
 			plan.priceMonthly(),
@@ -57,26 +57,6 @@ public final class PlanCreatedDomainEventMother {
 			plan.trialDays(),
 			plan.createdAt(),
 			plan.updatedAt()
-		);
-	}
-
-	public static PlanCreatedDomainEvent random() {
-		final String now = CurrentDate.now();
-		return create(
-			PlanIdMother.random(),
-			PlanNameMother.random(),
-			PlanDescriptionMother.random(),
-			PlanPriceMonthlyMother.random(),
-			PlanPriceYearlyMother.random(),
-			PlanMaxUsersMother.random(),
-			PlanMaxRolesMother.random(),
-			PlanMaxAccountsMother.random(),
-			PlanMaxInvoicesMother.random(),
-			PlanStatusMother.random(),
-			PlanVisibilityMother.random(),
-			PlanTrialDaysMother.random(),
-			new PlanCreatedAt(now),
-			new PlanUpdatedAt(now)
 		);
 	}
 }

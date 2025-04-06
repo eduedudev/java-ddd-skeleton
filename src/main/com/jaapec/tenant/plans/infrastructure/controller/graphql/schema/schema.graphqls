@@ -76,6 +76,7 @@ type PaginatedPlanResponse {
 
 extend type Mutation {
     createPlan(request: RequestPlan!): Boolean!
+    updatePlan(id:ID!,request: RequestPlan!):Boolean!
 }
 
 extend type Query {

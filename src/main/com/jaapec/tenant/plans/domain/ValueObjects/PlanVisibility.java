@@ -14,7 +14,7 @@ public class PlanVisibility {
 		this.value = null;
 	}
 
-	private enum visibility {
+	public enum visibility {
 		PUBLIC,
 		PRIVATE,
 	}

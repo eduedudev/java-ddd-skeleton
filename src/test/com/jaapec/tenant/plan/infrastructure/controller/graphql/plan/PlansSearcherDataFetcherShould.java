@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import jakarta.transaction.Transactional;
-import org.intellij.lang.annotations.Language;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -19,32 +18,6 @@ public class PlansSearcherDataFetcherShould extends ApplicationTestCase {
 
 	@Autowired
 	private PlanRepository repository;
-
-	@Language("GraphQL")
-	private final String query =
-		"""
-			query searchPlansQuery($filters: [FilterInput!]!, $limit: Int, $offset: Int, $orderBy: String, $orderType: OrderType) {
-				searchPlans(
-				  filters: $filters
-				  orderBy: $orderBy
-				  orderType: $orderType
-				  limit: $limit
-				  offset: $offset
-				) {
-				  data {
-					id
-					name
-				  }
-				  pagination {
-					currentPage
-					totalPages
-					totalItems
-					hasNext
-					hasPrevious
-				  }
-				}
-			  }
-		""";
 
 	@Test
 	void return_plans_when_it_exists() throws Exception {
@@ -66,7 +39,7 @@ public class PlansSearcherDataFetcherShould extends ApplicationTestCase {
 		);
 
 		Integer totalItems = assertResponseWithBody(
-			query,
+			PlanGraphQLMother.searchPlansQuery(),
 			"$.data.searchPlans.pagination.totalItems",
 			variables,
 			Integer.class
@@ -90,7 +63,7 @@ public class PlansSearcherDataFetcherShould extends ApplicationTestCase {
 		);
 
 		Integer totalItems = assertResponseWithBody(
-			query,
+			PlanGraphQLMother.searchPlansQuery(),
 			"$.data.searchPlans.pagination.totalItems",
 			variables,
 			Integer.class
@@ -121,7 +94,7 @@ public class PlansSearcherDataFetcherShould extends ApplicationTestCase {
 		);
 
 		Integer totalItems = assertResponseWithBody(
-			query,
+			PlanGraphQLMother.searchPlansQuery(),
 			"$.data.searchPlans.pagination.totalItems",
 			variables,
 			Integer.class
@@ -155,7 +128,7 @@ public class PlansSearcherDataFetcherShould extends ApplicationTestCase {
 		);
 
 		Integer totalItems = assertResponseWithBody(
-			query,
+			PlanGraphQLMother.searchPlansQuery(),
 			"$.data.searchPlans.pagination.totalItems",
 			variables,
 			Integer.class
@@ -182,9 +155,14 @@ public class PlansSearcherDataFetcherShould extends ApplicationTestCase {
 			"ASC"
 		);
 
-		List<?> resultData = assertResponseWithBody(query, "$.data.searchPlans.data", variables, List.class);
+		List<?> resultData = assertResponseWithBody(
+			PlanGraphQLMother.searchPlansQuery(),
+			"$.data.searchPlans.data",
+			variables,
+			List.class
+		);
 		Integer totalItems = assertResponseWithBody(
-			query,
+			PlanGraphQLMother.searchPlansQuery(),
 			"$.data.searchPlans.pagination.totalItems",
 			variables,
 			Integer.class

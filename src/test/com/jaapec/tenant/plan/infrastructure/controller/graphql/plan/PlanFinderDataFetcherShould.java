@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import jakarta.transaction.Transactional;
-import org.intellij.lang.annotations.Language;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -23,35 +22,6 @@ public class PlanFinderDataFetcherShould extends ApplicationTestCase {
 	@Autowired
 	private PlanRepository planRepository;
 
-	@Language("GraphQL")
-	private final String query =
-		"""
-			query FindPlan
-			(
-			  $id: String!
-			)\s
-			{
-				findPlan(
-			    id:$id
-			  ){
-			    id,
-			    name,
-			    description,
-			    priceMonthly,
-			    priceYearly,
-			    maxUsers,
-			    maxRoles,
-			    maxAccounts,
-			    maxInvoices,
-			    status,
-			    visibility,
-			    trialDays,
-			    createdAt,
-			    updatedAt
-			  }
-			}
-			""";
-
 	@Test
 	void return_plan_when_it_exists() throws Exception {
 		Plan plan = PlanMother.random();
@@ -59,7 +29,12 @@ public class PlanFinderDataFetcherShould extends ApplicationTestCase {
 
 		Map<String, Object> variables = new HashMap<>();
 		variables.put("id", plan.id().value());
-		PlanResponse foundPlan = assertResponseWithBody(query, "$.data.findPlan", variables, PlanResponse.class);
+		PlanResponse foundPlan = assertResponseWithBody(
+			PlanGraphQLMother.findPlanQuery(),
+			"$.data.findPlan",
+			variables,
+			PlanResponse.class
+		);
 
 		assertThat(foundPlan)
 			.hasFieldOrPropertyWithValue("id", plan.id().value())
@@ -80,7 +55,7 @@ public class PlanFinderDataFetcherShould extends ApplicationTestCase {
 	void return_fail_when_plan_does_not_exist() throws Exception {
 		String id = PlanIdMother.random().value();
 		assertErrorResponse(
-			query,
+			PlanGraphQLMother.findPlanQuery(),
 			Map.of("id", id),
 			"The plan doesnt exist",
 			Map.of("code", "E404", "reason", "plan", "value", id)

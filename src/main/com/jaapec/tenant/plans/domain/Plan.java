@@ -4,6 +4,7 @@ import java.util.Objects;
 
 import com.jaapec.tenant.plans.domain.ValueObjects.*;
 import com.jaapec.tenant.plans.domain.events.PlanCreatedDomainEvent;
+import com.jaapec.tenant.plans.domain.events.PlanUpdatedDomainEvent;
 import com.jaapec.tenant.shared.domain.AggregateRoot;
 import com.jaapec.tenant.shared.domain.CurrentDate;
 
@@ -163,6 +164,57 @@ public final class Plan extends AggregateRoot {
 		plan.record(
 			new PlanCreatedDomainEvent(
 				id.value(),
+				name.value(),
+				description.value(),
+				priceMonthly.value().toString(),
+				priceYearly.value().toString(),
+				maxUsers.value().toString(),
+				maxRoles.value().toString(),
+				maxAccounts.value().toString(),
+				maxInvoices.value().toString(),
+				status.value(),
+				visibility.value(),
+				trialDays.value().toString(),
+				plan.createdAt().value(),
+				plan.updatedAt().value()
+			)
+		);
+		return plan;
+	}
+
+	public Plan update(
+		PlanName name,
+		PlanDescription description,
+		PlanPriceMonthly priceMonthly,
+		PlanPriceYearly priceYearly,
+		PlanMaxUsers maxUsers,
+		PlanMaxRoles maxRoles,
+		PlanMaxAccounts maxAccounts,
+		PlanMaxInvoices maxInvoices,
+		PlanStatus status,
+		PlanVisibility visibility,
+		PlanTrialDays trialDays
+	) {
+		String now = CurrentDate.now();
+		Plan plan = new Plan(
+			this.id,
+			name,
+			description,
+			priceMonthly,
+			priceYearly,
+			maxUsers,
+			maxRoles,
+			maxAccounts,
+			maxInvoices,
+			status,
+			visibility,
+			trialDays,
+			this.createdAt,
+			new PlanUpdatedAt(now)
+		);
+		plan.record(
+			new PlanUpdatedDomainEvent(
+				plan.id().value(),
 				name.value(),
 				description.value(),
 				priceMonthly.value().toString(),

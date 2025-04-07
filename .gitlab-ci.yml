@@ -1,7 +1,93 @@
 image: openjdk:21-jdk-slim
 
+services:
+  - name: mariadb:10.7
+    alias: db
+    variables:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: jaapec_tenant_service
+      MYSQL_USER: dbuser
+      MYSQL_PASSWORD: dbpasss
+  - name: rabbitmq:3-management
+    alias: rabbitmq
+    variables:
+      RABBITMQ_DEFAULT_USER: kcrqwise
+      RABBITMQ_DEFAULT_PASS: I3SCFxjoQT8zExp7vrx6k5Xr9uOaGx6a
+      RABBITMQ_DEFAULT_VHOST: kcrqwise
+
+variables:
+  DATABASE_HOST: db
+  DATABASE_PORT: 3306
+  DATABASE_NAME: jaapec_tenant_service
+  DATABASE_USER: dbuser
+  DATABASE_PASSWORD: dbpasss
+  RABBITMQ_HOST: rabbitmq
+  RABBITMQ_PORT: 5672
+  RABBITMQ_LOGIN: kcrqwise
+  RABBITMQ_PASSWORD: I3SCFxjoQT8zExp7vrx6k5Xr9uOaGx6a
+  RABBITMQ_VHOST: kcrqwise
+  SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
+  GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
+
 stages:
+  - build
   - test
+  - package
+  - review
+  - deploy
+
+build:
+  stage: build
+  image: openjdk:21-jdk-slim
+  script:
+    - chmod +x gradlew
+    - ./gradlew assemble -x test
+  artifacts:
+    paths:
+      - build/libs/*.jar
+
+
+tests:
+  stage: test
+  script:
+    - echo "DEBUG=true" > src/main/resources/.env
+    - echo "DATABASE_HOST=db" >> src/main/resources/.env
+    - echo "DATABASE_PORT=3306" >> src/main/resources/.env
+    - echo "DATABASE_NAME=jaapec_tenant_service" >> src/main/resources/.env
+    - echo "DATABASE_USER=dbuser" >> src/main/resources/.env
+    - echo "DATABASE_PASSWORD=dbpasss" >> src/main/resources/.env
+    - echo "RABBITMQ_HOST=rabbitmq" >> src/main/resources/.env
+    - echo "RABBITMQ_PORT=5672" >> src/main/resources/.env
+    - echo "RABBITMQ_LOGIN=kcrqwise" >> src/main/resources/.env
+    - echo "RABBITMQ_PASSWORD=I3SCFxjoQT8zExp7vrx6k5Xr9uOaGx6a" >> src/main/resources/.env
+    - echo "RABBITMQ_EXCHANGE=domain_events" >> src/main/resources/.env
+    - echo "RABBITMQ_MAX_RETRIES=5" >> src/main/resources/.env
+    - echo "RABBITMQ_VHOST=kcrqwise" >> src/main/resources/.env
+    - cat src/main/resources/.env
+    - chmod +x gradlew
+    - ./gradlew test
+  rules:
+    - if: $CI_COMMIT_BRANCH != "master"
+
+
+build-sonar:
+  stage: test
+  cache:
+    policy: pull-push
+    key: "sonar-cache-$CI_COMMIT_REF_SLUG"
+    paths:
+      - "${SONAR_USER_HOME}/cache"
+      - sonar-scanner/
+  script:
+    - chmod +x gradlew
+    - ./gradlew assemble -x test
+    - echo "SONAR_TOKEN=$SONAR_TOKEN"
+    - echo "SONAR_HOST_URL=$SONAR_HOST_URL"
+    - ./gradlew sonar
+  allow_failure: true
+  rules:
+    - if: $CI_COMMIT_BRANCH != "master"
+
 qodana:
   stage: test
   image:
@@ -20,4 +106,29 @@ qodana:
   script:
     - qodana --cache-dir=$CI_PROJECT_DIR/.qodana/cache
   allow_failure: true
+  rules:
+   - if: $CI_COMMIT_BRANCH != "master"
+
+package:
+  stage: package
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - echo "package."
+   # - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+   # - docker build -t $IMAGE_NAME:$IMAGE_TAG .
+   # - docker push $IMAGE_NAME:$IMAGE_TAG
+
+review:
+  stage: review
+  script:
+    - echo "Preview environment would be deployed here."
+
+deploy:
+  stage: deploy
+  when: manual
+  script:
+    - echo "Deployment to production triggered manually"
+
 

@@ -1,8 +1,8 @@
 package com.jaapec.tenant.plan.domain;
 
 import com.jaapec.tenant.plans.domain.Plan;
-import com.jaapec.tenant.plans.domain.ValueObjects.*;
 import com.jaapec.tenant.plans.domain.events.PlanCreatedDomainEvent;
+import com.jaapec.tenant.plans.domain.value_objects.*;
 import com.jaapec.tenant.shared.domain.CurrentDate;
 
 public final class PlanCreatedDomainEventMother {

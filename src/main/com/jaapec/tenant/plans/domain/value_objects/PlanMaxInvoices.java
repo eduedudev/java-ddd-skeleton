@@ -1,11 +1,11 @@
-package com.jaapec.tenant.plans.domain.ValueObjects;
+package com.jaapec.tenant.plans.domain.value_objects;
 
 import com.jaapec.tenant.plans.domain.MinValueException;
-import com.jaapec.tenant.shared.domain.ValueObjects.IntValueObject;
+import com.jaapec.tenant.shared.domain.value_objects.IntValueObject;
 
 public final class PlanMaxInvoices extends IntValueObject {
 
-	private static final int minInvoices = 1;
+	private static final int MIN_INVOICES = 1;
 
 	public PlanMaxInvoices(Integer value) {
 		super(ensureValidMaxInvoices(value));
@@ -16,7 +16,7 @@ public final class PlanMaxInvoices extends IntValueObject {
 	}
 
 	private static Integer ensureValidMaxInvoices(Integer value) {
-		if (value.compareTo(0) < minInvoices) throw new MinValueException("MaxInvoices", value.toString());
+		if (value.compareTo(0) < MIN_INVOICES) throw new MinValueException("MaxInvoices", value.toString());
 		return value;
 	}
 }

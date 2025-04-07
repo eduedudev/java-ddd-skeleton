@@ -15,7 +15,7 @@ import com.jaapec.tenant.shared.domain.bus.query.QueryBus;
 
 public abstract class RestApiController extends ApiController {
 
-	public RestApiController(QueryBus queryBus, CommandBus commandBus) {
+	protected RestApiController(QueryBus queryBus, CommandBus commandBus) {
 		super(queryBus, commandBus);
 	}
 

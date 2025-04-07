@@ -1,29 +1,29 @@
-package com.jaapec.tenant.shared.domain.ValueObjects;
+package com.jaapec.tenant.shared.domain.value_objects;
 
 import java.util.Objects;
 
-public abstract class BooleanValueObject {
+public abstract class IntValueObject {
 
-	private final Boolean value;
+	private final Integer value;
 
-	public BooleanValueObject(Boolean value) {
+	protected IntValueObject(Integer value) {
 		this.value = value;
 	}
 
-	public Boolean value() {
+	public Integer value() {
 		return value;
 	}
 
 	@Override
 	public String toString() {
-		return "BooleanValueObject{" + "value=" + value + '}';
+		return "IntValueObject{" + "value=" + value + '}';
 	}
 
 	@Override
 	public boolean equals(Object o) {
 		if (o == null || getClass() != o.getClass()) return false;
 
-		BooleanValueObject that = (BooleanValueObject) o;
+		IntValueObject that = (IntValueObject) o;
 		return Objects.equals(value, that.value);
 	}
 

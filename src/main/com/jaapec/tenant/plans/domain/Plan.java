@@ -2,9 +2,9 @@ package com.jaapec.tenant.plans.domain;
 
 import java.util.Objects;
 
-import com.jaapec.tenant.plans.domain.ValueObjects.*;
 import com.jaapec.tenant.plans.domain.events.PlanCreatedDomainEvent;
 import com.jaapec.tenant.plans.domain.events.PlanUpdatedDomainEvent;
+import com.jaapec.tenant.plans.domain.value_objects.*;
 import com.jaapec.tenant.shared.domain.AggregateRoot;
 import com.jaapec.tenant.shared.domain.CurrentDate;
 

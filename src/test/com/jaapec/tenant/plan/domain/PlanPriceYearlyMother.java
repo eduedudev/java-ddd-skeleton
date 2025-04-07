@@ -2,7 +2,7 @@ package com.jaapec.tenant.plan.domain;
 
 import java.math.BigDecimal;
 
-import com.jaapec.tenant.plans.domain.ValueObjects.PlanPriceYearly;
+import com.jaapec.tenant.plans.domain.value_objects.PlanPriceYearly;
 import com.jaapec.tenant.shared.domain.MotherCreator;
 
 public final class PlanPriceYearlyMother {

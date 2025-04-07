@@ -1,6 +1,6 @@
 package com.jaapec.tenant.plan.domain;
 
-import com.jaapec.tenant.plans.domain.ValueObjects.PlanMaxUsers;
+import com.jaapec.tenant.plans.domain.value_objects.PlanMaxUsers;
 import com.jaapec.tenant.shared.domain.MotherCreator;
 
 public final class PlanMaxUsersMother {

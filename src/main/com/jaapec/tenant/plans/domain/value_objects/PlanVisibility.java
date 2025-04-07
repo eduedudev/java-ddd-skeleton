@@ -1,33 +1,33 @@
-package com.jaapec.tenant.plans.domain.ValueObjects;
+package com.jaapec.tenant.plans.domain.value_objects;
 
 import java.util.Objects;
 
-public class PlanStatus {
+public class PlanVisibility {
 
 	private final String value;
 
-	public PlanStatus(String value) {
+	public PlanVisibility(String value) {
 		this.value = value;
 	}
 
-	public PlanStatus() {
+	public PlanVisibility() {
 		this.value = null;
 	}
 
-	public String value() {
-		return PlanStatus.status.valueOf(value).toString();
+	public enum visibility {
+		PUBLIC,
+		PRIVATE,
 	}
 
-	public enum status {
-		ACTIVE,
-		INACTIVE,
+	public String value() {
+		return PlanVisibility.visibility.valueOf(value).toString();
 	}
 
 	@Override
 	public boolean equals(Object o) {
 		if (o == null || getClass() != o.getClass()) return false;
 
-		final PlanStatus that = (PlanStatus) o;
+		final PlanVisibility that = (PlanVisibility) o;
 		return Objects.equals(value, that.value);
 	}
 

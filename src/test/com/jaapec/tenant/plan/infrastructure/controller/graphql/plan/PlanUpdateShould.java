@@ -15,8 +15,8 @@ import com.jaapec.tenant.plans.application.PlanResponse;
 import com.jaapec.tenant.plans.application.update.UpdatePlanCommand;
 import com.jaapec.tenant.plans.domain.Plan;
 import com.jaapec.tenant.plans.domain.PlanRepository;
-import com.jaapec.tenant.plans.domain.ValueObjects.PlanStatus;
-import com.jaapec.tenant.plans.domain.ValueObjects.PlanVisibility;
+import com.jaapec.tenant.plans.domain.value_objects.PlanStatus;
+import com.jaapec.tenant.plans.domain.value_objects.PlanVisibility;
 import com.jaapec.tenant.shared.infrastructure.ApplicationTestCase;
 
 @Transactional

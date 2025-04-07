@@ -4,7 +4,7 @@ import java.util.UUID;
 
 import com.jaapec.tenant.plans.application.create.CreatePlanCommand;
 import com.jaapec.tenant.plans.domain.Plan;
-import com.jaapec.tenant.plans.domain.ValueObjects.*;
+import com.jaapec.tenant.plans.domain.value_objects.*;
 
 public final class PlanMother {
 

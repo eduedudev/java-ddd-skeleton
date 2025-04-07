@@ -1,9 +1,8 @@
 package com.jaapec.tenant.plan.application.update;
 
-import com.jaapec.tenant.plan.domain.*;
 import com.jaapec.tenant.plans.domain.Plan;
-import com.jaapec.tenant.plans.domain.ValueObjects.*;
 import com.jaapec.tenant.plans.domain.events.PlanUpdatedDomainEvent;
+import com.jaapec.tenant.plans.domain.value_objects.*;
 
 public class PlanUpdateDomainEventMother {
 

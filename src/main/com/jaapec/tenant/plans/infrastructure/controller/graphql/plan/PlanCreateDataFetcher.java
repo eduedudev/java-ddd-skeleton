@@ -10,7 +10,7 @@ import org.springframework.stereotype.Controller;
 
 import com.jaapec.tenant.plans.application.create.CreatePlanCommand;
 import com.jaapec.tenant.plans.domain.PlanRepository;
-import com.jaapec.tenant.plans.domain.ValueObjects.PlanId;
+import com.jaapec.tenant.plans.domain.value_objects.PlanId;
 import com.jaapec.tenant.plans.infrastructure.controller.RequestPlan;
 import com.jaapec.tenant.shared.domain.bus.command.CommandBus;
 import com.jaapec.tenant.shared.domain.bus.query.QueryBus;

@@ -1,6 +1,6 @@
 package com.jaapec.tenant.plan.domain;
 
-import com.jaapec.tenant.plans.domain.ValueObjects.PlanTrialDays;
+import com.jaapec.tenant.plans.domain.value_objects.PlanTrialDays;
 import com.jaapec.tenant.shared.domain.MotherCreator;
 
 public final class PlanTrialDaysMother {

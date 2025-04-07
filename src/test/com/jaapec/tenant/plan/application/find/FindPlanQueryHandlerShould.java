@@ -18,7 +18,7 @@ import com.jaapec.tenant.plans.application.find.PlanFinder;
 import com.jaapec.tenant.plans.domain.Plan;
 import com.jaapec.tenant.shared.domain.ResourceNotExist;
 
-public final class FindPlanQueryHandlerShould extends PlanModuleUnitTestCase {
+final class FindPlanQueryHandlerShould extends PlanModuleUnitTestCase {
 
 	private FindPlanQueryHandler handler;
 

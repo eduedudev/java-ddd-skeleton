@@ -15,7 +15,7 @@ public abstract class DomainError extends RuntimeException {
 	 * @param reason the reason for the error
 	 * @param value the value that caused the error
 	 */
-	public DomainError(String errorCode, Message errorMessage, String reason, String value) {
+	protected DomainError(String errorCode, Message errorMessage, String reason, String value) {
 		super(errorMessage.messageKey());
 		this.errorCode = errorCode;
 		this.errorMessage = errorMessage;

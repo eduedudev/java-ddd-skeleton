@@ -14,7 +14,7 @@ import com.jaapec.tenant.plans.domain.PlanRepository;
 import com.jaapec.tenant.shared.infrastructure.ApplicationTestCase;
 
 @Transactional
-public class PlansSearcherDataFetcherShould extends ApplicationTestCase {
+class PlansSearcherDataFetcherShould extends ApplicationTestCase {
 
 	@Autowired
 	private PlanRepository repository;

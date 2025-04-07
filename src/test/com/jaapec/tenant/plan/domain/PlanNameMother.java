@@ -1,6 +1,6 @@
 package com.jaapec.tenant.plan.domain;
 
-import com.jaapec.tenant.plans.domain.ValueObjects.PlanName;
+import com.jaapec.tenant.plans.domain.value_objects.PlanName;
 import com.jaapec.tenant.shared.domain.MotherCreator;
 
 public final class PlanNameMother {

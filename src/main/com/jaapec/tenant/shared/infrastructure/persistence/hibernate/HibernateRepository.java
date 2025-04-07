@@ -6,8 +6,8 @@ import java.util.Optional;
 import jakarta.persistence.criteria.CriteriaQuery;
 import org.hibernate.SessionFactory;
 
-import com.jaapec.tenant.shared.domain.ValueObjects.Identifier;
 import com.jaapec.tenant.shared.domain.criteria.*;
+import com.jaapec.tenant.shared.domain.value_objects.Identifier;
 
 public abstract class HibernateRepository<T> {
 
@@ -21,7 +21,7 @@ public abstract class HibernateRepository<T> {
 	 * @param sessionFactory The Hibernate SessionFactory
 	 * @param aggregateClass The class of the aggregate
 	 */
-	public HibernateRepository(SessionFactory sessionFactory, Class<T> aggregateClass) {
+	protected HibernateRepository(SessionFactory sessionFactory, Class<T> aggregateClass) {
 		this.sessionFactory = sessionFactory;
 		this.aggregateClass = aggregateClass;
 		this.criteriaConverter = new HibernateCriteriaConverter<>(sessionFactory.getCriteriaBuilder());

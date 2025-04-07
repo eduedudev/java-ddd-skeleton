@@ -1,4 +1,4 @@
-package com.jaapec.tenant.shared.domain.ValueObjects;
+package com.jaapec.tenant.shared.domain.value_objects;
 
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -7,7 +7,7 @@ public abstract class BigDecimalValueObject {
 
 	private final BigDecimal value;
 
-	public BigDecimalValueObject(BigDecimal value) {
+	protected BigDecimalValueObject(BigDecimal value) {
 		this.value = value;
 	}
 

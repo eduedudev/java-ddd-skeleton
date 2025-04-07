@@ -8,7 +8,7 @@ import org.hibernate.SessionFactory;
 
 import com.jaapec.tenant.plans.domain.Plan;
 import com.jaapec.tenant.plans.domain.PlanRepository;
-import com.jaapec.tenant.plans.domain.ValueObjects.PlanId;
+import com.jaapec.tenant.plans.domain.value_objects.PlanId;
 import com.jaapec.tenant.shared.domain.Service;
 import com.jaapec.tenant.shared.domain.criteria.Criteria;
 import com.jaapec.tenant.shared.infrastructure.persistence.hibernate.HibernateRepository;

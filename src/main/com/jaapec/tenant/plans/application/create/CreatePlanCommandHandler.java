@@ -2,7 +2,7 @@ package com.jaapec.tenant.plans.application.create;
 
 import java.math.BigDecimal;
 
-import com.jaapec.tenant.plans.domain.ValueObjects.*;
+import com.jaapec.tenant.plans.domain.value_objects.*;
 import com.jaapec.tenant.shared.domain.Service;
 import com.jaapec.tenant.shared.domain.bus.command.CommandHandler;
 

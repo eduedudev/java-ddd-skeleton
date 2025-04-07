@@ -1,4 +1,4 @@
-package com.jaapec.tenant.shared.domain.ValueObjects;
+package com.jaapec.tenant.shared.domain.value_objects;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -9,7 +9,7 @@ public abstract class DateTimeValueObject {
 
 	private final Timestamp value;
 
-	public DateTimeValueObject(String value) {
+	protected DateTimeValueObject(String value) {
 		this.value = convertToDateTime(value);
 	}
 

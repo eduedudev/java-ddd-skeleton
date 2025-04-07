@@ -24,11 +24,11 @@ public class EmailValidator implements FieldValidator {
 			return true;
 		}
 
-		String EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+		final String EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
 
 		Pattern emailPattern = Pattern.compile(EMAIL_REGEX);
 
-		return fieldValue instanceof String && emailPattern.matcher((String) fieldValue).matches();
+		return (fieldValue instanceof String strFieldValue) && emailPattern.matcher(strFieldValue).matches();
 	}
 
 	@Override

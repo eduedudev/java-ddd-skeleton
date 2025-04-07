@@ -22,6 +22,7 @@ final class FindPlanQueryHandlerShould extends PlanModuleUnitTestCase {
 
 	private FindPlanQueryHandler handler;
 
+	@Override
 	@BeforeEach
 	protected void setUp() {
 		super.setUp();

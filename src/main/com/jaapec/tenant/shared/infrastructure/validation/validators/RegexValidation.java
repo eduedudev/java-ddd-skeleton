@@ -2,6 +2,7 @@ package com.jaapec.tenant.shared.infrastructure.validation.validators;
 
 import java.io.Serializable;
 import java.util.Map;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,8 +26,7 @@ public class RegexValidation implements FieldValidator {
 			return true;
 		}
 
-		assert rule != null;
-		if (rule.contains(":") && rule.split(":")[0].equals("regex")) {
+		if (Objects.requireNonNull(rule).contains(":") && rule.split(":")[0].equals("regex")) {
 			String regex = rule.split(":")[1];
 			Pattern pattern = Pattern.compile(regex);
 			Matcher matcher = pattern.matcher(fieldValue.toString());

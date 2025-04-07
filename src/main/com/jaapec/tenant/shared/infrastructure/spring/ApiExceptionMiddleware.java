@@ -32,27 +32,31 @@ public final class ApiExceptionMiddleware implements Filter {
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 		throws ServletException, IOException {
-		HttpServletRequest httpRequest = ((HttpServletRequest) request);
-		HttpServletResponse httpResponse = ((HttpServletResponse) response);
+		HttpServletRequest httpRequest = (HttpServletRequest) request;
+		HttpServletResponse httpResponse = (HttpServletResponse) response;
 
 		if (isGraphQLRequest(httpRequest)) {
 			chain.doFilter(request, response);
 			return;
 		}
 
-		try {
-			Object possibleController =
-				((HandlerMethod) Objects.requireNonNull(mapping.getHandler(httpRequest)).getHandler()).getBean();
+		Object possibleController = getHandlerController(httpRequest);
 
-			try {
-				chain.doFilter(request, response);
-			} catch (Exception exception) {
-				if (possibleController instanceof RestApiController) {
-					handleCustomError(response, httpResponse, (RestApiController) possibleController, exception);
-				}
+		try {
+			chain.doFilter(request, response);
+		} catch (Exception exception) {
+			if (possibleController instanceof RestApiController controller) {
+				handleCustomError(response, httpResponse, controller, exception);
 			}
+		}
+	}
+
+	private Object getHandlerController(HttpServletRequest request) throws ServletException {
+		try {
+			HandlerMethod handlerMethod = (HandlerMethod) Objects.requireNonNull(mapping.getHandler(request)).getHandler();
+			return handlerMethod.getBean();
 		} catch (Exception e) {
-			throw new ServletException(e);
+			throw new ServletException("Error retrieving handler controller", e);
 		}
 	}
 
@@ -63,49 +67,78 @@ public final class ApiExceptionMiddleware implements Filter {
 		Exception exception
 	) throws IOException {
 		Map<Class<? extends DomainError>, HttpStatus> errorMapping = possibleController.errorMapping();
-		Throwable error = (
-				exception.getCause() instanceof CommandHandlerExecutionError ||
-				exception.getCause() instanceof QueryHandlerExecutionError
-			)
-			? exception.getCause().getCause()
-			: exception.getCause();
+		Throwable rootError = extractRootError(exception);
 
-		String errorMessage = error instanceof DomainError
-			? translator.translate(error.getMessage(), ((DomainError) error).errorMessage().args())
-			: translator.translate(error.getMessage(), new Object[] {});
-		String errorReason = error instanceof DomainError ? ((DomainError) error).reason() : null;
-		String errorValue = error instanceof DomainError ? ((DomainError) error).value() : null;
+		String errorMessage = extractErrorMessage(rootError);
+		Map<String, String> errorDetails = extractErrorDetails(rootError);
 
-		int statusCode = statusFor(errorMapping, error);
-		String errorCode = errorCodeFor(error);
+		int statusCode = statusFor(errorMapping, rootError);
+		String errorCode = errorCodeFor(rootError);
 
+		writeErrorResponse(response, httpResponse, statusCode, errorCode, errorMessage, errorDetails);
+	}
+
+	private Throwable extractRootError(Exception exception) {
+		Throwable rootCause = exception.getCause();
+		if (rootCause instanceof CommandHandlerExecutionError || rootCause instanceof QueryHandlerExecutionError) {
+			return rootCause.getCause();
+		}
+		return rootCause != null ? rootCause : exception;
+	}
+
+	private String extractErrorMessage(Throwable error) {
+		if (error instanceof DomainError domainError) {
+			return translator.translate(domainError.errorMessage().messageKey(), domainError.errorMessage().args());
+		}
+		return translator.translate(error.getMessage(), new Object[] {});
+	}
+
+	private Map<String, String> extractErrorDetails(Throwable error) {
+		Map<String, String> details = new LinkedHashMap<>();
+		if (error instanceof DomainError domainError) {
+			details.put("reason", domainError.reason());
+			details.put("value", domainError.value());
+		} else {
+			details.put("reason", null);
+			details.put("value", null);
+		}
+		return details;
+	}
+
+	private void writeErrorResponse(
+		ServletResponse response,
+		HttpServletResponse httpResponse,
+		int statusCode,
+		String errorCode,
+		String errorMessage,
+		Map<String, String> errorDetails
+	) throws IOException {
 		httpResponse.reset();
 		httpResponse.setHeader("Content-Type", "application/json");
 		httpResponse.setStatus(statusCode);
-		PrintWriter writer = response.getWriter();
 
-		ObjectMapper mapper = new ObjectMapper();
-
-		Map<String, Object> errorResponse = new LinkedHashMap<>(); // LinkedHashMap mantiene el orden
+		Map<String, Object> errorResponse = new LinkedHashMap<>();
 		errorResponse.put("error", true);
 		errorResponse.put("code", errorCode);
 
 		Map<String, Object> data = new LinkedHashMap<>();
 		data.put("message", errorMessage);
-		data.put("reason", errorReason);
-		data.put("value", errorValue);
+		data.put("reason", errorDetails.get("reason"));
+		data.put("value", errorDetails.get("value"));
 		errorResponse.put("data", data);
-		writer.write(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(errorResponse));
 
-		writer.close();
+		try (PrintWriter writer = response.getWriter()) {
+			ObjectMapper mapper = new ObjectMapper();
+			writer.write(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(errorResponse));
+		}
 	}
 
 	private String errorCodeFor(Throwable error) {
-		if (error instanceof DomainError) {
-			return ((DomainError) error).errorCode();
+		if (error instanceof DomainError domainError) {
+			return domainError.errorCode();
 		}
 
-		return Utils.toSnake(error.getClass().toString());
+		return Utils.toSnake(error.getClass().getSimpleName());
 	}
 
 	private int statusFor(Map<Class<? extends DomainError>, HttpStatus> errorMapping, Throwable error) {

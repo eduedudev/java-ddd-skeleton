@@ -61,8 +61,8 @@ public final class Validator {
 				if (null == validator) {
 					throw new ValidatorNotExist(rule);
 				}
-
-				if (!validator.isValid(entry.getKey(), jsonDecode(input), repository, ruleData)) {
+				Boolean isValid = validator.isValid(entry.getKey(), jsonDecode(input), repository, ruleData);
+				if (Boolean.FALSE.equals(isValid)) {
 					List<String> existingErrors = validationErrors.getOrDefault(entry.getKey(), new ArrayList<>());
 					existingErrors.add(
 						translator.translate(

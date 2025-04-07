@@ -23,7 +23,6 @@ public class UniqueFieldValidator implements FieldValidator {
 			return false;
 		}
 
-		assert repository != null;
 		return repository.uniqueField(fieldName, fieldValue.toString());
 	}
 

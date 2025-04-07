@@ -26,6 +26,7 @@ final class SearchPlanQueryHandlerShould extends PlanModuleUnitTestCase {
 
 	private SearchPlanQueryHandler handler;
 
+	@Override
 	@BeforeEach
 	protected void setUp() {
 		super.setUp();

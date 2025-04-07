@@ -15,6 +15,7 @@ public abstract class PlanModuleUnitTestCase extends UnitTestCase {
 
 	protected PlanRepository repository;
 
+	@Override
 	@BeforeEach
 	protected void setUp() {
 		super.setUp();

@@ -9,7 +9,7 @@ public abstract class InfrastructureTestCase {
 		int attempts = 0;
 		boolean allOk = false;
 
-		int MAX_ATTEMPTS = 3;
+		final int MAX_ATTEMPTS = 3;
 		while (attempts < MAX_ATTEMPTS && !allOk) {
 			try {
 				assertion.run();
@@ -18,7 +18,7 @@ public abstract class InfrastructureTestCase {
 			} catch (Throwable error) {
 				attempts++;
 
-				int MILLIS_TO_WAIT_BETWEEN_RETRIES = 300;
+				final int MILLIS_TO_WAIT_BETWEEN_RETRIES = 300;
 				Thread.sleep(MILLIS_TO_WAIT_BETWEEN_RETRIES);
 			}
 		}

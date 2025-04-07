@@ -61,9 +61,9 @@ public final class PlanUpdateDataFetcher extends GraphQLApiController {
 		String requestJson = objectMapper.writeValueAsString(request);
 		ValidationResponse validationResponse = validator.validate(requestJson, rules, repository);
 		validationResponse.addError(validator.validate("{\"id\":\"" + id + "\"}", rules2, repository).errors());
-
 		List<GraphQLCustomException> errors = new ArrayList<>();
-		if (validationResponse.hasErrors()) {
+		Boolean hasErrors = validationResponse.hasErrors();
+		if (Boolean.TRUE.equals(hasErrors)) {
 			validationResponse
 				.errors()
 				.forEach((key, value) -> {

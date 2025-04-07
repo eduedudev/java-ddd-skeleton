@@ -25,6 +25,7 @@ final class UpdatePlanCommandHandlerShould extends PlanModuleUnitTestCase {
 
 	private UpdatePlanCommandHandler handler;
 
+	@Override
 	@BeforeEach
 	protected void setUp() {
 		super.setUp();

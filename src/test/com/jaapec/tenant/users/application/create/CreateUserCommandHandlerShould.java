@@ -13,6 +13,7 @@ class CreateUserCommandHandlerShould extends UsersModuleUnitTestCase {
 
 	private CreateUserCommandHandler handler;
 
+	@Override
 	@BeforeEach
 	protected void setUp() {
 		super.setUp();

@@ -45,6 +45,7 @@ build:
   artifacts:
     paths:
       - build/libs/*.jar
+    expire_in: 1 days
 
 
 tests:
@@ -66,6 +67,12 @@ tests:
     - cat src/main/resources/.env
     - chmod +x gradlew
     - ./gradlew test
+  artifacts:
+    paths:
+      - build/reports/tests/test/
+    reports:
+      junit: build/test-results/test/**/*.xml
+    expire_in: 1 days
   rules:
     - if: $CI_COMMIT_BRANCH != "master"
 
@@ -81,12 +88,10 @@ build-sonar:
   script:
     - chmod +x gradlew
     - ./gradlew assemble -x test
-    - echo "SONAR_TOKEN=$SONAR_TOKEN"
-    - echo "SONAR_HOST_URL=$SONAR_HOST_URL"
     - ./gradlew sonar
   allow_failure: true
   rules:
-    - if: $CI_COMMIT_BRANCH != "master"
+    - if: $CI_COMMIT_BRANCH == "dev"
 
 qodana:
   stage: test
@@ -107,7 +112,7 @@ qodana:
     - qodana --cache-dir=$CI_PROJECT_DIR/.qodana/cache
   allow_failure: true
   rules:
-   - if: $CI_COMMIT_BRANCH != "master"
+    - if: $CI_COMMIT_BRANCH == "dev"
 
 package:
   stage: package
@@ -116,6 +121,8 @@ package:
     - docker:dind
   script:
     - echo "package."
+  rules:
+    - if: $CI_COMMIT_BRANCH == "dev"
    # - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
    # - docker build -t $IMAGE_NAME:$IMAGE_TAG .
    # - docker push $IMAGE_NAME:$IMAGE_TAG
@@ -124,11 +131,15 @@ review:
   stage: review
   script:
     - echo "Preview environment would be deployed here."
+  rules:
+    - if: $CI_COMMIT_BRANCH == "dev"
 
 deploy:
   stage: deploy
   when: manual
   script:
     - echo "Deployment to production triggered manually"
+  rules:
+    - if: $CI_COMMIT_BRANCH == "dev"
 
 

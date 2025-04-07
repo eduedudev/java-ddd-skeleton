@@ -2,6 +2,7 @@ package com.jaapec.tenant.shared.infrastructure.validation.validators;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,7 +16,7 @@ public class RegexValidation implements FieldValidator {
 	@Override
 	public Boolean isValid(
 		String fieldName,
-		HashMap<String, Serializable> fields,
+		Map<String, Serializable> fields,
 		@Nullable Repository repository,
 		@Nullable String rule
 	) {

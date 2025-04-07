@@ -1,9 +1,6 @@
 package com.jaapec.tenant.plans.infrastructure.controller.graphql.plan;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,21 +27,19 @@ public final class PlanCreateDataFetcher extends GraphQLApiController {
 	private final Validator validator;
 
 	private final PlanRepository repository;
-	private final HashMap<String, String> rules = new HashMap<String, String>() {
-		{
-			put("name", "required|not_empty|max:255|min:3");
-			put("description", "required|not_empty|max:255");
-			put("priceMonthly", "required|not_empty|double|min:0");
-			put("priceYearly", "required|not_empty|double|min:0");
-			put("maxUsers", "required|not_empty|integer|min:1");
-			put("maxRoles", "required|not_empty|integer|min:1");
-			put("maxAccounts", "required|not_empty|integer|min:1");
-			put("maxInvoices", "required|not_empty|integer|min:1");
-			put("status", "required|not_empty|enum:ACTIVE,INACTIVE");
-			put("visibility", "required|not_empty|enum:PUBLIC,PRIVATE");
-			put("trialDays", "required|not_empty|integer|min:0");
-		}
-	};
+	private final Map<String, String> rules = Map.ofEntries(
+		Map.entry("name", "required|not_empty|max:255|min:3"),
+		Map.entry("description", "required|not_empty|max:255"),
+		Map.entry("priceMonthly", "required|not_empty|double|min:0"),
+		Map.entry("priceYearly", "required|not_empty|double|min:0"),
+		Map.entry("maxUsers", "required|not_empty|integer|min:1"),
+		Map.entry("maxRoles", "required|not_empty|integer|min:1"),
+		Map.entry("maxAccounts", "required|not_empty|integer|min:1"),
+		Map.entry("maxInvoices", "required|not_empty|integer|min:1"),
+		Map.entry("status", "required|not_empty|enum:ACTIVE,INACTIVE"),
+		Map.entry("visibility", "required|not_empty|enum:PUBLIC,PRIVATE"),
+		Map.entry("trialDays", "required|not_empty|integer|min:0")
+	);
 
 	public PlanCreateDataFetcher(
 		QueryBus queryBus,

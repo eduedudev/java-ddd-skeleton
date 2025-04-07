@@ -31,9 +31,9 @@ public final class Utils {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static HashMap<String, Serializable> jsonDecode(String body) {
+	public static Map<String, Serializable> jsonDecode(String body) {
 		try {
-			return new ObjectMapper().readValue(body, HashMap.class);
+			return new ObjectMapper().readValue(body, Map.class);
 		} catch (IOException e) {
 			return null;
 		}

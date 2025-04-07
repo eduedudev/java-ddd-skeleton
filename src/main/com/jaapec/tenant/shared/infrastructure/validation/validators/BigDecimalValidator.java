@@ -3,6 +3,7 @@ package com.jaapec.tenant.shared.infrastructure.validation.validators;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.Map;
 import javax.annotation.Nullable;
 
 import com.jaapec.tenant.shared.domain.Message;
@@ -13,7 +14,7 @@ public final class BigDecimalValidator implements FieldValidator {
 	@Override
 	public Boolean isValid(
 		String fieldName,
-		HashMap<String, Serializable> fields,
+		Map<String, Serializable> fields,
 		@Nullable Repository repository,
 		@Nullable String rule
 	) {

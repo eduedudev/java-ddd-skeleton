@@ -2,11 +2,12 @@ package com.jaapec.tenant.plans.domain.events;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 import com.jaapec.tenant.shared.domain.bus.event.DomainEvent;
 
-public class PlanUpdatedDomainEvent extends DomainEvent {
+public final class PlanUpdatedDomainEvent extends DomainEvent {
 
 	private final String name;
 	private final String description;
@@ -165,7 +166,7 @@ public class PlanUpdatedDomainEvent extends DomainEvent {
 	@Override
 	public DomainEvent fromPrimitives(
 		String aggregateId,
-		HashMap<String, Serializable> body,
+		Map<String, Serializable> body,
 		String eventId,
 		String occurredOn
 	) {

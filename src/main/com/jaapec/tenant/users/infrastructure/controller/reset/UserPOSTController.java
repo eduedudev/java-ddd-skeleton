@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,13 +49,15 @@ public final class UserPOSTController extends RestApiController {
 		this.logger = logger;
 	}
 
-	private final HashMap<String, String> rules = new HashMap<String, String>() {
-		{
-			put("id", "required|not_empty|uuid");
-			put("name", "required|not_empty|max:255");
-			put("email", "required|not_empty|email");
-		}
-	};
+	private final Map<String, String> rules;
+
+	{
+		rules = Map.of(
+			"id", "required|not_empty|uuid",
+			"name", "required|not_empty|max:255",
+			"email", "required|not_empty|email"
+		);
+	}
 
 	@PostMapping("/users")
 	public ResponseEntity<HashMap<String, Serializable>> createUser(@RequestBody RequestUser request)
@@ -78,11 +81,9 @@ public final class UserPOSTController extends RestApiController {
 	}
 
 	@Override
-	public HashMap<Class<? extends DomainError>, HttpStatus> errorMapping() {
-		return new HashMap<Class<? extends DomainError>, HttpStatus>() {
-			{
-				put(ResourceAlreadyExists.class, HttpStatus.BAD_REQUEST);
-			}
-		};
+	public Map<Class<? extends DomainError>, HttpStatus> errorMapping() {
+		return Map.of(
+			ResourceAlreadyExists.class, HttpStatus.BAD_REQUEST
+		);
 	}
 }

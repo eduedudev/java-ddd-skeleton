@@ -62,7 +62,7 @@ public final class ApiExceptionMiddleware implements Filter {
 		RestApiController possibleController,
 		Exception exception
 	) throws IOException {
-		HashMap<Class<? extends DomainError>, HttpStatus> errorMapping = possibleController.errorMapping();
+		Map<Class<? extends DomainError>, HttpStatus> errorMapping = possibleController.errorMapping();
 		Throwable error = (
 				exception.getCause() instanceof CommandHandlerExecutionError ||
 				exception.getCause() instanceof QueryHandlerExecutionError
@@ -108,7 +108,7 @@ public final class ApiExceptionMiddleware implements Filter {
 		return Utils.toSnake(error.getClass().toString());
 	}
 
-	private int statusFor(HashMap<Class<? extends DomainError>, HttpStatus> errorMapping, Throwable error) {
+	private int statusFor(Map<Class<? extends DomainError>, HttpStatus> errorMapping, Throwable error) {
 		return errorMapping.getOrDefault(error.getClass(), HttpStatus.INTERNAL_SERVER_ERROR).value();
 	}
 

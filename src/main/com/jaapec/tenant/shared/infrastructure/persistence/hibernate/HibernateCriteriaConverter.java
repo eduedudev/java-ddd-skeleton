@@ -1,6 +1,5 @@
 package com.jaapec.tenant.shared.infrastructure.persistence.hibernate;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
@@ -15,12 +14,18 @@ public final class HibernateCriteriaConverter<T> {
 
 	private final CriteriaBuilder builder;
 	private final Map<FilterOperator, BiFunction<Filter, Root<T>, Predicate>> predicateTransformers = Map.of(
-		FilterOperator.EQUAL, this::equalsPredicateTransformer,
-		FilterOperator.NOT_EQUAL, this::notEqualsPredicateTransformer,
-		FilterOperator.GT, this::greaterThanPredicateTransformer,
-		FilterOperator.LT, this::lowerThanPredicateTransformer,
-		FilterOperator.CONTAINS, this::containsPredicateTransformer,
-		FilterOperator.NOT_CONTAINS, this::notContainsPredicateTransformer
+		FilterOperator.EQUAL,
+		this::equalsPredicateTransformer,
+		FilterOperator.NOT_EQUAL,
+		this::notEqualsPredicateTransformer,
+		FilterOperator.GT,
+		this::greaterThanPredicateTransformer,
+		FilterOperator.LT,
+		this::lowerThanPredicateTransformer,
+		FilterOperator.CONTAINS,
+		this::containsPredicateTransformer,
+		FilterOperator.NOT_CONTAINS,
+		this::notContainsPredicateTransformer
 	);
 
 	public HibernateCriteriaConverter(CriteriaBuilder builder) {

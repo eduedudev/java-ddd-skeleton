@@ -1,7 +1,6 @@
 package com.jaapec.tenant.users.infrastructure.controller.graphql;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -9,11 +8,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 
-import com.jaapec.tenant.shared.domain.DomainError;
-import com.jaapec.tenant.shared.domain.ResourceAlreadyExists;
 import com.jaapec.tenant.shared.domain.bus.command.CommandBus;
 import com.jaapec.tenant.shared.domain.bus.query.QueryBus;
 import com.jaapec.tenant.shared.infrastructure.controller.graphql.GraphQLApiController;
@@ -44,9 +40,12 @@ public final class UserPostControllerGraphql extends GraphQLApiController {
 	}
 
 	private final Map<String, String> rules = Map.of(
-		"id", "required|not_empty|uuid",
-		"name", "required|not_empty|max:255",
-		"email", "required|not_empty|email"
+		"id",
+		"required|not_empty|uuid",
+		"name",
+		"required|not_empty|max:255",
+		"email",
+		"required|not_empty|email"
 	);
 
 	@MutationMapping

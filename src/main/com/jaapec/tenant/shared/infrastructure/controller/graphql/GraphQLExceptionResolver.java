@@ -103,9 +103,12 @@ public class GraphQLExceptionResolver extends DataFetcherExceptionResolverAdapte
 			.location(env.getField().getSourceLocation())
 			.extensions(
 				Map.of(
-					"reason", ((DomainError) ex).reason(),
-					"value", ((DomainError) ex).value(),
-					"code", ((DomainError) ex).errorCode()
+					"reason",
+					((DomainError) ex).reason(),
+					"value",
+					((DomainError) ex).value(),
+					"code",
+					((DomainError) ex).errorCode()
 				)
 			)
 			.build();

@@ -1,7 +1,6 @@
 package com.jaapec.tenant.shared.infrastructure;
 
 import java.io.File;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -28,7 +27,9 @@ public abstract class Config {
 	private List<Resource> searchMappingFilesInJar(String segments, String extension) {
 		List<Resource> mappingResources = new ArrayList<>();
 		String path = "com/jaapec/tenant";
-		try (JarFile jarFile = new JarFile(new File(Objects.requireNonNull(Starter.class.getResource("/" + path)).toURI()))) {
+		try (
+			JarFile jarFile = new JarFile(new File(Objects.requireNonNull(Starter.class.getResource("/" + path)).toURI()))
+		) {
 			Enumeration<JarEntry> entries = jarFile.entries();
 			while (entries.hasMoreElements()) {
 				JarEntry entry = entries.nextElement();

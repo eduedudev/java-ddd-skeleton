@@ -13,13 +13,13 @@ public final class DomainEventJsonSerializer {
 		Map<String, Serializable> attributes = domainEvent.toPrimitives();
 		attributes.put("id", domainEvent.aggregateId());
 
-		Map<String, Serializable> data = new HashMap<String, Serializable>();
+		Map<String, Serializable> data = new HashMap<>();
 		data.put("id", domainEvent.eventId());
 		data.put("type", domainEvent.eventName());
 		data.put("occurred_on", domainEvent.occurredOn());
 		data.put("attributes", (Serializable) attributes);
 
-		HashMap<String, Serializable> json = new HashMap<String, Serializable>();
+		HashMap<String, Serializable> json = new HashMap<>();
 		json.put("data", (Serializable) data);
 		json.put("meta", new HashMap<String, Serializable>());
 		return Utils.jsonEncode(json);

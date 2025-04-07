@@ -28,24 +28,18 @@ public abstract class Config {
 	private List<Resource> searchMappingFilesInJar(String segments, String extension) {
 		List<Resource> mappingResources = new ArrayList<>();
 		String path = "com/jaapec/tenant";
-		try {
-			URL url = Starter.class.getResource("/" + path);
-			if (url != null) {
-				String jarPath = url.getFile().substring(5, url.getFile().indexOf("!"));
-				JarFile jarFile = new JarFile(jarPath);
-				Enumeration<JarEntry> entries = jarFile.entries();
-				while (entries.hasMoreElements()) {
-					JarEntry entry = entries.nextElement();
-					String entryName = entry.getName();
+		try (JarFile jarFile = new JarFile(new File(Objects.requireNonNull(Starter.class.getResource("/" + path)).toURI()))) {
+			Enumeration<JarEntry> entries = jarFile.entries();
+			while (entries.hasMoreElements()) {
+				JarEntry entry = entries.nextElement();
+				String entryName = entry.getName();
 
-					if (entryName.startsWith(path + "/") && entryName.contains(segments) && entryName.endsWith(extension)) {
-						mappingResources.add(new ClassPathResource(entryName));
-					}
+				if (entryName.startsWith(path + "/") && entryName.contains(segments) && entryName.endsWith(extension)) {
+					mappingResources.add(new ClassPathResource(entryName));
 				}
-				jarFile.close();
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new IllegalStateException("Error while searching mapping files in JAR", e);
 		}
 
 		return mappingResources;

@@ -10,8 +10,12 @@ import com.jaapec.tenant.shared.domain.Service;
 @Service
 public class MessageTranslatorImpl implements MessageTranslator {
 
+	private final MessageSource messageSource;
+
 	@Autowired
-	private MessageSource messageSource;
+	public MessageTranslatorImpl(MessageSource messageSource) {
+		this.messageSource = messageSource;
+	}
 
 	@Override
 	public String translate(String messageKey, Object[] args) {

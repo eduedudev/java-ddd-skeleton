@@ -1,6 +1,7 @@
 package com.jaapec.tenant.healt_checker.infrastructure.rest;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -9,10 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 public final class HealthCheckGetController {
 
 	@GetMapping("/health")
-	public HashMap<String, String> index() {
-		HashMap<String, String> status = new HashMap<>();
-		status.put("status", "ok");
-
-		return status;
+	public Map<String, String> index() {
+		return Map.of("status", "ok");
 	}
 }

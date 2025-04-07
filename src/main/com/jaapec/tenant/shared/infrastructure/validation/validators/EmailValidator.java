@@ -2,6 +2,7 @@ package com.jaapec.tenant.shared.infrastructure.validation.validators;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import jakarta.annotation.Nullable;
@@ -14,7 +15,7 @@ public class EmailValidator implements FieldValidator {
 	@Override
 	public Boolean isValid(
 		String fieldName,
-		HashMap<String, Serializable> fields,
+		Map<String, Serializable> fields,
 		@Nullable Repository repository,
 		@Nullable String rule
 	) {

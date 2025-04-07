@@ -3,6 +3,7 @@ package com.jaapec.tenant.users.infrastructure.controller.graphql;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -42,13 +43,11 @@ public final class UserPostControllerGraphql extends GraphQLApiController {
 		this.validator = validator;
 	}
 
-	private final HashMap<String, String> rules = new HashMap<String, String>() {
-		{
-			put("id", "required|not_empty|uuid");
-			put("name", "required|not_empty|max:255");
-			put("email", "required|not_empty|email");
-		}
-	};
+	private final Map<String, String> rules = Map.of(
+		"id", "required|not_empty|uuid",
+		"name", "required|not_empty|max:255",
+		"email", "required|not_empty|email"
+	);
 
 	@MutationMapping
 	public boolean createUser(@Argument RequestUser request) throws JsonProcessingException, ValidatorNotExist {
@@ -66,13 +65,5 @@ public final class UserPostControllerGraphql extends GraphQLApiController {
 		}
 		dispatch(new CreateUserCommand(request.id(), request.name(), request.email()));
 		return true;
-	}
-
-	public HashMap<Class<? extends DomainError>, HttpStatus> errorMapping() {
-		return new HashMap<Class<? extends DomainError>, HttpStatus>() {
-			{
-				put(ResourceAlreadyExists.class, HttpStatus.BAD_REQUEST);
-			}
-		};
 	}
 }

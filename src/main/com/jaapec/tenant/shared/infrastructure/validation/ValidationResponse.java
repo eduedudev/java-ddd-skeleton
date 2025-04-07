@@ -2,12 +2,13 @@ package com.jaapec.tenant.shared.infrastructure.validation;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public final class ValidationResponse {
 
-	private final HashMap<String, List<String>> validationErrors;
+	private final Map<String, List<String>> validationErrors;
 
-	public ValidationResponse(HashMap<String, List<String>> validationErrors) {
+	public ValidationResponse(Map<String, List<String>> validationErrors) {
 		this.validationErrors = validationErrors;
 	}
 
@@ -15,11 +16,11 @@ public final class ValidationResponse {
 		return !validationErrors.isEmpty();
 	}
 
-	public HashMap<String, List<String>> errors() {
+	public Map<String, List<String>> errors() {
 		return validationErrors;
 	}
 
-	public void addError(HashMap<String, List<String>> errors) {
+	public void addError(Map<String, List<String>> errors) {
 		validationErrors.putAll(errors);
 	}
 }

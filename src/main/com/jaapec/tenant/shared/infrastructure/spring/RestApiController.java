@@ -3,6 +3,7 @@ package com.jaapec.tenant.shared.infrastructure.spring;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Map;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.HttpStatus;
@@ -40,5 +41,5 @@ public abstract class RestApiController extends ApiController {
 		return status.body(responseMap);
 	}
 
-	public abstract HashMap<Class<? extends DomainError>, HttpStatus> errorMapping();
+	public abstract Map<Class<? extends DomainError>, HttpStatus> errorMapping();
 }

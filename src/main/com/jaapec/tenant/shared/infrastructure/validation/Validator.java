@@ -17,32 +17,34 @@ import com.jaapec.tenant.shared.infrastructure.validation.validators.*;
 @Service
 public final class Validator {
 
+	private final MessageTranslator translator;
+
 	@Autowired
-	private MessageTranslator translator;
+	public Validator(MessageTranslator translator) {
+		this.translator = translator;
+	}
+	private static final Map<String, FieldValidator> validators = Map.ofEntries(
+		Map.entry("required", new RequiredValidator()),
+		Map.entry("string", new StringValidator()),
+		Map.entry("not_empty", new NotEmptyValidator()),
+		Map.entry("uuid", new UuidValidator()),
+		Map.entry("unique", new UniqueFieldValidator()),
+		Map.entry("enum", new EnumValidator()),
+		Map.entry("email", new EmailValidator()),
+		Map.entry("min", new MinValidation()),
+		Map.entry("max", new MaxValidation()),
+		Map.entry("regex", new RegexValidation()),
+		Map.entry("date", new DateValidator()),
+		Map.entry("datetime", new DateTimeValidator()),
+		Map.entry("double", new DoubleValidator()),
+		Map.entry("bigdecimal", new BigDecimalValidator()),
+		Map.entry("integer", new IntegerValidator())
+	);
 
-	private static final HashMap<String, FieldValidator> validators = new HashMap<String, FieldValidator>() {
-		{
-			put("required", new RequiredValidator());
-			put("string", new StringValidator());
-			put("not_empty", new NotEmptyValidator());
-			put("uuid", new UuidValidator());
-			put("unique", new UniqueFieldValidator());
-			put("enum", new EnumValidator());
-			put("email", new EmailValidator());
-			put("min", new MinValidation());
-			put("max", new MaxValidation());
-			put("regex", new RegexValidation());
-			put("date", new DateValidator());
-			put("datetime", new DateTimeValidator());
-			put("double", new DoubleValidator());
-			put("bigdecimal", new BigDecimalValidator());
-			put("integer", new IntegerValidator());
-		}
-	};
 
-	public ValidationResponse validate(String input, HashMap<String, String> combinedRules, Repository repository)
+	public ValidationResponse validate(String input, Map<String, String> combinedRules, Repository repository)
 		throws ValidatorNotExist {
-		HashMap<String, List<String>> validationErrors = new HashMap<>();
+		Map<String, List<String>> validationErrors = new HashMap<>();
 
 		for (Map.Entry<String, String> entry : combinedRules.entrySet()) {
 			String[] rules = entry.getValue().split("\\|");

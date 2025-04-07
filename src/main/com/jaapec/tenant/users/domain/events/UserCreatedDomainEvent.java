@@ -2,6 +2,7 @@ package com.jaapec.tenant.users.domain.events;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 import com.jaapec.tenant.shared.domain.bus.event.DomainEvent;
@@ -40,19 +41,17 @@ public final class UserCreatedDomainEvent extends DomainEvent {
 	}
 
 	@Override
-	public HashMap<String, Serializable> toPrimitives() {
-		return new HashMap<String, Serializable>() {
-			{
-				put("name", name);
-				put("email", email);
-			}
-		};
+	public Map<String, Serializable> toPrimitives() {
+		Map<String, Serializable> primitives = new HashMap<>();
+		primitives.put("name", name);
+		primitives.put("email", email);
+		return primitives;
 	}
 
 	@Override
 	public DomainEvent fromPrimitives(
 		String aggregateId,
-		HashMap<String, Serializable> body,
+		Map<String, Serializable> body,
 		String eventId,
 		String occurredOn
 	) {

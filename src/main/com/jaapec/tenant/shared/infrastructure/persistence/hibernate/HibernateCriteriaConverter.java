@@ -2,6 +2,7 @@ package com.jaapec.tenant.shared.infrastructure.persistence.hibernate;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.BiFunction;
 
 import jakarta.persistence.criteria.*;
@@ -13,17 +14,14 @@ import com.jaapec.tenant.shared.domain.criteria.FilterOperator;
 public final class HibernateCriteriaConverter<T> {
 
 	private final CriteriaBuilder builder;
-	private final HashMap<FilterOperator, BiFunction<Filter, Root<T>, Predicate>> predicateTransformers =
-		new HashMap<FilterOperator, BiFunction<Filter, Root<T>, Predicate>>() {
-			{
-				put(FilterOperator.EQUAL, HibernateCriteriaConverter.this::equalsPredicateTransformer);
-				put(FilterOperator.NOT_EQUAL, HibernateCriteriaConverter.this::notEqualsPredicateTransformer);
-				put(FilterOperator.GT, HibernateCriteriaConverter.this::greaterThanPredicateTransformer);
-				put(FilterOperator.LT, HibernateCriteriaConverter.this::lowerThanPredicateTransformer);
-				put(FilterOperator.CONTAINS, HibernateCriteriaConverter.this::containsPredicateTransformer);
-				put(FilterOperator.NOT_CONTAINS, HibernateCriteriaConverter.this::notContainsPredicateTransformer);
-			}
-		};
+	private final Map<FilterOperator, BiFunction<Filter, Root<T>, Predicate>> predicateTransformers = Map.of(
+		FilterOperator.EQUAL, this::equalsPredicateTransformer,
+		FilterOperator.NOT_EQUAL, this::notEqualsPredicateTransformer,
+		FilterOperator.GT, this::greaterThanPredicateTransformer,
+		FilterOperator.LT, this::lowerThanPredicateTransformer,
+		FilterOperator.CONTAINS, this::containsPredicateTransformer,
+		FilterOperator.NOT_CONTAINS, this::notContainsPredicateTransformer
+	);
 
 	public HibernateCriteriaConverter(CriteriaBuilder builder) {
 		this.builder = builder;

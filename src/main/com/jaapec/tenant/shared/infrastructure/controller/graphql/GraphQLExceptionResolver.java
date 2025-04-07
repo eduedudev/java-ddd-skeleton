@@ -1,9 +1,6 @@
 package com.jaapec.tenant.shared.infrastructure.controller.graphql;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import graphql.GraphQLError;
 import graphql.GraphqlErrorBuilder;
@@ -105,13 +102,11 @@ public class GraphQLExceptionResolver extends DataFetcherExceptionResolverAdapte
 			.path(env.getExecutionStepInfo().getPath())
 			.location(env.getField().getSourceLocation())
 			.extensions(
-				new HashMap<>() {
-					{
-						put("reason", ((DomainError) ex).reason());
-						put("value", ((DomainError) ex).value());
-						put("code", ((DomainError) ex).errorCode());
-					}
-				}
+				Map.of(
+					"reason", ((DomainError) ex).reason(),
+					"value", ((DomainError) ex).value(),
+					"code", ((DomainError) ex).errorCode()
+				)
 			)
 			.build();
 	}

@@ -9,7 +9,7 @@ public abstract class DateValueObject {
 
 	private final Date value;
 
-	private DateValueObject(String value) {
+	protected DateValueObject(String value) {
 		this.value = convertToDate(value);
 	}
 

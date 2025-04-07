@@ -19,8 +19,8 @@ public class Log4j2Logger implements Logger {
 	}
 
 	@Override
-	public void info(String message, Map<String, Serializable> $context) {
-		logger.info("{} Context: {}", message, $context);
+	public void info(String message, Map<String, Serializable> context) {
+		logger.info("{} Context: {}", message, context);
 	}
 
 	@Override
@@ -29,8 +29,8 @@ public class Log4j2Logger implements Logger {
 	}
 
 	@Override
-	public void warning(String message, Map<String, Serializable> $context) {
-		logger.warn("{} Context: {}", message, $context);
+	public void warning(String message, Map<String, Serializable> context) {
+		logger.warn("{} Context: {}", message, context);
 	}
 
 	@Override
@@ -39,8 +39,8 @@ public class Log4j2Logger implements Logger {
 	}
 
 	@Override
-	public void critical(String message, Map<String, Serializable> $context) {
-		logger.fatal("{} Context: {}", message, $context);
+	public void critical(String message, Map<String, Serializable> context) {
+		logger.fatal("{} Context: {}", message, context);
 	}
 
 	@Override
@@ -49,13 +49,13 @@ public class Log4j2Logger implements Logger {
 	}
 
 	@Override
-	public void error(String message, Map<String, Serializable> $context) {
-		logger.error("{} Context: {}", message, $context);
+	public void error(String message, Map<String, Serializable> context) {
+		logger.error("{} Context: {}", message, context);
 	}
 
 	@Override
-	public void error(String message, Map<String, Serializable> $context, Throwable throwable) {
-		logger.error("{} Context: {}", message, $context, throwable);
+	public void error(String message, Map<String, Serializable> context, Throwable throwable) {
+		logger.error("{} Context: {}", message, context, throwable);
 	}
 
 	@Override
@@ -64,8 +64,8 @@ public class Log4j2Logger implements Logger {
 	}
 
 	@Override
-	public void debug(String message, Map<String, Serializable> $context) {
-		logger.debug("{} Context: {}", message, $context);
+	public void debug(String message, Map<String, Serializable> context) {
+		logger.debug("{} Context: {}", message, context);
 	}
 
 	@Override
@@ -74,7 +74,7 @@ public class Log4j2Logger implements Logger {
 	}
 
 	@Override
-	public void trace(String message, String traceId, Map<String, Serializable> $context) {
-		logger.trace("{} TraceId: {} Context: {}", message, traceId, $context);
+	public void trace(String message, String traceId, Map<String, Serializable> context) {
+		logger.trace("{} TraceId: {} Context: {}", message, traceId, context);
 	}
 }

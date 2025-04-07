@@ -66,9 +66,9 @@ public final class PlanUpdateDataFetcher extends GraphQLApiController {
 		if (Boolean.TRUE.equals(hasErrors)) {
 			validationResponse
 				.errors()
-				.forEach((key, value) -> {
-					value.forEach(error -> errors.add(new GraphQLCustomException(error, key)));
-				});
+				.forEach((key, value) ->
+					value.forEach(error -> errors.add(new GraphQLCustomException(error, key)))
+				);
 			throw new GraphQLExceptionList(errors);
 		}
 

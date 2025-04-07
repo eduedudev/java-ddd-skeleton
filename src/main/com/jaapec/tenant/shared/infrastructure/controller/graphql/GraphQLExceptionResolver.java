@@ -64,11 +64,11 @@ public class GraphQLExceptionResolver extends DataFetcherExceptionResolverAdapte
 
 	@Override
 	protected List<GraphQLError> resolveToMultipleErrors(Throwable ex, DataFetchingEnvironment env) {
-		if (ex instanceof GraphQLExceptionList) {
-			List<GraphQLError> errors = new ArrayList<>();
-
-			for (GraphQLCustomException error : ((GraphQLExceptionList) ex).getErrors()) {
-				errors.add(
+		if (ex instanceof GraphQLExceptionList exceptionList) {
+			return exceptionList
+				.getErrors()
+				.stream()
+				.map(error ->
 					GraphqlErrorBuilder
 						.newError()
 						.errorType(error.errorType())
@@ -77,12 +77,12 @@ public class GraphQLExceptionResolver extends DataFetcherExceptionResolverAdapte
 						.location(env.getField().getSourceLocation())
 						.extensions(Collections.singletonMap("field", error.field()))
 						.build()
-				);
-			}
-			return errors;
+				)
+				.toList();
 		}
+
 		GraphQLError error = resolveToSingleError(ex, env);
-		return (error != null ? Collections.singletonList(error) : null);
+		return error != null ? Collections.singletonList(error) : Collections.emptyList();
 	}
 
 	private Throwable unwrap(Throwable ex) {

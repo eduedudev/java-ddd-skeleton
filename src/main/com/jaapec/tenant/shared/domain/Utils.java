@@ -13,6 +13,8 @@ import com.google.common.base.CaseFormat;
 
 public final class Utils {
 
+	private Utils() {}
+
 	public static String dateToString(LocalDateTime dateTime) {
 		return dateTime.format(DateTimeFormatter.ISO_LOCAL_DATE);
 	}

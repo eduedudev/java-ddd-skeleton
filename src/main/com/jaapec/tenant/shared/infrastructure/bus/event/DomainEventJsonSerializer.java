@@ -9,6 +9,8 @@ import com.jaapec.tenant.shared.domain.bus.event.DomainEvent;
 
 public final class DomainEventJsonSerializer {
 
+	private DomainEventJsonSerializer() {}
+
 	public static String serialize(DomainEvent domainEvent) {
 		Map<String, Serializable> attributes = domainEvent.toPrimitives();
 		attributes.put("id", domainEvent.aggregateId());

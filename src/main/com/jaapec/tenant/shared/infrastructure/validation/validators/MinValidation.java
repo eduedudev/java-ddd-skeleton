@@ -24,16 +24,15 @@ public class MinValidation implements FieldValidator {
 			return true;
 		}
 
-		assert rule != null;
-		if (rule.contains(":") && rule.split(":")[0].equals("min")) {
+		if (Objects.requireNonNull(rule).contains(":") && rule.split(":")[0].equals("min")) {
 			int min = Integer.parseInt(rule.split(":")[1]);
 
-			if (fieldValue instanceof String) {
-				return fieldValue.toString().length() >= min;
+			if (fieldValue instanceof String string) {
+				return string.length() >= min;
 			}
 
-			if (fieldValue instanceof Number) {
-				return ((Number) fieldValue).doubleValue() >= min;
+			if (fieldValue instanceof Number number) {
+				return number.doubleValue() >= min;
 			}
 		}
 		return false;

@@ -42,7 +42,7 @@ public class MariaDBDomainEventsConsumer {
 				"SELECT id, aggregate_id, name, body, occurred_on FROM domain_events ORDER BY occurred_on LIMIT :chunk";
 			NativeQuery<Object[]> query = session.createNativeQuery(sqlQuery, Object[].class);
 
-			Integer CHUNKS = 10;
+			final Integer CHUNKS = 10;
 			query.setParameter("chunk", CHUNKS);
 
 			List<Object[]> events = query.getResultList();

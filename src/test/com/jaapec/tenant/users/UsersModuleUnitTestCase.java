@@ -12,6 +12,7 @@ public abstract class UsersModuleUnitTestCase extends UnitTestCase {
 
 	protected UserRepository repository;
 
+	@Override
 	@BeforeEach
 	protected void setUp() {
 		super.setUp();

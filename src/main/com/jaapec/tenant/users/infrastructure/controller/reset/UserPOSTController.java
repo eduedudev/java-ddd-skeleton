@@ -71,7 +71,8 @@ public final class UserPOSTController extends RestApiController {
 		String requestJson = objectMapper.writeValueAsString(request);
 		ValidationResponse validationResponse = validator.validate(requestJson, rules, repository);
 		HashMap<String, List<String>> validationErrors = new HashMap<>();
-		if (validationResponse.hasErrors()) {
+		Boolean hasErrors = validationResponse.hasErrors();
+		if (Boolean.TRUE.equals(hasErrors)) {
 			validationResponse
 				.errors()
 				.forEach((key, value) -> {

@@ -18,9 +18,9 @@ public abstract class Email {
 		return value;
 	}
 
-	private void ensureValidEmail(String value) throws IllegalArgumentException {
-		String EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
-		if (!Pattern.matches(EMAIL_REGEX, value)) {
+	private void ensureValidEmail(String value) {
+		final String EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
+		if (value == null || !Pattern.matches(EMAIL_REGEX, value)) {
 			throw new IllegalArgumentException("The email is invalid");
 		}
 	}

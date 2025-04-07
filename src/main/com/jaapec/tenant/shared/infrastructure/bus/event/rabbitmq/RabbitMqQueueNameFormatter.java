@@ -4,6 +4,8 @@ import com.jaapec.tenant.shared.infrastructure.bus.event.DomainEventSubscriberIn
 
 public final class RabbitMqQueueNameFormatter {
 
+	private RabbitMqQueueNameFormatter() {}
+
 	public static String format(DomainEventSubscriberInformation information) {
 		return information.formatRabbitMqQueueName();
 	}

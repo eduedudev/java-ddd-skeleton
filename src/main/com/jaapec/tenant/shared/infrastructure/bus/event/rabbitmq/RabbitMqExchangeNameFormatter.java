@@ -2,6 +2,8 @@ package com.jaapec.tenant.shared.infrastructure.bus.event.rabbitmq;
 
 public final class RabbitMqExchangeNameFormatter {
 
+	private RabbitMqExchangeNameFormatter() {}
+
 	public static String retry(String exchangeName) {
 		return String.format("retry-%s", exchangeName);
 	}

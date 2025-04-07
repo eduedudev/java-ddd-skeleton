@@ -24,14 +24,13 @@ public class MaxValidation implements FieldValidator {
 			return true;
 		}
 
-		assert rule != null;
-		if (rule.contains(":") && rule.split(":")[0].equals("max")) {
+		if (Objects.requireNonNull(rule).contains(":") && rule.split(":")[0].equals("max")) {
 			int max = Integer.parseInt(rule.split(":")[1]);
-			if (fieldValue instanceof Number) {
-				return ((Number) fieldValue).doubleValue() <= max;
+			if (fieldValue instanceof Number number) {
+				return number.doubleValue() <= max;
 			}
-			if (fieldValue instanceof String) {
-				return fieldValue.toString().length() <= max;
+			if (fieldValue instanceof String string) {
+				return string.length() <= max;
 			}
 		}
 		return false;

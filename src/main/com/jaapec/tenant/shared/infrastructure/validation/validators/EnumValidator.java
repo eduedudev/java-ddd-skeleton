@@ -2,6 +2,7 @@ package com.jaapec.tenant.shared.infrastructure.validation.validators;
 
 import java.io.Serializable;
 import java.util.Map;
+import java.util.Objects;
 
 import jakarta.annotation.Nullable;
 
@@ -22,8 +23,8 @@ public class EnumValidator implements FieldValidator {
 		if (fieldValue == null) {
 			return true;
 		}
-		assert rule != null;
-		if (rule.contains(":") && rule.split(":")[0].equals("enum")) {
+
+		if (Objects.requireNonNull(rule).contains(":") && rule.split(":")[0].equals("enum")) {
 			String[] enumValues = rule.split(":")[1].split(",");
 			for (String enumValue : enumValues) {
 				if (enumValue.equals(fieldValue.toString())) {

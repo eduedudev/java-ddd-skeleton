@@ -118,7 +118,7 @@ public final class RabbitMqDomainEventsConsumer {
 	}
 
 	private boolean hasBeenRedeliveredTooMuch(Message message) {
-		int MAX_RETRIES = 2;
+		final int MAX_RETRIES = 2;
 		return (int) message.getMessageProperties().getHeaders().getOrDefault("redelivery_count", 0) >= MAX_RETRIES;
 	}
 

@@ -16,6 +16,7 @@ final class CreatePlanCommandHandlerShould extends PlanModuleUnitTestCase {
 
 	private CreatePlanCommandHandler handler;
 
+	@Override
 	@BeforeEach
 	protected void setUp() {
 		super.setUp();

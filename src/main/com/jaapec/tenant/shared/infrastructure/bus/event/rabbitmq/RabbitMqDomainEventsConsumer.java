@@ -22,7 +22,8 @@ import com.jaapec.tenant.shared.infrastructure.bus.event.DomainEventSubscribersI
 @Service
 public final class RabbitMqDomainEventsConsumer {
 
-	private final String CONSUMER_NAME = "domain_events_consumer";
+	private final static String CONSUMER_NAME = "domain_events_consumer";
+	private static final String REDELIVERY_COUNT_HEADER = "redelivery_count";
 	private final DomainEventJsonDeserializer deserializer;
 	private final ApplicationContext context;
 	private final RabbitMqPublisher publisher;
@@ -70,7 +71,7 @@ public final class RabbitMqDomainEventsConsumer {
 		try {
 			subscriberOnMethod.invoke(subscriber, domainEvent);
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException error) {
-			throw new Exception(
+			throw new IllegalArgumentException(
 				String.format(
 					"The subscriber <%s> should implement a method `on` listening the domain event <%s>",
 					queue,
@@ -101,7 +102,7 @@ public final class RabbitMqDomainEventsConsumer {
 	private void sendMessageTo(String exchange, Message message, String queue) {
 		Map<String, Object> headers = message.getMessageProperties().getHeaders();
 
-		headers.put("redelivery_count", (int) headers.getOrDefault("redelivery_count", 0) + 1);
+		headers.put(REDELIVERY_COUNT_HEADER, (int) headers.getOrDefault(REDELIVERY_COUNT_HEADER, 0) + 1);
 
 		MessageBuilder
 			.fromMessage(message)
@@ -126,7 +127,7 @@ public final class RabbitMqDomainEventsConsumer {
 		this.information = information;
 	}
 
-	private Object subscriberFor(String queue) throws Exception {
+	private Object subscriberFor(String queue){
 		String[] queueParts = queue.split("\\.");
 		String subscriberName = Utils.toCamelFirstLower(queueParts[queueParts.length - 1]);
 
@@ -136,7 +137,7 @@ public final class RabbitMqDomainEventsConsumer {
 
 			return subscriber;
 		} catch (Exception e) {
-			throw new Exception(String.format("There are not registered subscribers for <%s> queue", queue));
+			throw new IllegalArgumentException(String.format("There are not registered subscribers for <%s> queue", queue));
 		}
 	}
 }

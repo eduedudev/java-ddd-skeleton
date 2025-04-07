@@ -1,6 +1,6 @@
 package com.jaapec.tenant.users.domain;
 
-import com.jaapec.tenant.shared.domain.ValueObjects.Email;
+import com.jaapec.tenant.shared.domain.value_objects.Email;
 
 public final class UserEmail extends Email {
 

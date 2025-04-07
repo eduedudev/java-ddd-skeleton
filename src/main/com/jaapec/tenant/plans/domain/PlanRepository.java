@@ -3,7 +3,7 @@ package com.jaapec.tenant.plans.domain;
 import java.util.List;
 import java.util.Optional;
 
-import com.jaapec.tenant.plans.domain.ValueObjects.PlanId;
+import com.jaapec.tenant.plans.domain.value_objects.PlanId;
 import com.jaapec.tenant.shared.domain.Repository;
 import com.jaapec.tenant.shared.domain.criteria.Criteria;
 

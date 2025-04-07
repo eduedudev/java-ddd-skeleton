@@ -1,6 +1,6 @@
 package com.jaapec.tenant.tenants.domain;
 
-import com.jaapec.tenant.shared.domain.ValueObjects.StringValueObject;
+import com.jaapec.tenant.shared.domain.value_objects.StringValueObject;
 
 public final class TenantName extends StringValueObject {
 

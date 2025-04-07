@@ -21,7 +21,7 @@ import com.jaapec.tenant.plans.application.update.UpdatePlanCommandHandler;
 import com.jaapec.tenant.plans.domain.Plan;
 import com.jaapec.tenant.shared.domain.ResourceNotExist;
 
-public final class UpdatePlanCommandHandlerShould extends PlanModuleUnitTestCase {
+final class UpdatePlanCommandHandlerShould extends PlanModuleUnitTestCase {
 
 	private UpdatePlanCommandHandler handler;
 

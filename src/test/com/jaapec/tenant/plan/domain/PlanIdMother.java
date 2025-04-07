@@ -1,6 +1,6 @@
 package com.jaapec.tenant.plan.domain;
 
-import com.jaapec.tenant.plans.domain.ValueObjects.PlanId;
+import com.jaapec.tenant.plans.domain.value_objects.PlanId;
 import com.jaapec.tenant.shared.domain.UuidMother;
 
 public final class PlanIdMother {

@@ -1,6 +1,6 @@
-package com.jaapec.tenant.plans.domain.ValueObjects;
+package com.jaapec.tenant.plans.domain.value_objects;
 
-import com.jaapec.tenant.shared.domain.ValueObjects.Identifier;
+import com.jaapec.tenant.shared.domain.value_objects.Identifier;
 
 public final class PlanId extends Identifier {
 

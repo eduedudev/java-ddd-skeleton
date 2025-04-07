@@ -1,6 +1,6 @@
 package com.jaapec.tenant.plan.domain;
 
-import com.jaapec.tenant.plans.domain.ValueObjects.PlanStatus;
+import com.jaapec.tenant.plans.domain.value_objects.PlanStatus;
 
 public final class PlanStatusMother {
 

@@ -14,7 +14,7 @@ import com.jaapec.tenant.plan.domain.PlanMother;
 import com.jaapec.tenant.plans.domain.Plan;
 
 @Transactional
-public class MariaDBPlanRepositoryShould extends PlanModuleInfrastructureTestCase {
+class MariaDBPlanRepositoryShould extends PlanModuleInfrastructureTestCase {
 
 	@Test
 	void save_a_plan() {

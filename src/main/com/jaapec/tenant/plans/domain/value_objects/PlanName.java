@@ -1,6 +1,6 @@
-package com.jaapec.tenant.plans.domain.ValueObjects;
+package com.jaapec.tenant.plans.domain.value_objects;
 
-import com.jaapec.tenant.shared.domain.ValueObjects.StringValueObject;
+import com.jaapec.tenant.shared.domain.value_objects.StringValueObject;
 
 public final class PlanName extends StringValueObject {
 

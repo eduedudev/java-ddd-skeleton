@@ -1,6 +1,6 @@
 package com.jaapec.tenant.plan.domain;
 
-import com.jaapec.tenant.plans.domain.ValueObjects.PlanMaxRoles;
+import com.jaapec.tenant.plans.domain.value_objects.PlanMaxRoles;
 import com.jaapec.tenant.shared.domain.MotherCreator;
 
 public final class PlanMaxRolesMother {

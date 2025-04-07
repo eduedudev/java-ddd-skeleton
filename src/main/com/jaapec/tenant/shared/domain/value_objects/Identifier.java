@@ -1,4 +1,4 @@
-package com.jaapec.tenant.shared.domain.ValueObjects;
+package com.jaapec.tenant.shared.domain.value_objects;
 
 import java.util.Objects;
 import java.util.regex.Pattern;
@@ -10,7 +10,7 @@ public abstract class Identifier {
 		"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
 	);
 
-	public Identifier(String value) {
+	protected Identifier(String value) {
 		ensureValidUuid(value);
 		this.value = value;
 	}

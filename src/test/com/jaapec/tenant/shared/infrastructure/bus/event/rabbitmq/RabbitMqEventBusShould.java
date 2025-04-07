@@ -15,7 +15,7 @@ import com.jaapec.tenant.shared.infrastructure.bus.event.DomainEventSubscribersI
 import com.jaapec.tenant.users.domain.UserCreatedDomainEventMother;
 import com.jaapec.tenant.users.domain.events.UserCreatedDomainEvent;
 
-public final class RabbitMqEventBusShould extends InfrastructureTestCase {
+final class RabbitMqEventBusShould extends InfrastructureTestCase {
 
 	@Autowired
 	private RabbitMqEventBus eventBus;
@@ -27,7 +27,7 @@ public final class RabbitMqEventBusShould extends InfrastructureTestCase {
 	private TestAllWorksOnRabbitMqEventsPublished subscriber;
 
 	@BeforeEach
-	protected void setUp() {
+	void setUp() {
 		subscriber.hasBeenExecuted = false;
 
 		consumer.withSubscribersInformation(

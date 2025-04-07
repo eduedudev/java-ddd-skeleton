@@ -19,10 +19,10 @@ import com.jaapec.tenant.plans.application.search.PlanSearcher;
 import com.jaapec.tenant.plans.application.search.SearchPlanQuery;
 import com.jaapec.tenant.plans.application.search.SearchPlanQueryHandler;
 import com.jaapec.tenant.plans.domain.Plan;
-import com.jaapec.tenant.plans.domain.ValueObjects.PlanStatus;
+import com.jaapec.tenant.plans.domain.value_objects.PlanStatus;
 import com.jaapec.tenant.shared.domain.criteria.*;
 
-public final class SearchPlanQueryHandlerShould extends PlanModuleUnitTestCase {
+final class SearchPlanQueryHandlerShould extends PlanModuleUnitTestCase {
 
 	private SearchPlanQueryHandler handler;
 

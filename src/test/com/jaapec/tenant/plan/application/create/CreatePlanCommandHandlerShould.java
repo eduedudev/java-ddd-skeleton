@@ -12,7 +12,7 @@ import com.jaapec.tenant.plans.application.create.PlanCreator;
 import com.jaapec.tenant.plans.domain.Plan;
 import com.jaapec.tenant.plans.domain.events.PlanCreatedDomainEvent;
 
-public final class CreatePlanCommandHandlerShould extends PlanModuleUnitTestCase {
+final class CreatePlanCommandHandlerShould extends PlanModuleUnitTestCase {
 
 	private CreatePlanCommandHandler handler;
 

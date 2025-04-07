@@ -1,6 +1,6 @@
-package com.jaapec.tenant.plans.domain.ValueObjects;
+package com.jaapec.tenant.plans.domain.value_objects;
 
-import com.jaapec.tenant.shared.domain.ValueObjects.DateTimeValueObject;
+import com.jaapec.tenant.shared.domain.value_objects.DateTimeValueObject;
 
 public final class PlanUpdatedAt extends DateTimeValueObject {
 

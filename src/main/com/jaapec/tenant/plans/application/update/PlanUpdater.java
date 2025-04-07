@@ -2,7 +2,7 @@ package com.jaapec.tenant.plans.application.update;
 
 import com.jaapec.tenant.plans.domain.Plan;
 import com.jaapec.tenant.plans.domain.PlanRepository;
-import com.jaapec.tenant.plans.domain.ValueObjects.*;
+import com.jaapec.tenant.plans.domain.value_objects.*;
 import com.jaapec.tenant.shared.domain.ResourceAlreadyExists;
 import com.jaapec.tenant.shared.domain.ResourceNotExist;
 import com.jaapec.tenant.shared.domain.Service;

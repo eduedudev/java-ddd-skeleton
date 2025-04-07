@@ -1,6 +1,6 @@
 package com.jaapec.tenant.plan.domain;
 
-import com.jaapec.tenant.plans.domain.ValueObjects.PlanVisibility;
+import com.jaapec.tenant.plans.domain.value_objects.PlanVisibility;
 
 public final class PlanVisibilityMother {
 

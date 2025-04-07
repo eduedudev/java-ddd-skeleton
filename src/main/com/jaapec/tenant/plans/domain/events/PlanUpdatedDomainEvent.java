@@ -143,24 +143,22 @@ public final class PlanUpdatedDomainEvent extends DomainEvent {
 	}
 
 	@Override
-	public HashMap<String, Serializable> toPrimitives() {
-		return new HashMap<String, Serializable>() {
-			{
-				put("name", name);
-				put("description", description);
-				put("priceMonthly", priceMonthly);
-				put("priceYearly", priceYearly);
-				put("maxUsers", maxUsers);
-				put("maxRoles", maxRoles);
-				put("maxAccounts", maxAccounts);
-				put("maxInvoices", maxInvoices);
-				put("status", status);
-				put("visibility", visibility);
-				put("trialDays", trialDays);
-				put("createdAt", createdAt);
-				put("updatedAt", updatedAt);
-			}
-		};
+	public Map<String, Serializable> toPrimitives() {
+		Map<String, Serializable> primitives = new HashMap<>();
+		primitives.put("name", name);
+		primitives.put("description", description);
+		primitives.put("priceMonthly", priceMonthly);
+		primitives.put("priceYearly", priceYearly);
+		primitives.put("maxUsers", maxUsers);
+		primitives.put("maxRoles", maxRoles);
+		primitives.put("maxAccounts", maxAccounts);
+		primitives.put("maxInvoices", maxInvoices);
+		primitives.put("status", status);
+		primitives.put("visibility", visibility);
+		primitives.put("trialDays", trialDays);
+		primitives.put("createdAt", createdAt);
+		primitives.put("updatedAt", updatedAt);
+		return primitives;
 	}
 
 	@Override

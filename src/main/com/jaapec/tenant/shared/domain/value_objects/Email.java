@@ -1,4 +1,4 @@
-package com.jaapec.tenant.shared.domain.ValueObjects;
+package com.jaapec.tenant.shared.domain.value_objects;
 
 import java.util.Objects;
 import java.util.regex.Pattern;
@@ -7,7 +7,7 @@ public abstract class Email {
 
 	protected final String value;
 
-	public Email(String value) {
+	protected Email(String value) {
 		if (value != null) {
 			ensureValidEmail(value);
 		}

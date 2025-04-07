@@ -1,6 +1,6 @@
 package com.jaapec.tenant.tenants.domain;
 
-import com.jaapec.tenant.shared.domain.ValueObjects.Identifier;
+import com.jaapec.tenant.shared.domain.value_objects.Identifier;
 
 public final class TenantId extends Identifier {
 

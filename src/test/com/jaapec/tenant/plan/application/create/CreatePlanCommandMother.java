@@ -2,7 +2,7 @@ package com.jaapec.tenant.plan.application.create;
 
 import com.jaapec.tenant.plan.domain.*;
 import com.jaapec.tenant.plans.application.create.CreatePlanCommand;
-import com.jaapec.tenant.plans.domain.ValueObjects.*;
+import com.jaapec.tenant.plans.domain.value_objects.*;
 
 public final class CreatePlanCommandMother {
 

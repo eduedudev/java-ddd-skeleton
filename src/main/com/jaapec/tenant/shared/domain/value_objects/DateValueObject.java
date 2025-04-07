@@ -1,4 +1,4 @@
-package com.jaapec.tenant.shared.domain.ValueObjects;
+package com.jaapec.tenant.shared.domain.value_objects;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -9,7 +9,7 @@ public abstract class DateValueObject {
 
 	private final Date value;
 
-	public DateValueObject(String value) {
+	private DateValueObject(String value) {
 		this.value = convertToDate(value);
 	}
 

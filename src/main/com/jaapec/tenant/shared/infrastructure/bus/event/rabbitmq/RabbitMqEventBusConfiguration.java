@@ -1,12 +1,10 @@
 package com.jaapec.tenant.shared.infrastructure.bus.event.rabbitmq;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.springframework.amqp.core.*;
+import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -131,13 +129,11 @@ public class RabbitMqEventBusConfiguration {
 			.collect(Collectors.toList());
 	}
 
-	private HashMap<String, Object> retryQueueArguments(TopicExchange exchange, String routingKey) {
-		return new HashMap<String, Object>() {
-			{
-				put("x-dead-letter-exchange", exchange.getName());
-				put("x-dead-letter-routing-key", routingKey);
-				put("x-message-ttl", 1000);
-			}
-		};
+	private Map<String, Object> retryQueueArguments(TopicExchange exchange, String routingKey) {
+		Map<String, Object> arguments = new HashMap<>();
+		arguments.put("x-dead-letter-exchange", exchange.getName());
+		arguments.put("x-dead-letter-routing-key", routingKey);
+		arguments.put("x-message-ttl", 1000);
+		return arguments;
 	}
 }

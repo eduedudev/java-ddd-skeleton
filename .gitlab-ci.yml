@@ -46,6 +46,8 @@ build:
     paths:
       - build/libs/*.jar
     expire_in: 1 days
+  rules:
+    - if: $CI_COMMIT_BRANCH == "master"
 
 
 tests:
@@ -74,7 +76,7 @@ tests:
       junit: build/test-results/test/**/*.xml
     expire_in: 1 days
   rules:
-    - if: $CI_COMMIT_BRANCH != "master"
+    - if: $CI_COMMIT_BRANCH == "master"
 
 
 build-sonar:
@@ -112,7 +114,7 @@ qodana:
     - qodana --cache-dir=$CI_PROJECT_DIR/.qodana/cache
   allow_failure: true
   rules:
-    - if: $CI_COMMIT_BRANCH == "dev"
+    - if: $CI_COMMIT_BRANCH == "master"
 
 package:
   stage: package
@@ -122,7 +124,7 @@ package:
   script:
     - echo "package."
   rules:
-    - if: $CI_COMMIT_BRANCH == "dev"
+    - if: $CI_COMMIT_BRANCH == "master"
    # - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
    # - docker build -t $IMAGE_NAME:$IMAGE_TAG .
    # - docker push $IMAGE_NAME:$IMAGE_TAG
@@ -132,7 +134,7 @@ review:
   script:
     - echo "Preview environment would be deployed here."
   rules:
-    - if: $CI_COMMIT_BRANCH == "dev"
+    - if: $CI_COMMIT_BRANCH == "master"
 
 deploy:
   stage: deploy
@@ -140,6 +142,6 @@ deploy:
   script:
     - echo "Deployment to production triggered manually"
   rules:
-    - if: $CI_COMMIT_BRANCH == "dev"
+    - if: $CI_COMMIT_BRANCH == "master"
 
 

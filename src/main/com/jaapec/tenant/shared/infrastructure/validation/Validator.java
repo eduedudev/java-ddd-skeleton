@@ -23,6 +23,7 @@ public final class Validator {
 	public Validator(MessageTranslator translator) {
 		this.translator = translator;
 	}
+
 	private static final Map<String, FieldValidator> validators = Map.ofEntries(
 		Map.entry("required", new RequiredValidator()),
 		Map.entry("string", new StringValidator()),
@@ -40,7 +41,6 @@ public final class Validator {
 		Map.entry("bigdecimal", new BigDecimalValidator()),
 		Map.entry("integer", new IntegerValidator())
 	);
-
 
 	public ValidationResponse validate(String input, Map<String, String> combinedRules, Repository repository)
 		throws ValidatorNotExist {

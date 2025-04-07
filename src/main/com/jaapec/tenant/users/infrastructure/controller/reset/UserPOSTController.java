@@ -52,11 +52,15 @@ public final class UserPOSTController extends RestApiController {
 	private final Map<String, String> rules;
 
 	{
-		rules = Map.of(
-			"id", "required|not_empty|uuid",
-			"name", "required|not_empty|max:255",
-			"email", "required|not_empty|email"
-		);
+		rules =
+			Map.of(
+				"id",
+				"required|not_empty|uuid",
+				"name",
+				"required|not_empty|max:255",
+				"email",
+				"required|not_empty|email"
+			);
 	}
 
 	@PostMapping("/users")
@@ -82,8 +86,6 @@ public final class UserPOSTController extends RestApiController {
 
 	@Override
 	public Map<Class<? extends DomainError>, HttpStatus> errorMapping() {
-		return Map.of(
-			ResourceAlreadyExists.class, HttpStatus.BAD_REQUEST
-		);
+		return Map.of(ResourceAlreadyExists.class, HttpStatus.BAD_REQUEST);
 	}
 }

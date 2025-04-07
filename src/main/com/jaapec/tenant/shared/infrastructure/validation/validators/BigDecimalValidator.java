@@ -2,7 +2,6 @@ package com.jaapec.tenant.shared.infrastructure.validation.validators;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.Nullable;
 

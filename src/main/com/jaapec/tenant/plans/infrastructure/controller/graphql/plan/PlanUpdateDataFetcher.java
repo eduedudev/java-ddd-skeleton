@@ -1,7 +1,6 @@
 package com.jaapec.tenant.plans.infrastructure.controller.graphql.plan;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -42,9 +41,7 @@ public final class PlanUpdateDataFetcher extends GraphQLApiController {
 		Map.entry("visibility", "required|not_empty|enum:PUBLIC,PRIVATE"),
 		Map.entry("trialDays", "required|not_empty|integer|min:0")
 	);
-	private final Map<String, String> rules2 = Map.of(
-		"id", "required|not_empty|uuid"
-	);
+	private final Map<String, String> rules2 = Map.of("id", "required|not_empty|uuid");
 
 	public PlanUpdateDataFetcher(
 		QueryBus queryBus,

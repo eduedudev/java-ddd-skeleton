@@ -1,5 +1,7 @@
 package com.jaapec.tenant.shared.infrastructure.bus.event.mariadb;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -39,7 +41,7 @@ class MariaDBEventBusShould extends InfrastructureTestCase {
 		eventually(() -> {
 			List<?> remaining = sessionFactory
 				.getCurrentSession()
-				.createNativeQuery("SELECT * FROM domain_events WHERE id = :id",Void.class)
+				.createNativeQuery("SELECT * FROM domain_events WHERE id = :id", Void.class)
 				.setParameter("id", domainEvent.eventId())
 				.getResultList();
 

@@ -1,5 +1,7 @@
 package com.jaapec.tenant.users.infrastructure.persistence.hibernate;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.util.Optional;
 
 import jakarta.transaction.Transactional;

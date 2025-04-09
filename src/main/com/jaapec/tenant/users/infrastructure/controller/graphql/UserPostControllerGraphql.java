@@ -58,9 +58,7 @@ public final class UserPostControllerGraphql extends GraphQLApiController {
 		if (Boolean.TRUE.equals(hasErrors)) {
 			validationResponse
 				.errors()
-				.forEach((key, value) ->
-					value.forEach(error -> errors.add(new GraphQLCustomException(error, key)))
-				);
+				.forEach((key, value) -> value.forEach(error -> errors.add(new GraphQLCustomException(error, key))));
 			throw new GraphQLExceptionList(errors);
 		}
 		dispatch(new CreateUserCommand(request.id(), request.name(), request.email()));

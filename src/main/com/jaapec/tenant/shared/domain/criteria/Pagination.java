@@ -10,7 +10,7 @@ public record Pagination(int limit, int offset) {
 	}
 
 	public static Pagination defaults() {
-		return new Pagination(0, DEFAULT_LIMIT);
+		return new Pagination(DEFAULT_LIMIT, 0);
 	}
 
 	public static Pagination fromValues(int limit, int offset) {

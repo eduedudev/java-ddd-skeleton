@@ -36,7 +36,7 @@ public final class Utils {
 		try {
 			return new ObjectMapper().readValue(body, Map.class);
 		} catch (IOException e) {
-			return null;
+			throw new IllegalArgumentException("Failed to decode JSON string", e);
 		}
 	}
 

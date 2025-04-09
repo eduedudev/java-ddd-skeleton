@@ -20,9 +20,9 @@ public abstract class Identifier {
 	}
 
 	private void ensureValidUuid(String value) throws IllegalArgumentException {
-		if (value != null) if (!UUID_PATTERN.matcher(value).matches()) throw new IllegalArgumentException(
-			"Invalid UUID format: " + value
-		);
+		if (value != null && !UUID_PATTERN.matcher(value).matches()) {
+			throw new IllegalArgumentException("Invalid UUID format: " + value);
+		}
 	}
 
 	@Override

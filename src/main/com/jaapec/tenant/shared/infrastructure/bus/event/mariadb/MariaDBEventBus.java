@@ -48,8 +48,7 @@ public class MariaDBEventBus implements EventBus {
 			query.setParameter("occurredOn", occurredOn);
 			query.executeUpdate();
 		} catch (Exception e) {
-			//logger.error("Error al publicar el evento: {}", e.getMessage());
-			throw new RuntimeException("Error al publicar el evento", e);
+			throw new RuntimeException("Error publishing the event to MariaDB", e);
 		}
 	}
 }

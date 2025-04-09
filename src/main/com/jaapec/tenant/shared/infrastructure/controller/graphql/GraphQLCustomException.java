@@ -2,7 +2,7 @@ package com.jaapec.tenant.shared.infrastructure.controller.graphql;
 
 import org.springframework.graphql.execution.ErrorType;
 
-public class GraphQLCustomException {
+public class GraphQLCustomException extends Exception {
 
 	private final String message;
 	private final ErrorType errorType;

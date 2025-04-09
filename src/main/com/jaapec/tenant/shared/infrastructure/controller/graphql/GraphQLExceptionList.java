@@ -1,8 +1,9 @@
 package com.jaapec.tenant.shared.infrastructure.controller.graphql;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class GraphQLExceptionList extends RuntimeException {
+public class GraphQLExceptionList extends RuntimeException  implements Serializable {
 
 	private final List<GraphQLCustomException> errors;
 

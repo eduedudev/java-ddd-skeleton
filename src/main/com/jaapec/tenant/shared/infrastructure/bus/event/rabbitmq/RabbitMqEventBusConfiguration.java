@@ -65,7 +65,7 @@ public class RabbitMqEventBusConfiguration {
 		)
 			.stream()
 			.flatMap(Collection::stream)
-			.collect(Collectors.toList());
+			.toList();
 
 		declarables.addAll(queuesAndBindings);
 
@@ -111,7 +111,7 @@ public class RabbitMqEventBusConfiguration {
 						String eventName = domainEventsInformation.forClass(domainEventClass);
 						return BindingBuilder.bind(queue).to(domainEventsExchange).with(eventName);
 					})
-					.collect(Collectors.toList());
+					.toList();
 
 				List<Declarable> queuesAndBindings = new ArrayList<>();
 				queuesAndBindings.add(queue);

@@ -1,9 +1,10 @@
 package com.jaapec.tenant.shared.domain;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
 
-public record Message(String messageKey, Object[] args) {
+public record Message(String messageKey, Object[] args) implements Serializable {
 	public Message {
 		if (messageKey == null || messageKey.isBlank()) {
 			throw new IllegalArgumentException("Message key must not be null or blank.");

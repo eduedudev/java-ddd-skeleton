@@ -89,13 +89,9 @@ final class SearchPlanQueryHandlerShould extends PlanModuleUnitTestCase {
 				return mockPlans.stream().skip(pagination.offset()).limit(pagination.limit()).toList();
 			});
 		when(repository.count(any()))
-			.thenAnswer(invocation -> {
-				Criteria criteria = invocation.getArgument(0);
-				return mockPlans
-					.stream()
-					.filter(plan -> PlanStatus.status.ACTIVE.toString().equals(plan.status().value()))
-					.count();
-			});
+			.thenAnswer(invocation ->
+				mockPlans.stream().filter(plan -> PlanStatus.status.ACTIVE.toString().equals(plan.status().value())).count()
+			);
 		Filter filter = new Filter(new FilterField("status"), FilterOperator.EQUAL, new FilterValue("INACTIVE"));
 		SearchPlanQuery query = new SearchPlanQuery(List.of(filter), "name", "desc", Pagination.fromValues(100, 0));
 

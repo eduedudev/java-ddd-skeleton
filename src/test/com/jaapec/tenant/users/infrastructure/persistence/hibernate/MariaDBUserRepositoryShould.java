@@ -12,8 +12,6 @@ import com.jaapec.tenant.users.domain.User;
 import com.jaapec.tenant.users.domain.UserIdMother;
 import com.jaapec.tenant.users.domain.UserMother;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @Transactional
 class MariaDBUserRepositoryShould extends UsersModuleInfrastructureTestCase {
 

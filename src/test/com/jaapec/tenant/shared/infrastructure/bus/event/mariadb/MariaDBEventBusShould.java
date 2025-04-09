@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.Collections;
 import java.util.List;
 
-import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.Test;
@@ -14,8 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.jaapec.tenant.shared.infrastructure.InfrastructureTestCase;
 import com.jaapec.tenant.users.domain.UserCreatedDomainEventMother;
 import com.jaapec.tenant.users.domain.events.UserCreatedDomainEvent;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Transactional
 class MariaDBEventBusShould extends InfrastructureTestCase {
@@ -48,6 +45,4 @@ class MariaDBEventBusShould extends InfrastructureTestCase {
 			assertTrue(remaining.isEmpty());
 		});
 	}
-
-
 }

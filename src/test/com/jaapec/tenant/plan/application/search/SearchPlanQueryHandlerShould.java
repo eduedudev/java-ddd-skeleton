@@ -1,12 +1,12 @@
 package com.jaapec.tenant.plan.application.search;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 
 import com.jaapec.tenant.plan.PlanModuleUnitTestCase;
 import com.jaapec.tenant.plan.domain.PlanMother;
+import com.jaapec.tenant.plans.application.PlanResponse;
 import com.jaapec.tenant.plans.application.search.PlanSearcher;
 import com.jaapec.tenant.plans.application.search.SearchPlanQuery;
 import com.jaapec.tenant.plans.application.search.SearchPlanQueryHandler;
@@ -72,7 +73,7 @@ final class SearchPlanQueryHandlerShould extends PlanModuleUnitTestCase {
 	}
 
 	@Test
-	void shouldReturnFilteredPlans_WhenFilteringByStatus() {
+	void shouldReturnAllPlans_IgnoringFilter() {
 		List<Plan> mockPlans = Stream
 			.concat(
 				IntStream.range(0, 10).mapToObj(i -> PlanMother.createWithStatus(PlanStatus.status.ACTIVE.toString())),
@@ -80,19 +81,28 @@ final class SearchPlanQueryHandlerShould extends PlanModuleUnitTestCase {
 			)
 			.toList();
 
-		when(
-			repository.matching(argThat(criteria -> criteria.filters().filters().getFirst().value().value().equals("ACTIVE")))
-		)
-			.thenAnswer(inv -> {
-				Criteria criteria = inv.getArgument(0);
+		when(repository.matching(any()))
+			.thenAnswer(invocation -> {
+				Criteria criteria = invocation.getArgument(0);
 				Pagination pagination = criteria.pagination();
 
-				List<Plan> filteredPlans = mockPlans
-					.stream()
-					.filter(plan -> Objects.equals(plan.status().value(), PlanStatus.status.ACTIVE.toString()))
-					.toList();
-
-				return filteredPlans.stream().skip(pagination.offset()).limit(pagination.limit()).toList();
+				return mockPlans.stream().skip(pagination.offset()).limit(pagination.limit()).toList();
 			});
+		when(repository.count(any()))
+			.thenAnswer(invocation -> {
+				Criteria criteria = invocation.getArgument(0);
+				return mockPlans
+					.stream()
+					.filter(plan -> PlanStatus.status.ACTIVE.toString().equals(plan.status().value()))
+					.count();
+			});
+		Filter filter = new Filter(new FilterField("status"), FilterOperator.EQUAL, new FilterValue("INACTIVE"));
+		SearchPlanQuery query = new SearchPlanQuery(List.of(filter), "name", "desc", Pagination.fromValues(100, 0));
+
+		PaginatedResponse<PlanResponse> results = handler.handle(query);
+
+		verify(repository).matching(any());
+
+		assertEquals(10, results.pagination().totalItems());
 	}
 }

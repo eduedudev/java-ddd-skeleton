@@ -18,10 +18,7 @@ public record Message(String messageKey, Object[] args) implements Serializable 
 
 	@Override
 	public String toString() {
-		return "Message{" +
-			"messageKey='" + messageKey + '\'' +
-			", args=" + Arrays.toString(args) +
-			'}';
+		return "Message{" + "messageKey='" + messageKey + '\'' + ", args=" + Arrays.toString(args) + '}';
 	}
 
 	@Override

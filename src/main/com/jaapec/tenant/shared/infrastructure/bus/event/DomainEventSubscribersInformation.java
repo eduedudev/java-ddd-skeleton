@@ -8,6 +8,7 @@ import com.jaapec.tenant.shared.domain.Service;
 
 @Service
 public final class DomainEventSubscribersInformation {
+
 	Map<Class<?>, DomainEventSubscriberInformation> information;
 
 	public DomainEventSubscribersInformation(Map<Class<?>, DomainEventSubscriberInformation> information) {
@@ -19,7 +20,7 @@ public final class DomainEventSubscribersInformation {
 	}
 
 	private static Map<Class<?>, DomainEventSubscriberInformation> scanDomainEventSubscribers() {
-		Reflections   reflections = new Reflections("com.jaapec");
+		Reflections reflections = new Reflections("com.jaapec");
 		Set<Class<?>> subscribers = reflections.getTypesAnnotatedWith(DomainEventSubscriber.class);
 
 		Map<Class<?>, DomainEventSubscriberInformation> subscribersInformation = new HashMap<>();
@@ -41,7 +42,8 @@ public final class DomainEventSubscribersInformation {
 	}
 
 	public String[] rabbitMqFormattedNames() {
-		return information.values()
+		return information
+			.values()
 			.stream()
 			.map(DomainEventSubscriberInformation::formatRabbitMqQueueName)
 			.distinct()

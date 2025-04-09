@@ -50,9 +50,12 @@ public final class UserPOSTController extends RestApiController {
 	}
 
 	private static final Map<String, String> RULES = Map.of(
-		"id", "required|not_empty|uuid",
-		"name", "required|not_empty|max:255",
-		"email", "required|not_empty|email"
+		"id",
+		"required|not_empty|uuid",
+		"name",
+		"required|not_empty|max:255",
+		"email",
+		"required|not_empty|email"
 	);
 
 	@PostMapping("/users")

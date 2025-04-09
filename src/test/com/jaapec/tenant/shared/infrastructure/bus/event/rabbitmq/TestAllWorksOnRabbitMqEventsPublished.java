@@ -10,7 +10,7 @@ public final class TestAllWorksOnRabbitMqEventsPublished {
 
 	public Boolean hasBeenExecuted = false;
 
-	public void on(UserCreatedDomainEvent event) {
+	public void on() {
 		hasBeenExecuted = true;
 	}
 }

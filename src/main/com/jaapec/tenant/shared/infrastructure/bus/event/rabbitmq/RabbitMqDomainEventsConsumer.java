@@ -127,7 +127,7 @@ public final class RabbitMqDomainEventsConsumer {
 		this.information = information;
 	}
 
-	private Object subscriberFor(String queue){
+	private Object subscriberFor(String queue) {
 		String[] queueParts = queue.split("\\.");
 		String subscriberName = Utils.toCamelFirstLower(queueParts[queueParts.length - 1]);
 

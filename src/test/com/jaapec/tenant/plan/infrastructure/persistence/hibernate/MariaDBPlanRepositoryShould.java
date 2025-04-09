@@ -1,7 +1,6 @@
 package com.jaapec.tenant.plan.infrastructure.persistence.hibernate;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Optional;
 
@@ -19,8 +18,7 @@ class MariaDBPlanRepositoryShould extends PlanModuleInfrastructureTestCase {
 	@Test
 	void save_a_plan() {
 		Plan plan = PlanMother.random();
-
-		mariadbPlanRepository.save(plan);
+		assertDoesNotThrow(() -> mariadbPlanRepository.save(plan));
 	}
 
 	@Test
@@ -35,5 +33,13 @@ class MariaDBPlanRepositoryShould extends PlanModuleInfrastructureTestCase {
 	@Test
 	void not_return_a_non_existing_plan() {
 		assertFalse(mariadbPlanRepository.find(PlanIdMother.random()).isPresent());
+	}
+
+	@Test
+	void not_allow_duplicate_plan_ids() {
+		Plan plan = PlanMother.random();
+		mariadbPlanRepository.save(plan);
+
+		assertThrows(Exception.class, () -> mariadbPlanRepository.save(plan));
 	}
 }

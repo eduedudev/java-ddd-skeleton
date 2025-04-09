@@ -8,9 +8,9 @@ import com.jaapec.tenant.shared.domain.Service;
 
 @Service
 public final class DomainEventSubscribersInformation {
-	HashMap<Class<?>, DomainEventSubscriberInformation> information;
+	Map<Class<?>, DomainEventSubscriberInformation> information;
 
-	public DomainEventSubscribersInformation(HashMap<Class<?>, DomainEventSubscriberInformation> information) {
+	public DomainEventSubscribersInformation(Map<Class<?>, DomainEventSubscriberInformation> information) {
 		this.information = information;
 	}
 
@@ -18,11 +18,11 @@ public final class DomainEventSubscribersInformation {
 		this(scanDomainEventSubscribers());
 	}
 
-	private static HashMap<Class<?>, DomainEventSubscriberInformation> scanDomainEventSubscribers() {
+	private static Map<Class<?>, DomainEventSubscriberInformation> scanDomainEventSubscribers() {
 		Reflections   reflections = new Reflections("com.jaapec");
 		Set<Class<?>> subscribers = reflections.getTypesAnnotatedWith(DomainEventSubscriber.class);
 
-		HashMap<Class<?>, DomainEventSubscriberInformation> subscribersInformation = new HashMap<>();
+		Map<Class<?>, DomainEventSubscriberInformation> subscribersInformation = new HashMap<>();
 
 		for (Class<?> subscriberClass : subscribers) {
 			DomainEventSubscriber annotation = subscriberClass.getAnnotation(DomainEventSubscriber.class);

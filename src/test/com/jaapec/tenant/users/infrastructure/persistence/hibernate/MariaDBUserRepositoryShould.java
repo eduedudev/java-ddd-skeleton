@@ -1,8 +1,5 @@
 package com.jaapec.tenant.users.infrastructure.persistence.hibernate;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-
 import java.util.Optional;
 
 import jakarta.transaction.Transactional;
@@ -13,6 +10,8 @@ import com.jaapec.tenant.users.domain.User;
 import com.jaapec.tenant.users.domain.UserIdMother;
 import com.jaapec.tenant.users.domain.UserMother;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 @Transactional
 class MariaDBUserRepositoryShould extends UsersModuleInfrastructureTestCase {
 
@@ -20,7 +19,7 @@ class MariaDBUserRepositoryShould extends UsersModuleInfrastructureTestCase {
 	void save_a_user() {
 		User user = UserMother.random();
 
-		mariadbUserRepository.save(user);
+		assertDoesNotThrow(() -> mariadbUserRepository.save(user));
 	}
 
 	@Test

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
+import jakarta.persistence.PersistenceException;
 import jakarta.transaction.Transactional;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.NativeQuery;
@@ -48,7 +49,7 @@ public class MariaDBEventBus implements EventBus {
 			query.setParameter("occurredOn", occurredOn);
 			query.executeUpdate();
 		} catch (Exception e) {
-			throw new RuntimeException("Error publishing the event to MariaDB", e);
+			throw new PersistenceException("Error publishing the event to MariaDB", e);
 		}
 	}
 }

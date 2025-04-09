@@ -22,7 +22,7 @@ import com.jaapec.tenant.shared.infrastructure.bus.event.DomainEventSubscribersI
 @Service
 public final class RabbitMqDomainEventsConsumer {
 
-	private final static String CONSUMER_NAME = "domain_events_consumer";
+	private static final String CONSUMER_NAME = "domain_events_consumer";
 	private static final String REDELIVERY_COUNT_HEADER = "redelivery_count";
 	private final DomainEventJsonDeserializer deserializer;
 	private final ApplicationContext context;

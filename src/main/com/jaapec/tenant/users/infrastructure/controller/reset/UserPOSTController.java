@@ -49,19 +49,11 @@ public final class UserPOSTController extends RestApiController {
 		this.logger = logger;
 	}
 
-	private final Map<String, String> rules;
-
-	{
-		rules =
-			Map.of(
-				"id",
-				"required|not_empty|uuid",
-				"name",
-				"required|not_empty|max:255",
-				"email",
-				"required|not_empty|email"
-			);
-	}
+	private static final Map<String, String> RULES = Map.of(
+		"id", "required|not_empty|uuid",
+		"name", "required|not_empty|max:255",
+		"email", "required|not_empty|email"
+	);
 
 	@PostMapping("/users")
 	public ResponseEntity<HashMap<String, Serializable>> createUser(@RequestBody RequestUser request)
@@ -69,7 +61,7 @@ public final class UserPOSTController extends RestApiController {
 		logger.info("Creating user");
 		ObjectMapper objectMapper = new ObjectMapper();
 		String requestJson = objectMapper.writeValueAsString(request);
-		ValidationResponse validationResponse = validator.validate(requestJson, rules, repository);
+		ValidationResponse validationResponse = validator.validate(requestJson, RULES, repository);
 		HashMap<String, List<String>> validationErrors = new HashMap<>();
 		Boolean hasErrors = validationResponse.hasErrors();
 		if (Boolean.TRUE.equals(hasErrors)) {

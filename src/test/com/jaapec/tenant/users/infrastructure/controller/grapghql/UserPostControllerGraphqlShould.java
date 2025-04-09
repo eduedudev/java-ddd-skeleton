@@ -32,12 +32,6 @@ class UserPostControllerGraphqlShould extends ApplicationTestCase {
 		);
 
 		create_a_valid_non_existing_user(mutation, jsonPath, variables);
-		/*assertErrorResponse(
-			mutation,
-			variables,
-			"The user with id 1aab45ba-3c7a-4344-8936-78466eca77fa already exists",
-			Map.of("code", "E409", "reason", "id", "value", "1aab45ba-3c7a-4344-8936-78466eca77fa")
-		);*/
 	}
 
 	private void create_a_valid_non_existing_user(

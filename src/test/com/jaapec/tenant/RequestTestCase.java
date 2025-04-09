@@ -20,8 +20,6 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 public abstract class RequestTestCase {
 
 	private static final MediaType CONTENT_TYPE_JSON = MediaType.APPLICATION_JSON;
-	private static final int STATUS_CODE_OK = 200;
-	private static final int STATUS_CODE_NOT_FOUND = 404;
 
 	@Autowired
 	private MockMvc mockMvc;

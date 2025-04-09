@@ -2,6 +2,7 @@ package com.jaapec.tenant.plan.application;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import com.jaapec.tenant.plan.domain.PlanMother;
 import com.jaapec.tenant.plans.application.PlanResponse;
@@ -14,7 +15,7 @@ public final class PlansResponseMother {
 	}
 
 	public static List<PlanResponse> random() {
-		int size = (int) (Math.random() * 10);
+		int size = new Random().nextInt(100);
 		List<Plan> plans = new ArrayList<>();
 		for (int i = 0; i < size; i++) {
 			plans.add(PlanMother.random());

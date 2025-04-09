@@ -56,7 +56,7 @@ public final class RabbitMqDomainEventsConsumer {
 	}
 
 	@RabbitListener(id = CONSUMER_NAME, autoStartup = "false")
-	public void consumer(Message message) throws Exception {
+	public void consumer(Message message) throws ReflectiveOperationException {
 		String serializedMessage = new String(message.getBody());
 		DomainEvent domainEvent = deserializer.deserialize(serializedMessage);
 

@@ -1,16 +1,23 @@
 package com.jaapec.tenant.plan.application.create;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.math.BigDecimal;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.jaapec.tenant.plan.PlanModuleUnitTestCase;
-import com.jaapec.tenant.plan.domain.PlanCreatedDomainEventMother;
-import com.jaapec.tenant.plan.domain.PlanMother;
+import com.jaapec.tenant.plan.domain.*;
 import com.jaapec.tenant.plans.application.create.CreatePlanCommand;
 import com.jaapec.tenant.plans.application.create.CreatePlanCommandHandler;
 import com.jaapec.tenant.plans.application.create.PlanCreator;
+import com.jaapec.tenant.plans.domain.MinValueException;
+import com.jaapec.tenant.plans.domain.NonNegativeNumberException;
 import com.jaapec.tenant.plans.domain.Plan;
 import com.jaapec.tenant.plans.domain.events.PlanCreatedDomainEvent;
+import com.jaapec.tenant.plans.domain.value_objects.PlanMaxUsers;
+import com.jaapec.tenant.plans.domain.value_objects.PlanPriceMonthly;
 
 final class CreatePlanCommandHandlerShould extends PlanModuleUnitTestCase {
 
@@ -35,5 +42,51 @@ final class CreatePlanCommandHandlerShould extends PlanModuleUnitTestCase {
 
 		shouldHaveSaved(plan);
 		shouldHavePublished(domainEvent);
+	}
+
+	@Test
+	void throw_exception_when_plan_price_monthly_is_negative() {
+		assertThrows(
+			NonNegativeNumberException.class,
+			() -> {
+				CreatePlanCommandMother.create(
+					PlanIdMother.random(),
+					PlanNameMother.random(),
+					PlanDescriptionMother.random(),
+					new PlanPriceMonthly(BigDecimal.valueOf(-10)),
+					PlanPriceYearlyMother.random(),
+					PlanMaxUsersMother.random(),
+					PlanMaxRolesMother.random(),
+					PlanMaxAccountsMother.random(),
+					PlanMaxInvoicesMother.random(),
+					PlanStatusMother.random(),
+					PlanVisibilityMother.random(),
+					PlanTrialDaysMother.random()
+				);
+			}
+		);
+	}
+
+	@Test
+	void throw_exception_when_plan_max_users_is_below_minimum() {
+		assertThrows(
+			MinValueException.class,
+			() -> {
+				CreatePlanCommandMother.create(
+					PlanIdMother.random(),
+					PlanNameMother.random(),
+					PlanDescriptionMother.random(),
+					PlanPriceMonthlyMother.random(),
+					PlanPriceYearlyMother.random(),
+					new PlanMaxUsers(-1),
+					PlanMaxRolesMother.random(),
+					PlanMaxAccountsMother.random(),
+					PlanMaxInvoicesMother.random(),
+					PlanStatusMother.random(),
+					PlanVisibilityMother.random(),
+					PlanTrialDaysMother.random()
+				);
+			}
+		);
 	}
 }

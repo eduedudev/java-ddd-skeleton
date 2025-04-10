@@ -237,7 +237,7 @@ public final class Plan extends AggregateRoot {
 	public boolean equals(Object o) {
 		if (o == null || getClass() != o.getClass()) return false;
 
-		final Plan plan = (Plan) o;
+		Plan plan = (Plan) o;
 		return (
 			Objects.equals(id, plan.id) &&
 			Objects.equals(name, plan.name) &&

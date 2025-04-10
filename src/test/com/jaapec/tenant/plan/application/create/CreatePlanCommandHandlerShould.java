@@ -48,7 +48,7 @@ final class CreatePlanCommandHandlerShould extends PlanModuleUnitTestCase {
 	void throw_exception_when_plan_price_monthly_is_negative() {
 		assertThrows(
 			NonNegativeNumberException.class,
-			() -> {
+			() ->
 				CreatePlanCommandMother.create(
 					PlanIdMother.random(),
 					PlanNameMother.random(),
@@ -62,8 +62,7 @@ final class CreatePlanCommandHandlerShould extends PlanModuleUnitTestCase {
 					PlanStatusMother.random(),
 					PlanVisibilityMother.random(),
 					PlanTrialDaysMother.random()
-				);
-			}
+				)
 		);
 	}
 
@@ -71,7 +70,7 @@ final class CreatePlanCommandHandlerShould extends PlanModuleUnitTestCase {
 	void throw_exception_when_plan_max_users_is_below_minimum() {
 		assertThrows(
 			MinValueException.class,
-			() -> {
+			() ->
 				CreatePlanCommandMother.create(
 					PlanIdMother.random(),
 					PlanNameMother.random(),
@@ -85,8 +84,7 @@ final class CreatePlanCommandHandlerShould extends PlanModuleUnitTestCase {
 					PlanStatusMother.random(),
 					PlanVisibilityMother.random(),
 					PlanTrialDaysMother.random()
-				);
-			}
+				)
 		);
 	}
 }

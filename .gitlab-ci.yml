@@ -68,15 +68,16 @@ tests:
     - echo "RABBITMQ_VHOST=kcrqwise" >> src/main/resources/.env
     - cat src/main/resources/.env
     - chmod +x gradlew
-    - ./gradlew test
+    - ./gradlew clean test jacocoTestReport
   artifacts:
     paths:
       - build/reports/tests/test/
+      - build/reports/jacoco/test/jacocoTestReport.xml
     reports:
       junit: build/test-results/test/**/*.xml
     expire_in: 1 days
   rules:
-    - if: $CI_COMMIT_BRANCH == "master"
+    - if: $CI_COMMIT_BRANCH == "dev"
 
 
 build-sonar:
@@ -90,8 +91,10 @@ build-sonar:
   script:
     - chmod +x gradlew
     - ./gradlew assemble -x test
-    - ./gradlew sonar
+    - ./gradlew sonar -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/test/jacocoTestReport.xml
   allow_failure: true
+  dependencies:
+    - tests
   rules:
     - if: $CI_COMMIT_BRANCH == "dev"
 

@@ -26,8 +26,8 @@ variables:
   RABBITMQ_LOGIN: kcrqwise
   RABBITMQ_PASSWORD: I3SCFxjoQT8zExp7vrx6k5Xr9uOaGx6a
   RABBITMQ_VHOST: kcrqwise
-  SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
-  GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
+  SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"
+  GIT_DEPTH: "0"
 
 stages:
   - build
@@ -38,37 +38,38 @@ stages:
 
 build:
   stage: build
-  image: openjdk:21-jdk-slim
   script:
     - chmod +x gradlew
     - ./gradlew assemble -x test
   artifacts:
     paths:
-      - build/libs/*.jar
+      - build/libs/
+      - build/classes/
     expire_in: 1 days
   rules:
-    - if: $CI_COMMIT_BRANCH == "master"
-
+    - if: $CI_COMMIT_BRANCH == "dev"
 
 tests:
   stage: test
+  needs:
+    - job: build
   script:
     - echo "DEBUG=true" > src/main/resources/.env
-    - echo "DATABASE_HOST=db" >> src/main/resources/.env
-    - echo "DATABASE_PORT=3306" >> src/main/resources/.env
-    - echo "DATABASE_NAME=jaapec_tenant_service" >> src/main/resources/.env
-    - echo "DATABASE_USER=dbuser" >> src/main/resources/.env
-    - echo "DATABASE_PASSWORD=dbpasss" >> src/main/resources/.env
-    - echo "RABBITMQ_HOST=rabbitmq" >> src/main/resources/.env
-    - echo "RABBITMQ_PORT=5672" >> src/main/resources/.env
-    - echo "RABBITMQ_LOGIN=kcrqwise" >> src/main/resources/.env
-    - echo "RABBITMQ_PASSWORD=I3SCFxjoQT8zExp7vrx6k5Xr9uOaGx6a" >> src/main/resources/.env
+    - echo "DATABASE_HOST=$DATABASE_HOST" >> src/main/resources/.env
+    - echo "DATABASE_PORT=$DATABASE_PORT" >> src/main/resources/.env
+    - echo "DATABASE_NAME=$DATABASE_NAME" >> src/main/resources/.env
+    - echo "DATABASE_USER=$DATABASE_USER" >> src/main/resources/.env
+    - echo "DATABASE_PASSWORD=$DATABASE_PASSWORD" >> src/main/resources/.env
+    - echo "RABBITMQ_HOST=$RABBITMQ_HOST" >> src/main/resources/.env
+    - echo "RABBITMQ_PORT=$RABBITMQ_PORT" >> src/main/resources/.env
+    - echo "RABBITMQ_LOGIN=$RABBITMQ_LOGIN" >> src/main/resources/.env
+    - echo "RABBITMQ_PASSWORD=$RABBITMQ_PASSWORD" >> src/main/resources/.env
     - echo "RABBITMQ_EXCHANGE=domain_events" >> src/main/resources/.env
     - echo "RABBITMQ_MAX_RETRIES=5" >> src/main/resources/.env
-    - echo "RABBITMQ_VHOST=kcrqwise" >> src/main/resources/.env
+    - echo "RABBITMQ_VHOST=$RABBITMQ_VHOST" >> src/main/resources/.env
     - cat src/main/resources/.env
     - chmod +x gradlew
-    - ./gradlew clean test jacocoTestReport
+    - ./gradlew test jacocoTestReport
   artifacts:
     paths:
       - build/reports/tests/test/
@@ -79,9 +80,11 @@ tests:
   rules:
     - if: $CI_COMMIT_BRANCH == "dev"
 
-
 build-sonar:
   stage: test
+  needs:
+    - job: build
+    - job: tests
   cache:
     policy: pull-push
     key: "sonar-cache-$CI_COMMIT_REF_SLUG"
@@ -90,11 +93,9 @@ build-sonar:
       - sonar-scanner/
   script:
     - chmod +x gradlew
-    - ./gradlew assemble -x test
+    - ls build/reports/jacoco/test
     - ./gradlew sonar -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/test/jacocoTestReport.xml
   allow_failure: true
-  dependencies:
-    - tests
   rules:
     - if: $CI_COMMIT_BRANCH == "dev"
 
@@ -128,9 +129,7 @@ package:
     - echo "package."
   rules:
     - if: $CI_COMMIT_BRANCH == "master"
-   # - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-   # - docker build -t $IMAGE_NAME:$IMAGE_TAG .
-   # - docker push $IMAGE_NAME:$IMAGE_TAG
+    # Aquí puedes agregar docker build/push si lo necesitas
 
 review:
   stage: review
@@ -146,5 +145,3 @@ deploy:
     - echo "Deployment to production triggered manually"
   rules:
     - if: $CI_COMMIT_BRANCH == "master"
-
-

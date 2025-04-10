@@ -140,4 +140,36 @@ class PlanUpdateShould extends ApplicationTestCase {
 			Map.of("code", "E404", "reason", "plan", "value", command.id())
 		);
 	}
+
+	@Test
+	void should_fail_when_updating_plan_with_existing_name() throws Exception {
+		Plan plan = PlanMother.random();
+		repository.save(plan);
+		Plan plan1 = PlanMother.random();
+		repository.save(plan1);
+
+		UpdatePlanCommand command = new UpdatePlanCommand(
+			plan.id().value(),
+			plan1.name().value(),
+			"Updated Description",
+			199.99,
+			1999.99,
+			50,
+			10,
+			25,
+			100,
+			"ACTIVE",
+			"PRIVATE",
+			15
+		);
+
+		Map<String, Object> variables = variables(command);
+
+		assertErrorResponse(
+			PlanGraphQLMother.createPlanMutation(),
+			variables,
+			String.format("The plan with name %s already exists", command.name()),
+			Map.of("code", "E409", "reason", "name", "value", command.name())
+		);
+	}
 }

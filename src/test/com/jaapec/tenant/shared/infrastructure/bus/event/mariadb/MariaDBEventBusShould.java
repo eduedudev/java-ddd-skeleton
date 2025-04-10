@@ -1,10 +1,12 @@
 package com.jaapec.tenant.shared.infrastructure.bus.event.mariadb;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Collections;
 import java.util.List;
 
+import jakarta.persistence.PersistenceException;
 import jakarta.transaction.Transactional;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.Test;
@@ -44,5 +46,19 @@ class MariaDBEventBusShould extends InfrastructureTestCase {
 
 			assertTrue(remaining.isEmpty());
 		});
+	}
+
+	@Test
+	void throw_persistence_exception_when_publishing_event_fails() {
+		UserCreatedDomainEvent domainEvent = new UserCreatedDomainEvent(null, null, null); // Invalid event to force failure
+
+		Exception exception = assertThrows(
+			PersistenceException.class,
+			() -> {
+				eventBus.publish(Collections.singletonList(domainEvent));
+			}
+		);
+
+		assertTrue(exception.getMessage().contains("Error publishing the event to MariaDB"));
 	}
 }

@@ -45,6 +45,15 @@ public abstract class HibernateRepository<T> {
 	}
 
 	/**
+	 * Removes the specified entity from the current session.
+	 *
+	 * @param entity The entity instance to be removed from the database.
+	 */
+	protected void remove(T entity) {
+		sessionFactory.getCurrentSession().remove(entity);
+	}
+
+	/**
 	 * Returns an instance of the aggregate class with the given id.
 	 *
 	 * @param id The id of the instance to retrieve

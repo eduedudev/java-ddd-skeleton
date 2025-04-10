@@ -42,4 +42,14 @@ class MariaDBPlanRepositoryShould extends PlanModuleInfrastructureTestCase {
 
 		assertThrows(Exception.class, () -> mariadbPlanRepository.save(plan));
 	}
+
+	@Test
+	void delete_an_existing_plan() {
+		Plan plan = PlanMother.random();
+		mariadbPlanRepository.save(plan);
+
+		assertDoesNotThrow(() -> mariadbPlanRepository.delete(plan));
+
+		assertFalse(mariadbPlanRepository.find(plan.id()).isPresent());
+	}
 }

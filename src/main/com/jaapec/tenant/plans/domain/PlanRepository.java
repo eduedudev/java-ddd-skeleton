@@ -10,7 +10,7 @@ import com.jaapec.tenant.shared.domain.criteria.Criteria;
 public interface PlanRepository extends Repository {
 	void save(Plan plan);
 
-	void delete(PlanId id);
+	void delete(Plan plan);
 
 	void update(Plan plan);
 

@@ -152,4 +152,14 @@ public final class PlanGraphQLMother {
 		""";
 		return updatePlanMutation;
 	}
+
+	public static String deletePlanMutation() {
+		@Language("GraphQL")
+		String deletePlanMutation = """
+					mutation DeletePlan($id: String!) {
+						deletePlan(id: $id)
+					}
+				""";
+		return deletePlanMutation;
+	}
 }

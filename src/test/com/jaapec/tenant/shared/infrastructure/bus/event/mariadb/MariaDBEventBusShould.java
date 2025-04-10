@@ -54,9 +54,7 @@ class MariaDBEventBusShould extends InfrastructureTestCase {
 
 		Exception exception = assertThrows(
 			PersistenceException.class,
-			() -> {
-				eventBus.publish(Collections.singletonList(domainEvent));
-			}
+			() -> eventBus.publish(Collections.singletonList(domainEvent))
 		);
 
 		assertTrue(exception.getMessage().contains("Error publishing the event to MariaDB"));

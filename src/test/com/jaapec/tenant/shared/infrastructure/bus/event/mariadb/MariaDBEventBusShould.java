@@ -50,11 +50,11 @@ class MariaDBEventBusShould extends InfrastructureTestCase {
 
 	@Test
 	void throw_persistence_exception_when_publishing_event_fails() {
-		UserCreatedDomainEvent domainEvent = new UserCreatedDomainEvent(null, null, null); // Invalid event to force failure
+		UserCreatedDomainEvent invalidEvent = new UserCreatedDomainEvent(null, null, null); // Invalid event to force failure
 
-		Exception exception = assertThrows(
+		PersistenceException exception = assertThrows(
 			PersistenceException.class,
-			() -> eventBus.publish(Collections.singletonList(domainEvent))
+			() -> eventBus.publish(List.of(invalidEvent))
 		);
 
 		assertTrue(exception.getMessage().contains("Error publishing the event to MariaDB"));

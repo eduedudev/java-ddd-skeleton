@@ -47,22 +47,7 @@ final class CreatePlanCommandHandlerShould extends PlanModuleUnitTestCase {
 	@Test
 	void throw_exception_when_plan_price_monthly_is_negative() {
 		assertThrows(
-			NonNegativeNumberException.class,
-			() ->
-				CreatePlanCommandMother.create(
-					PlanIdMother.random(),
-					PlanNameMother.random(),
-					PlanDescriptionMother.random(),
-					new PlanPriceMonthly(BigDecimal.valueOf(-10)),
-					PlanPriceYearlyMother.random(),
-					PlanMaxUsersMother.random(),
-					PlanMaxRolesMother.random(),
-					PlanMaxAccountsMother.random(),
-					PlanMaxInvoicesMother.random(),
-					PlanStatusMother.random(),
-					PlanVisibilityMother.random(),
-					PlanTrialDaysMother.random()
-				)
+			NonNegativeNumberException.class, () -> new PlanPriceMonthly(BigDecimal.valueOf(-10))
 		);
 	}
 
@@ -70,21 +55,7 @@ final class CreatePlanCommandHandlerShould extends PlanModuleUnitTestCase {
 	void throw_exception_when_plan_max_users_is_below_minimum() {
 		assertThrows(
 			MinValueException.class,
-			() ->
-				CreatePlanCommandMother.create(
-					PlanIdMother.random(),
-					PlanNameMother.random(),
-					PlanDescriptionMother.random(),
-					PlanPriceMonthlyMother.random(),
-					PlanPriceYearlyMother.random(),
-					new PlanMaxUsers(-1),
-					PlanMaxRolesMother.random(),
-					PlanMaxAccountsMother.random(),
-					PlanMaxInvoicesMother.random(),
-					PlanStatusMother.random(),
-					PlanVisibilityMother.random(),
-					PlanTrialDaysMother.random()
-				)
+			() -> new PlanMaxUsers(-1)
 		);
 	}
 }

@@ -78,6 +78,7 @@ extend type Mutation {
     createPlan(request: RequestPlan!): Boolean!
     updatePlan(id:ID!,request: RequestPlan!):Boolean!
     deletePlan(id:String!):Boolean!
+    changeVisibilityPlan(id:String!,request: PlanVisibility!):Boolean!
 }
 
 extend type Query {

@@ -1,27 +1,11 @@
 package com.jaapec.tenant.plans.domain.events;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 import com.jaapec.tenant.shared.domain.bus.event.DomainEvent;
 
-public final class PlanUpdatedDomainEvent extends DomainEvent {
-
-	private final String name;
-	private final String description;
-	private final String priceMonthly;
-	private final String priceYearly;
-	private final String maxUsers;
-	private final String maxRoles;
-	private final String maxAccounts;
-	private final String maxInvoices;
-	private final String status;
-	private final String visibility;
-	private final String trialDays;
-	private final String createdAt;
-	private final String updatedAt;
+public final class PlanUpdatedDomainEvent extends PlanDomainEvent {
 
 	public PlanUpdatedDomainEvent(
 		String name,
@@ -38,20 +22,22 @@ public final class PlanUpdatedDomainEvent extends DomainEvent {
 		String createdAt,
 		String updatedAt
 	) {
-		super(null);
-		this.name = name;
-		this.description = description;
-		this.priceMonthly = priceMonthly;
-		this.priceYearly = priceYearly;
-		this.maxUsers = maxUsers;
-		this.maxRoles = maxRoles;
-		this.maxAccounts = maxAccounts;
-		this.maxInvoices = maxInvoices;
-		this.status = status;
-		this.visibility = visibility;
-		this.trialDays = trialDays;
-		this.createdAt = createdAt;
-		this.updatedAt = updatedAt;
+		super(
+			null,
+			name,
+			description,
+			priceMonthly,
+			priceYearly,
+			maxUsers,
+			maxRoles,
+			maxAccounts,
+			maxInvoices,
+			status,
+			visibility,
+			trialDays,
+			createdAt,
+			updatedAt
+		);
 	}
 
 	public PlanUpdatedDomainEvent(
@@ -70,20 +56,22 @@ public final class PlanUpdatedDomainEvent extends DomainEvent {
 		String createdAt,
 		String updatedAt
 	) {
-		super(aggregateId);
-		this.name = name;
-		this.description = description;
-		this.priceMonthly = priceMonthly;
-		this.priceYearly = priceYearly;
-		this.maxUsers = maxUsers;
-		this.maxRoles = maxRoles;
-		this.maxAccounts = maxAccounts;
-		this.maxInvoices = maxInvoices;
-		this.status = status;
-		this.visibility = visibility;
-		this.trialDays = trialDays;
-		this.createdAt = createdAt;
-		this.updatedAt = updatedAt;
+		super(
+			aggregateId,
+			name,
+			description,
+			priceMonthly,
+			priceYearly,
+			maxUsers,
+			maxRoles,
+			maxAccounts,
+			maxInvoices,
+			status,
+			visibility,
+			trialDays,
+			createdAt,
+			updatedAt
+		);
 	}
 
 	public PlanUpdatedDomainEvent(
@@ -104,61 +92,33 @@ public final class PlanUpdatedDomainEvent extends DomainEvent {
 		String createdAt,
 		String updatedAt
 	) {
-		super(aggregateId, eventId, occurredOn);
-		this.name = name;
-		this.description = description;
-		this.priceMonthly = priceMonthly;
-		this.priceYearly = priceYearly;
-		this.maxUsers = maxUsers;
-		this.maxRoles = maxRoles;
-		this.maxAccounts = maxAccounts;
-		this.maxInvoices = maxInvoices;
-		this.status = status;
-		this.visibility = visibility;
-		this.trialDays = trialDays;
-		this.createdAt = createdAt;
-		this.updatedAt = updatedAt;
+		super(
+			aggregateId,
+			eventId,
+			occurredOn,
+			name,
+			description,
+			priceMonthly,
+			priceYearly,
+			maxUsers,
+			maxRoles,
+			maxAccounts,
+			maxInvoices,
+			status,
+			visibility,
+			trialDays,
+			createdAt,
+			updatedAt
+		);
 	}
 
 	public PlanUpdatedDomainEvent() {
-		super(null);
-		this.name = null;
-		this.description = null;
-		this.priceMonthly = null;
-		this.priceYearly = null;
-		this.maxUsers = null;
-		this.maxRoles = null;
-		this.maxAccounts = null;
-		this.maxInvoices = null;
-		this.status = null;
-		this.visibility = null;
-		this.trialDays = null;
-		this.createdAt = null;
-		this.updatedAt = null;
+		super(null, null, null, null, null, null, null, null, null, null, null, null, null, null);
 	}
 
 	@Override
 	public String eventName() {
 		return "plan.updated";
-	}
-
-	@Override
-	public Map<String, Serializable> toPrimitives() {
-		Map<String, Serializable> primitives = new HashMap<>();
-		primitives.put("name", name);
-		primitives.put("description", description);
-		primitives.put("priceMonthly", priceMonthly);
-		primitives.put("priceYearly", priceYearly);
-		primitives.put("maxUsers", maxUsers);
-		primitives.put("maxRoles", maxRoles);
-		primitives.put("maxAccounts", maxAccounts);
-		primitives.put("maxInvoices", maxInvoices);
-		primitives.put("status", status);
-		primitives.put("visibility", visibility);
-		primitives.put("trialDays", trialDays);
-		primitives.put("createdAt", createdAt);
-		primitives.put("updatedAt", updatedAt);
-		return primitives;
 	}
 
 	@Override
@@ -168,7 +128,7 @@ public final class PlanUpdatedDomainEvent extends DomainEvent {
 		String eventId,
 		String occurredOn
 	) {
-		return new PlanCreatedDomainEvent(
+		return new PlanUpdatedDomainEvent(
 			aggregateId,
 			eventId,
 			occurredOn,
@@ -185,42 +145,6 @@ public final class PlanUpdatedDomainEvent extends DomainEvent {
 			(String) body.get("trialDays"),
 			(String) body.get("createdAt"),
 			(String) body.get("updatedAt")
-		);
-	}
-
-	@Override
-	public boolean equals(Object o) {
-		if (o == null || getClass() != o.getClass()) return false;
-		PlanUpdatedDomainEvent that = (PlanUpdatedDomainEvent) o;
-		return (
-			Objects.equals(name, that.name) &&
-			Objects.equals(description, that.description) &&
-			Objects.equals(priceMonthly, that.priceMonthly) &&
-			Objects.equals(priceYearly, that.priceYearly) &&
-			Objects.equals(maxUsers, that.maxUsers) &&
-			Objects.equals(maxRoles, that.maxRoles) &&
-			Objects.equals(maxAccounts, that.maxAccounts) &&
-			Objects.equals(maxInvoices, that.maxInvoices) &&
-			Objects.equals(status, that.status) &&
-			Objects.equals(visibility, that.visibility) &&
-			Objects.equals(trialDays, that.trialDays)
-		);
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(
-			name,
-			description,
-			priceMonthly,
-			priceYearly,
-			maxUsers,
-			maxRoles,
-			maxAccounts,
-			maxInvoices,
-			status,
-			visibility,
-			trialDays
 		);
 	}
 }

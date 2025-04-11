@@ -10,6 +10,7 @@ import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.stereotype.Controller;
 
+import com.jaapec.tenant.plans.application.change_visibility.ChangeVisibilityPlanCommand;
 import com.jaapec.tenant.plans.application.update.UpdatePlanCommand;
 import com.jaapec.tenant.plans.domain.PlanRepository;
 import com.jaapec.tenant.plans.infrastructure.controller.RequestPlan;
@@ -88,4 +89,12 @@ public final class PlanUpdateDataFetcher extends GraphQLApiController {
 		);
 		return true;
 	}
+
+	@MutationMapping
+	public boolean changeVisibilityPlan(@Argument String id, @Argument RequestVisibility request) {
+		dispatch(new ChangeVisibilityPlanCommand(id, request.visibility()));
+		return true;
+	}
+
+	public record RequestVisibility(String visibility) {}
 }

@@ -1,6 +1,7 @@
 package com.jaapec.tenant.shared.infrastructure.bus.event;
 
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -36,6 +37,7 @@ public final class DomainEventsInformation {
 		Map<String, Class<? extends DomainEvent>> events = new HashMap<>();
 
 		for (Class<? extends DomainEvent> domainEvent : domainEvents) {
+			if (Modifier.isAbstract(domainEvent.getModifiers())) continue;
 			DomainEvent nullInstance = domainEvent.getConstructor().newInstance();
 
 			events.put((String) domainEvent.getMethod("eventName").invoke(nullInstance), domainEvent);

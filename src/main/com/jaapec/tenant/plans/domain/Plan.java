@@ -2,6 +2,7 @@ package com.jaapec.tenant.plans.domain;
 
 import java.util.Objects;
 
+import com.jaapec.tenant.plans.domain.events.ChangeVisibilityPlanDomainEvent;
 import com.jaapec.tenant.plans.domain.events.PlanCreatedDomainEvent;
 import com.jaapec.tenant.plans.domain.events.PlanUpdatedDomainEvent;
 import com.jaapec.tenant.plans.domain.value_objects.*;
@@ -231,6 +232,34 @@ public final class Plan extends AggregateRoot {
 			)
 		);
 		return plan;
+	}
+
+	public Plan changeVisibility(PlanVisibility visibility) {
+		String now = CurrentDate.now();
+		Plan updatedPlan = new Plan(
+			this.id,
+			this.name,
+			this.description,
+			this.priceMonthly,
+			this.priceYearly,
+			this.maxUsers,
+			this.maxRoles,
+			this.maxAccounts,
+			this.maxInvoices,
+			this.status,
+			visibility,
+			this.trialDays,
+			this.createdAt,
+			new PlanUpdatedAt(now)
+		);
+		updatedPlan.record(
+			new ChangeVisibilityPlanDomainEvent(
+				updatedPlan.id().value(),
+				updatedPlan.visibility().value(),
+				updatedPlan.updatedAt().value()
+			)
+		);
+		return updatedPlan;
 	}
 
 	@Override

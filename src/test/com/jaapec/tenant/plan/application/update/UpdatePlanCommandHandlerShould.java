@@ -1,10 +1,12 @@
 package com.jaapec.tenant.plan.application.update;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +21,9 @@ import com.jaapec.tenant.plans.application.update.PlanUpdater;
 import com.jaapec.tenant.plans.application.update.UpdatePlanCommand;
 import com.jaapec.tenant.plans.application.update.UpdatePlanCommandHandler;
 import com.jaapec.tenant.plans.domain.Plan;
+import com.jaapec.tenant.plans.domain.events.PlanUpdatedDomainEvent;
 import com.jaapec.tenant.shared.domain.ResourceNotExist;
+import com.jaapec.tenant.shared.domain.bus.event.DomainEvent;
 
 final class UpdatePlanCommandHandlerShould extends PlanModuleUnitTestCase {
 
@@ -44,6 +48,28 @@ final class UpdatePlanCommandHandlerShould extends PlanModuleUnitTestCase {
 
 		ArgumentCaptor<Plan> savedPlanCaptor = ArgumentCaptor.forClass(Plan.class);
 		verify(repository).update(savedPlanCaptor.capture());
+
+		@SuppressWarnings("unchecked")
+		ArgumentCaptor<List<DomainEvent>> captor = ArgumentCaptor.forClass(List.class);
+		verify(eventBus).publish(captor.capture());
+		List<DomainEvent> capturedEvents = captor.getValue();
+		assertEquals(1, capturedEvents.size());
+		DomainEvent capturedEvent = capturedEvents.getFirst();
+		assertInstanceOf(PlanUpdatedDomainEvent.class, capturedEvent);
+		PlanUpdatedDomainEvent planUpdatedEvent = (PlanUpdatedDomainEvent) capturedEvent;
+		assertEquals(plan.id().value(), planUpdatedEvent.aggregateId());
+		Map<String, Serializable> body = capturedEvent.toPrimitives();
+		assertEquals(command.name(), body.get("name"));
+		assertEquals(command.description(), body.get("description"));
+		assertEquals(Double.toString(command.priceMonthly()), body.get("priceMonthly"));
+		assertEquals(Double.toString(command.priceYearly()), body.get("priceYearly"));
+		assertEquals(Integer.toString(command.maxUsers()), body.get("maxUsers"));
+		assertEquals(Integer.toString(command.maxRoles()), body.get("maxRoles"));
+		assertEquals(Integer.toString(command.maxAccounts()), body.get("maxAccounts"));
+		assertEquals(Integer.toString(command.maxInvoices()), body.get("maxInvoices"));
+		assertEquals(command.status(), body.get("status"));
+		assertEquals(command.visibility(), body.get("visibility"));
+		assertEquals(Integer.toString(command.trialDays()), body.get("trialDays"));
 
 		Plan capturedPlan = savedPlanCaptor.getValue();
 		assertEquals(command.id(), capturedPlan.id().value());

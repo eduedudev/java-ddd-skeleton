@@ -162,4 +162,18 @@ public final class PlanGraphQLMother {
 				""";
 		return deletePlanMutation;
 	}
+
+	public static String changeVisibilityMutation() {
+		@Language("GraphQL")
+		String changeVisibilityMutation =
+			"""
+				mutation ChangeVisibilityPlan($id: String!, $visibility: PlanVisibility!) {
+					changeVisibilityPlan(
+					  id: $id,
+					  request: $visibility
+					)
+				}
+				""";
+		return changeVisibilityMutation;
+	}
 }

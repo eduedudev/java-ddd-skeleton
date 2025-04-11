@@ -172,4 +172,25 @@ class PlanUpdateShould extends ApplicationTestCase {
 			Map.of("code", "E409", "reason", "name", "value", command.name())
 		);
 	}
+
+	@Test
+	void change_plan_visibility() throws Exception {
+		Plan plan = PlanMother.random();
+		repository.save(plan);
+
+		String newVisibility = "PUBLIC";
+		Map<String, Object> variables = Map.of("id", plan.id().value(), "visibility", newVisibility);
+
+		assertResponse(PlanGraphQLMother.changeVisibilityMutation(), "$.data.changeVisibilityPlan", variables);
+
+		Map<String, Object> queryVariables = Map.of("id", plan.id().value());
+		PlanResponse updatedPlan = assertResponseWithBody(
+			PlanGraphQLMother.findPlanQuery(),
+			"$.data.findPlan",
+			queryVariables,
+			PlanResponse.class
+		);
+
+		assertEquals(newVisibility, updatedPlan.visibility());
+	}
 }

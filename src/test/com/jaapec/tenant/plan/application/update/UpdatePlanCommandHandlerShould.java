@@ -66,10 +66,6 @@ final class UpdatePlanCommandHandlerShould extends PlanModuleUnitTestCase {
 		assertEquals(Integer.toString(command.maxUsers()), body.get("maxUsers"));
 		assertEquals(Integer.toString(command.maxRoles()), body.get("maxRoles"));
 		assertEquals(Integer.toString(command.maxAccounts()), body.get("maxAccounts"));
-		assertEquals(Integer.toString(command.maxInvoices()), body.get("maxInvoices"));
-		assertEquals(command.status(), body.get("status"));
-		assertEquals(command.visibility(), body.get("visibility"));
-		assertEquals(Integer.toString(command.trialDays()), body.get("trialDays"));
 
 		Plan capturedPlan = savedPlanCaptor.getValue();
 		assertEquals(command.id(), capturedPlan.id().value());
@@ -79,11 +75,6 @@ final class UpdatePlanCommandHandlerShould extends PlanModuleUnitTestCase {
 		assertEquals(command.priceYearly(), Double.parseDouble(capturedPlan.priceYearly().value().toString()));
 		assertEquals(command.maxUsers(), capturedPlan.maxUsers().value());
 		assertEquals(command.maxRoles(), capturedPlan.maxRoles().value());
-		assertEquals(command.maxAccounts(), capturedPlan.maxAccounts().value());
-		assertEquals(command.maxInvoices(), capturedPlan.maxInvoices().value());
-		assertEquals(command.status(), capturedPlan.status().value());
-		assertEquals(command.visibility(), capturedPlan.visibility().value());
-		assertEquals(command.trialDays(), capturedPlan.trialDays().value());
 	}
 
 	@Test

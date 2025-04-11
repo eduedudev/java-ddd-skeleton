@@ -46,16 +46,11 @@ final class CreatePlanCommandHandlerShould extends PlanModuleUnitTestCase {
 
 	@Test
 	void throw_exception_when_plan_price_monthly_is_negative() {
-		assertThrows(
-			NonNegativeNumberException.class, () -> new PlanPriceMonthly(BigDecimal.valueOf(-10))
-		);
+		assertThrows(NonNegativeNumberException.class, () -> new PlanPriceMonthly(BigDecimal.valueOf(-10)));
 	}
 
 	@Test
 	void throw_exception_when_plan_max_users_is_below_minimum() {
-		assertThrows(
-			MinValueException.class,
-			() -> new PlanMaxUsers(-1)
-		);
+		assertThrows(MinValueException.class, () -> new PlanMaxUsers(-1));
 	}
 }

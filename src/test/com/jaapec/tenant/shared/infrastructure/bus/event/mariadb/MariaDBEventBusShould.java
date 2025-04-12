@@ -12,6 +12,7 @@ import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.jaapec.tenant.shared.domain.bus.event.DomainEvent;
 import com.jaapec.tenant.shared.infrastructure.InfrastructureTestCase;
 import com.jaapec.tenant.users.domain.UserCreatedDomainEventMother;
 import com.jaapec.tenant.users.domain.events.UserCreatedDomainEvent;
@@ -50,12 +51,9 @@ class MariaDBEventBusShould extends InfrastructureTestCase {
 
 	@Test
 	void throw_persistence_exception_when_publishing_event_fails() {
-		UserCreatedDomainEvent invalidEvent = new UserCreatedDomainEvent(null, null, null); // Invalid event to force failure
-
-		PersistenceException exception = assertThrows(
-			PersistenceException.class,
-			() -> eventBus.publish(List.of(invalidEvent))
-		);
+		UserCreatedDomainEvent invalidEvent = new UserCreatedDomainEvent(null, null, null);
+		List<DomainEvent> events = List.of(invalidEvent);
+		PersistenceException exception = assertThrows(PersistenceException.class, () -> eventBus.publish(events));
 
 		assertTrue(exception.getMessage().contains("Error publishing the event to MariaDB"));
 	}

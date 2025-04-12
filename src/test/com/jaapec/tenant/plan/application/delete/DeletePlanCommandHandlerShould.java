@@ -24,7 +24,7 @@ import com.jaapec.tenant.plans.domain.value_objects.PlanId;
 import com.jaapec.tenant.shared.domain.ResourceNotExist;
 import com.jaapec.tenant.shared.domain.bus.event.DomainEvent;
 
-public class DeletePlanCommandHandlerShould extends PlanModuleUnitTestCase {
+class DeletePlanCommandHandlerShould extends PlanModuleUnitTestCase {
 
 	private DeletePlanCommandHandler handler;
 

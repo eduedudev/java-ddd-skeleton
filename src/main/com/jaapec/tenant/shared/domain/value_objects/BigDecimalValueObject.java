@@ -22,10 +22,9 @@ public abstract class BigDecimalValueObject {
 
 	@Override
 	public boolean equals(Object o) {
-		if (o == null || getClass() != o.getClass()) return false;
-
-		BigDecimalValueObject that = (BigDecimalValueObject) o;
-		return Objects.equals(value, that.value);
+		if (this == o) return true;
+		if (!(o instanceof BigDecimalValueObject that)) return false;
+		return this.value.compareTo(that.value) == 0;
 	}
 
 	@Override

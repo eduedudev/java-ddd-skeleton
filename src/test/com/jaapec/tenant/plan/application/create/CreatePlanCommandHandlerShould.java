@@ -1,7 +1,5 @@
 package com.jaapec.tenant.plan.application.create;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import java.math.BigDecimal;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -18,6 +16,8 @@ import com.jaapec.tenant.plans.domain.Plan;
 import com.jaapec.tenant.plans.domain.events.PlanCreatedDomainEvent;
 import com.jaapec.tenant.plans.domain.value_objects.PlanMaxUsers;
 import com.jaapec.tenant.plans.domain.value_objects.PlanPriceMonthly;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 final class CreatePlanCommandHandlerShould extends PlanModuleUnitTestCase {
 
@@ -54,4 +54,16 @@ final class CreatePlanCommandHandlerShould extends PlanModuleUnitTestCase {
 	void throw_exception_when_plan_max_users_is_below_minimum() {
 		assertThrows(MinValueException.class, () -> new PlanMaxUsers(-1));
 	}
+
+	@Test
+	void verify_monthly_plan_price_equality() {
+		assertEquals(PlanPriceMonthlyMother.create("2.9"), PlanPriceMonthlyMother.create("2.90"));
+		assertEquals(PlanPriceMonthlyMother.create("0.00"), PlanPriceMonthlyMother.create("0"));
+		assertEquals(PlanPriceMonthlyMother.create("10.00"), PlanPriceMonthlyMother.create("10"));
+		assertEquals(PlanPriceMonthlyMother.create("99.9"), PlanPriceMonthlyMother.create("99.90"));
+		assertEquals(PlanPriceMonthlyMother.create("99.98"), PlanPriceMonthlyMother.create("99.98"));
+		assertNotEquals(PlanPriceMonthlyMother.create("2.9"), PlanPriceMonthlyMother.create("3.0"));
+
+	}
+
 }

@@ -27,7 +27,22 @@ class MariaDBPlanRepositoryShould extends PlanModuleInfrastructureTestCase {
 
 		mariadbPlanRepository.save(plan);
 
-		assertEquals(Optional.of(plan), mariadbPlanRepository.find(plan.id()));
+		Optional<Plan> foundPlan = mariadbPlanRepository.find(plan.id());
+		assertTrue(foundPlan.isPresent());
+
+		assertEquals(plan.id(), foundPlan.get().id());
+		assertEquals(plan.name(), foundPlan.get().name());
+		assertEquals(plan.description(), foundPlan.get().description());
+		assertEquals(plan.priceMonthly(), foundPlan.get().priceMonthly());
+		assertEquals(plan.priceYearly(), foundPlan.get().priceYearly());
+		assertEquals(plan.maxUsers(), foundPlan.get().maxUsers());
+		assertEquals(plan.maxRoles(), foundPlan.get().maxRoles());
+		assertEquals(plan.maxAccounts(), foundPlan.get().maxAccounts());
+		assertEquals(plan.maxInvoices(), foundPlan.get().maxInvoices());
+		assertEquals(plan.status(), foundPlan.get().status());
+		assertEquals(plan.visibility(), foundPlan.get().visibility());
+		assertEquals(plan.trialDays(), foundPlan.get().trialDays());
+
 	}
 
 	@Test

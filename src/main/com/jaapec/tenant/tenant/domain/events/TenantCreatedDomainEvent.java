@@ -37,14 +37,12 @@ public final class TenantCreatedDomainEvent extends DomainEvent {
 
 	@Override
 	public HashMap<String, Serializable> toPrimitives() {
-		return new HashMap<String, Serializable>() {
-			{
-				put("name", name);
-				put("ownerId", ownerId);
-				put("createAt", createAt);
-				put("updateAt", updateAt);
-			}
-		};
+		HashMap<String, Serializable> primitives = new HashMap<>();
+		primitives.put("name", name);
+		primitives.put("ownerId", ownerId);
+		primitives.put("createAt", createAt);
+		primitives.put("updateAt", updateAt);
+		return primitives;
 	}
 
 	@Override

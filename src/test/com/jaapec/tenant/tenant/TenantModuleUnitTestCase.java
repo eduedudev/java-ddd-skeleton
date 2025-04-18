@@ -11,7 +11,7 @@ import com.jaapec.tenant.tenant.domain.Tenant;
 import com.jaapec.tenant.tenant.domain.TenantRepository;
 import com.jaapec.tenant.users.infrastructure.UnitTestCase;
 
-public class TenantModuleUnitTestCase extends UnitTestCase {
+public abstract class TenantModuleUnitTestCase extends UnitTestCase {
 
 	protected TenantRepository repository;
 

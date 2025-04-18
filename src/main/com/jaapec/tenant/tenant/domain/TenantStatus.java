@@ -2,14 +2,7 @@ package com.jaapec.tenant.tenant.domain;
 
 import java.util.Objects;
 
-public final class TenantStatus {
-
-	public enum Status {
-		ACTIVE,
-		INACTIVE,
-		PENDING,
-		SUSPENDED,
-	}
+public class TenantStatus {
 
 	private final String value;
 
@@ -17,24 +10,31 @@ public final class TenantStatus {
 		this.value = value;
 	}
 
-	public String value() {
-		return TenantStatus.Status.valueOf(value).toString();
-	}
-
 	public TenantStatus() {
 		this.value = null;
 	}
 
+	public String value() {
+		return TenantStatus.Status.valueOf(value).toString();
+	}
+
+	public enum Status {
+		ACTIVE,
+		INACTIVE,
+		PENDING,
+		SUSPENDED
+	}
+
 	@Override
 	public boolean equals(Object o) {
-		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		TenantStatus that = (TenantStatus) o;
-		return value == that.value;
+
+		final TenantStatus that = (TenantStatus) o;
+		return Objects.equals(value, that.value);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(value);
+		return Objects.hashCode(value);
 	}
 }

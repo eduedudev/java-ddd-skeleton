@@ -1,0 +1,38 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.jaapec.tenant.tenant.domain.Tenant" table="tenants">
+        <composite-id name="id" class="com.jaapec.tenant.tenant.domain.TenantId" access="field">
+            <key-property column="id" name="value" access="field" type="string" length="255"/>
+        </composite-id>
+        <component name="name" class="com.jaapec.tenant.tenant.domain.TenantName" access="field">
+            <property name="value" column="name" length="255" access="field" not-null="true"/>
+        </component>
+        <component name="status" class="com.jaapec.tenant.tenant.domain.TenantStatus" access="field">
+            <property name="value" column="status" not-null="true" access="field"/>
+        </component>
+        <component name="customDomain" class="com.jaapec.tenant.tenant.domain.TenantCustomDomain"
+                   access="field">
+            <property name="value" column="custom_domain" length="255" access="field" not-null="false"/>
+        </component>
+        <component name="domainVerified" class="com.jaapec.tenant.tenant.domain.TenantDomainVerified"
+                   access="field">
+            <property name="value" column="domain_verified" length="1" access="field" not-null="false"/>
+        </component>
+        <component name="domainHash" class="com.jaapec.tenant.tenant.domain.TenantDomainHash"
+                   access="field">
+            <property name="value" column="domain_hash" length="255" access="field" not-null="false"/>
+        </component>
+        <component name="ownerId" class="com.jaapec.tenant.tenant.domain.TenantOwnerId" access="field">
+            <property name="value" column="owner_id" length="255" access="field" not-null="true"/>
+        </component>
+        <component name="createdAt" class="com.jaapec.tenant.tenant.domain.TenantCreatedAt" access="field">
+            <property name="value" column="created_at" length="255" access="field" not-null="true"/>
+        </component>
+        <component name="updatedAt" class="com.jaapec.tenant.tenant.domain.TenantUpdatedAt" access="field">
+            <property name="value" column="updated_at" length="255" access="field" not-null="true"/>
+        </component>
+    </class>
+</hibernate-mapping>

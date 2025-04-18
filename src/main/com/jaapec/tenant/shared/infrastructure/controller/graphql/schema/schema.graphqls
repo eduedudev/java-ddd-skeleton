@@ -11,3 +11,36 @@ type Mutation {
     _empty: String
 }
 
+enum Operator {
+    EQUAL
+    NOT_EQUAL
+    GT
+    LT
+    CONTAINS
+    NOT_CONTAINS
+}
+enum OrderType{
+    ASC
+    DESC
+    NONE
+}
+
+
+input FilterInput{
+    field: String!
+    operator: Operator!
+    value:String!
+}
+
+type PaginationMetadata {
+    currentPage: Int!
+    totalPages: Int!
+    totalItems: Int!
+    hasNext: Boolean!
+    hasPrevious: Boolean!
+}
+
+type PaginatedPlanResponse {
+    data: [PlanResponse!]!
+    pagination: PaginationMetadata!
+}

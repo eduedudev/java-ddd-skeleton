@@ -1,7 +1,7 @@
 package com.jaapec.tenant.plan.domain;
 
 import com.jaapec.tenant.plans.domain.value_objects.PlanName;
-import com.jaapec.tenant.shared.domain.MotherCreator;
+import com.jaapec.tenant.shared.domain.NameMother;
 
 public final class PlanNameMother {
 
@@ -10,10 +10,6 @@ public final class PlanNameMother {
 	}
 
 	public static PlanName random() {
-		String name;
-		do {
-			name = MotherCreator.random().lorem().word();
-		} while (name.length() < 4);
-		return create(name);
+		return create(NameMother.random());
 	}
 }

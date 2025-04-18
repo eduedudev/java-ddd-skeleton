@@ -1,0 +1,7 @@
+input RequestTenant{
+    name: String!
+}
+
+extend type Mutation {
+    createTenant(request: RequestTenant!): Boolean!
+}

@@ -1,4 +1,4 @@
-package com.jaapec.tenant.tenants.domain;
+package com.jaapec.tenant.tenant.domain;
 
 import java.util.List;
 import java.util.Optional;
@@ -8,11 +8,13 @@ import com.jaapec.tenant.shared.domain.criteria.Criteria;
 public interface TenantRepository {
 	void save(Tenant tenant);
 
-	void delete(TenantId id);
+	void delete(Tenant tenant);
 
 	void update(Tenant tenant);
 
-	Optional<Tenant> findById(TenantId id);
+	Optional<Tenant> find(TenantId id);
 
 	List<Tenant> matching(Criteria criteria);
+
+	long count(Criteria criteria);
 }

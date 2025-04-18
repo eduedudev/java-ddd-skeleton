@@ -22,18 +22,18 @@ public class MariaDBTenantRepository extends HibernateRepository<Tenant> impleme
 	}
 
 	@Override
-	public void save(Tenant Tenant) {
-		persist(Tenant);
+	public void save(Tenant tenant) {
+		persist(tenant);
 	}
 
 	@Override
-	public void delete(Tenant Tenant) {
-		remove(Tenant);
+	public void delete(Tenant tenant) {
+		remove(tenant);
 	}
 
 	@Override
-	public void update(Tenant Tenant) {
-		merge(Tenant);
+	public void update(Tenant tenant) {
+		merge(tenant);
 	}
 
 	@Override

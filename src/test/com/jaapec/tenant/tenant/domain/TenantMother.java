@@ -25,4 +25,12 @@ public final class TenantMother {
 		name = name.concat(PlanNameMother.random().value());
 		return create(TenantIdMother.random(), TenantNameMother.create(name), TenantOwnerIdMother.random());
 	}
+
+	public static Tenant withName(String name) {
+		return create(TenantIdMother.random(), TenantNameMother.create(name), TenantOwnerIdMother.random());
+	}
+
+	public static Tenant withNameAndOwnerId(String name, String ownerId) {
+		return create(TenantIdMother.random(), TenantNameMother.create(name), TenantOwnerIdMother.create(ownerId));
+	}
 }

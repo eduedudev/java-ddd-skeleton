@@ -30,4 +30,34 @@ public final class TenantGraphQLMother {
 	public static Map<String, Object> fromCommand(CreateTenantCommand command) {
 		return Map.of("id", command.id(), "name", command.name(), "ownerId", command.ownerId());
 	}
+
+	public static String searchTenantsQuery() {
+		@Language("Graphql")
+		String searchTenantsQuery =
+			"""
+			query searchTenantsQuery($filters: [FilterInput!]!, $limit: Int, $offset: Int, $orderBy: String, $orderType: OrderType) {
+					searchTenants(
+					  filters: $filters
+					  orderBy: $orderBy
+					  orderType: $orderType
+					  limit: $limit
+					  offset: $offset
+					) {
+					  data {
+						id
+						name
+						ownerId
+					  }
+					  pagination {
+						currentPage
+						totalPages
+						totalItems
+						hasNext
+						hasPrevious
+					  }
+					}
+				  }
+			""";
+		return searchTenantsQuery;
+	}
 }

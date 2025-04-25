@@ -42,7 +42,6 @@ class MariaDBPlanRepositoryShould extends PlanModuleInfrastructureTestCase {
 		assertEquals(plan.status(), foundPlan.get().status());
 		assertEquals(plan.visibility(), foundPlan.get().visibility());
 		assertEquals(plan.trialDays(), foundPlan.get().trialDays());
-
 	}
 
 	@Test

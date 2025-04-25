@@ -1,6 +1,6 @@
 package com.jaapec.tenant.tenant.domain;
 
-import com.jaapec.tenant.tenant.application.CreateTenantCommand;
+import com.jaapec.tenant.tenant.application.create.CreateTenantCommand;
 
 public final class CreateTenantCommandMother {
 

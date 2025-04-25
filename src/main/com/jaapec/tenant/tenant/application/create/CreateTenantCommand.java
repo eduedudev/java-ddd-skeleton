@@ -1,4 +1,4 @@
-package com.jaapec.tenant.tenant.application;
+package com.jaapec.tenant.tenant.application.create;
 
 import com.jaapec.tenant.shared.domain.bus.command.Command;
 

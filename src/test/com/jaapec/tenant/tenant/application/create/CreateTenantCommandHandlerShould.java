@@ -4,9 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.jaapec.tenant.tenant.TenantModuleUnitTestCase;
-import com.jaapec.tenant.tenant.application.CreateTenantCommand;
-import com.jaapec.tenant.tenant.application.CreateTenantCommandHandler;
-import com.jaapec.tenant.tenant.application.TenantCreator;
 import com.jaapec.tenant.tenant.domain.*;
 import com.jaapec.tenant.tenant.domain.events.TenantCreatedDomainEvent;
 

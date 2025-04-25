@@ -2,6 +2,30 @@ input RequestTenant{
     name: String!
 }
 
+type TenantResponse {
+    id: String!
+    name: String!
+    domain: String
+    ownerId: String!
+    createdAt: String!
+    updatedAt: String!
+}
+
+type PaginatedTenantResponse {
+    data: [TenantResponse!]!
+    pagination: PaginationMetadata!
+}
+
 extend type Mutation {
     createTenant(request: RequestTenant!): Boolean!
+}
+
+extend type Query {
+    searchTenants(
+        filters: [FilterInput!]
+        orderBy: String
+        orderType: OrderType
+        limit: Int
+        offset: Int
+    ): PaginatedTenantResponse!
 }

@@ -39,8 +39,3 @@ type PaginationMetadata {
     hasNext: Boolean!
     hasPrevious: Boolean!
 }
-
-type PaginatedPlanResponse {
-    data: [PlanResponse!]!
-    pagination: PaginationMetadata!
-}

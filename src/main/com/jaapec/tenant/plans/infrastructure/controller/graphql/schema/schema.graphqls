@@ -39,6 +39,11 @@ type PlanResponse {
     updatedAt: String!
 }
 
+type PaginatedPlanResponse {
+    data: [PlanResponse!]!
+    pagination: PaginationMetadata!
+}
+
 extend type Mutation {
     createPlan(request: RequestPlan!): Boolean!
     updatePlan(id:ID!,request: RequestPlan!):Boolean!

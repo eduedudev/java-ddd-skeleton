@@ -4,7 +4,7 @@ import java.util.Map;
 
 import org.intellij.lang.annotations.Language;
 
-import com.jaapec.tenant.tenant.application.CreateTenantCommand;
+import com.jaapec.tenant.tenant.application.create.CreateTenantCommand;
 
 public final class TenantGraphQLMother {
 

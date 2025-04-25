@@ -20,7 +20,7 @@ import com.jaapec.tenant.shared.infrastructure.controller.graphql.GraphQLExcepti
 import com.jaapec.tenant.shared.infrastructure.validation.ValidationResponse;
 import com.jaapec.tenant.shared.infrastructure.validation.Validator;
 import com.jaapec.tenant.shared.infrastructure.validation.ValidatorNotExist;
-import com.jaapec.tenant.tenant.application.CreateTenantCommand;
+import com.jaapec.tenant.tenant.application.create.CreateTenantCommand;
 import com.jaapec.tenant.tenant.domain.TenantId;
 
 @Controller

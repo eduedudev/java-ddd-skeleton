@@ -7,7 +7,7 @@ import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 
 import com.jaapec.tenant.shared.infrastructure.ApplicationTestCase;
-import com.jaapec.tenant.tenant.application.CreateTenantCommand;
+import com.jaapec.tenant.tenant.application.create.CreateTenantCommand;
 import com.jaapec.tenant.tenant.domain.CreateTenantCommandMother;
 import com.jaapec.tenant.tenant.domain.TenantGraphQLMother;
 

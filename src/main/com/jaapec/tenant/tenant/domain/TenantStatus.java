@@ -22,7 +22,7 @@ public class TenantStatus {
 		ACTIVE,
 		INACTIVE,
 		PENDING,
-		SUSPENDED
+		SUSPENDED,
 	}
 
 	@Override

@@ -3,7 +3,7 @@ package com.jaapec.tenant.tenant.domain;
 import java.util.UUID;
 
 import com.jaapec.tenant.plan.domain.PlanNameMother;
-import com.jaapec.tenant.tenant.application.CreateTenantCommand;
+import com.jaapec.tenant.tenant.application.create.CreateTenantCommand;
 
 public final class TenantMother {
 

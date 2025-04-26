@@ -1,8 +1,10 @@
 package com.jaapec.tenant.tenant.infrastructure.controller.graphql;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,10 +13,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.jaapec.tenant.shared.infrastructure.ApplicationTestCase;
+import com.jaapec.tenant.tenant.application.TenantResponse;
 import com.jaapec.tenant.tenant.domain.*;
 
 @Transactional
-class TenantsSearcherShould extends ApplicationTestCase {
+class TenantGraphQLQueryFeatureShould extends ApplicationTestCase {
 
 	@Autowired
 	private TenantRepository repository;
@@ -312,5 +315,36 @@ class TenantsSearcherShould extends ApplicationTestCase {
 		);
 
 		assertEquals(2, totalItems);
+	}
+
+	@Test
+	void return_tenant_by_id_when_it_exists() throws Exception {
+		Tenant tenant = TenantMother.random();
+		repository.save(tenant);
+
+		Map<String, Object> variables = new HashMap<>();
+		variables.put("id", tenant.id().value());
+		TenantResponse foundTenant = assertResponseWithBody(
+			TenantGraphQLMother.findTenantQuery(),
+			"$.data.findTenant",
+			variables,
+			TenantResponse.class
+		);
+
+		assertThat(foundTenant)
+			.hasFieldOrPropertyWithValue("id", tenant.id().value())
+			.hasFieldOrPropertyWithValue("name", tenant.name().value())
+			.hasFieldOrPropertyWithValue("ownerId", tenant.ownerId().value());
+	}
+
+	@Test
+	void return_fail_when_tenant_does_not_exist() throws Exception {
+		String id = TenantIdMother.random().value();
+		assertErrorResponse(
+			TenantGraphQLMother.findTenantQuery(),
+			Map.of("id", id),
+			"The tenant doesnt exist",
+			Map.of("code", "E404", "reason", "tenant", "value", id)
+		);
 	}
 }

@@ -2,21 +2,13 @@ package com.jaapec.tenant.tenant.application;
 
 import java.util.Optional;
 
-import com.jaapec.tenant.shared.domain.bus.query.Response;
 import com.jaapec.tenant.tenant.domain.Tenant;
 import com.jaapec.tenant.tenant.domain.TenantCustomDomain;
+import com.jaapec.tenant.tenant.domain.TenantMother;
 
-public record TenantResponse(
-	String id,
-	String name,
-	String status,
-	Optional<String> domain,
-	String ownerId,
-	String createdAt,
-	String updatedAt
-)
-	implements Response {
-	public static TenantResponse fromAggregate(Tenant tenant) {
+public final class TenantResponseMother {
+
+	public static TenantResponse create(Tenant tenant) {
 		return new TenantResponse(
 			tenant.id().value(),
 			tenant.name().value(),
@@ -26,5 +18,9 @@ public record TenantResponse(
 			tenant.createdAt().value(),
 			tenant.updatedAt().value()
 		);
+	}
+
+	public static TenantResponse random() {
+		return create(TenantMother.random());
 	}
 }

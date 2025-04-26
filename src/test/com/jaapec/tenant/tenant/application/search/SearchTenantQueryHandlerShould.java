@@ -59,9 +59,7 @@ final class SearchTenantQueryHandlerShould extends TenantModuleUnitTestCase {
 		List<Tenant> allTenants = List.of(matchingTenant1, matchingTenant2, nonMatchingTenant);
 
 		when(repository.matching(any()))
-			.thenAnswer(invocation -> {
-				return allTenants.stream().filter(t -> t.name().value().toLowerCase().contains("acme")).toList();
-			});
+			.thenAnswer(invocation -> allTenants.stream().filter(t -> t.name().value().toLowerCase().contains("acme")).toList());
 
 		Filter filter = Filter.create("name", "CONTAINS", "acme");
 
@@ -86,9 +84,7 @@ final class SearchTenantQueryHandlerShould extends TenantModuleUnitTestCase {
 		Tenant tenantB = TenantMother.withName("B Corp");
 		givenTenants(List.of(tenantB, tenantC, tenantA));
 		when(repository.matching(any()))
-			.thenAnswer(invocation -> {
-				return List.of(tenantA, tenantB, tenantC);
-			});
+			.thenAnswer(invocation -> List.of(tenantA, tenantB, tenantC));
 
 		SearchTenantQuery query = new SearchTenantQuery(List.of(), "name", "asc", Pagination.defaults());
 

@@ -19,6 +19,7 @@ type PaginatedTenantResponse {
 
 extend type Mutation {
     createTenant(request: RequestTenant!): Boolean!
+    updateTenant(id:ID!, request:RequestTenant!):Boolean!
 }
 
 extend type Query {

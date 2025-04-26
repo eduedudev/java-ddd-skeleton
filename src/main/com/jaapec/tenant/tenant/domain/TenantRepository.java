@@ -3,9 +3,10 @@ package com.jaapec.tenant.tenant.domain;
 import java.util.List;
 import java.util.Optional;
 
+import com.jaapec.tenant.shared.domain.Repository;
 import com.jaapec.tenant.shared.domain.criteria.Criteria;
 
-public interface TenantRepository {
+public interface TenantRepository extends Repository {
 	void save(Tenant tenant);
 
 	void delete(Tenant tenant);

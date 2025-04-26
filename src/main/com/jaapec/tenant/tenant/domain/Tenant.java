@@ -5,6 +5,7 @@ import java.util.Objects;
 import com.jaapec.tenant.shared.domain.AggregateRoot;
 import com.jaapec.tenant.shared.domain.CurrentDate;
 import com.jaapec.tenant.tenant.domain.events.TenantCreatedDomainEvent;
+import com.jaapec.tenant.tenant.domain.events.TenantUpdatedDomainEvent;
 
 public final class Tenant extends AggregateRoot {
 
@@ -110,6 +111,23 @@ public final class Tenant extends AggregateRoot {
 				tenant.updatedAt.value()
 			)
 		);
+		return tenant;
+	}
+
+	public Tenant update(TenantName name) {
+		String now = CurrentDate.now();
+		Tenant tenant = new Tenant(
+			this.id,
+			name,
+			this.status,
+			this.customDomain,
+			this.domainVerified,
+			this.domainHash,
+			this.ownerId,
+			this.createdAt,
+			new TenantUpdatedAt(now)
+		);
+		tenant.record(new TenantUpdatedDomainEvent(tenant.id().value(), tenant.name().value(), tenant.updatedAt().value()));
 		return tenant;
 	}
 

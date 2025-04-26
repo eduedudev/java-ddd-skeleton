@@ -33,7 +33,12 @@ final class SearchTenantQueryHandlerShould extends TenantModuleUnitTestCase {
 	@Test
 	void should_search_all_tenants_when_no_criteria_provided() {
 		// Given
-		givenRandomTenants(5);
+		List<Tenant> mockTenants = new ArrayList<>();
+		for (int i = 0; i < 5; i++) {
+			mockTenants.add(TenantMother.random());
+		}
+
+		when(repository.matching(argThat(criteria -> criteria.filters().filters().isEmpty()))).thenReturn(mockTenants);
 
 		SearchTenantQuery query = new SearchTenantQuery(List.of(), null, null, Pagination.defaults());
 
@@ -53,12 +58,8 @@ final class SearchTenantQueryHandlerShould extends TenantModuleUnitTestCase {
 
 		List<Tenant> allTenants = List.of(matchingTenant1, matchingTenant2, nonMatchingTenant);
 
-		// Simulamos que el repositorio devuelve solo los que coinciden con el filtro "acme"
 		when(repository.matching(any()))
 			.thenAnswer(invocation -> {
-				Criteria criteria = invocation.getArgument(0);
-
-				// Aquí simulamos la lógica del filtro (ej. contiene "acme", sin importar mayúsculas)
 				return allTenants.stream().filter(t -> t.name().value().toLowerCase().contains("acme")).toList();
 			});
 
@@ -105,12 +106,4 @@ final class SearchTenantQueryHandlerShould extends TenantModuleUnitTestCase {
 		tenants.forEach(tenant -> repository.save(tenant));
 	}
 
-	private void givenRandomTenants(int count) {
-		List<Tenant> mockTenants = new ArrayList<>();
-		for (int i = 0; i < count; i++) {
-			mockTenants.add(TenantMother.random());
-		}
-
-		when(repository.matching(argThat(criteria -> criteria.filters().filters().isEmpty()))).thenReturn(mockTenants);
-	}
 }

@@ -50,4 +50,9 @@ public class MariaDBTenantRepository extends HibernateRepository<Tenant> impleme
 	public long count(Criteria criteria) {
 		return countByCriteria(criteria);
 	}
+
+	@Override
+	public boolean uniqueField(String fieldName, String value) {
+		return isFieldValueUnique(fieldName, value);
+	}
 }

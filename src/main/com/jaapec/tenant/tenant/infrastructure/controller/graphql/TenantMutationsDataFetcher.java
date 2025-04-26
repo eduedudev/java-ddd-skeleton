@@ -21,6 +21,7 @@ import com.jaapec.tenant.shared.infrastructure.validation.ValidationResponse;
 import com.jaapec.tenant.shared.infrastructure.validation.Validator;
 import com.jaapec.tenant.shared.infrastructure.validation.ValidatorNotExist;
 import com.jaapec.tenant.tenant.application.create.CreateTenantCommand;
+import com.jaapec.tenant.tenant.application.update.UpdateTenantCommand;
 import com.jaapec.tenant.tenant.domain.TenantId;
 
 @Controller
@@ -44,6 +45,23 @@ public final class TenantMutationsDataFetcher extends GraphQLApiController {
 
 	@MutationMapping
 	public boolean createTenant(@Argument RequestTenant request) throws ValidatorNotExist, JsonProcessingException {
+		checkTenant(request);
+		String uuid = UUID.randomUUID().toString();
+		// TODO: Replace mock-owner-id with actual ownerId from authenticated user (JWT claim "sub")
+		String ownerId = new TenantId(uuid).value();
+		dispatch(new CreateTenantCommand(uuid, request.name(), ownerId));
+		return true;
+	}
+
+	@MutationMapping
+	public boolean updateTenant(@Argument String id, @Argument RequestTenant request)
+		throws JsonProcessingException, ValidatorNotExist {
+		checkTenant(request);
+		dispatch(new UpdateTenantCommand(id, request.name()));
+		return true;
+	}
+
+	private void checkTenant(RequestTenant request) throws JsonProcessingException, ValidatorNotExist {
 		ObjectMapper objectMapper = new ObjectMapper();
 		String requestJson = objectMapper.writeValueAsString(request);
 		ValidationResponse validationResponse = validator.validate(requestJson, rules, repository);
@@ -55,11 +73,5 @@ public final class TenantMutationsDataFetcher extends GraphQLApiController {
 				.forEach((key, value) -> value.forEach(error -> errors.add(new GraphQLCustomException(error, key))));
 			throw new GraphQLExceptionList(errors);
 		}
-
-		String uuid = UUID.randomUUID().toString();
-		// TODO: Replace mock-owner-id with actual ownerId from authenticated user (JWT claim "sub")
-		String ownerId = new TenantId(uuid).value();
-		dispatch(new CreateTenantCommand(uuid, request.name(), ownerId));
-		return true;
 	}
 }

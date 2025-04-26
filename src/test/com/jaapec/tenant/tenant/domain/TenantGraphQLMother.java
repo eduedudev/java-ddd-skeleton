@@ -85,4 +85,24 @@ public final class TenantGraphQLMother {
 			""";
 		return findTenantQuery;
 	}
+
+	public static String updateTenantMutation() {
+		@Language("GraphQL")
+		String updateTenantMutation =
+			"""
+			mutation UpdateTenant(
+				$id: ID!,
+				$name: String!,\s
+			  ) {
+				updateTenant(
+				  id: $id,
+				  request: {
+					name: $name,\s
+				  }
+				)
+			  }
+
+		""";
+		return updateTenantMutation;
+	}
 }

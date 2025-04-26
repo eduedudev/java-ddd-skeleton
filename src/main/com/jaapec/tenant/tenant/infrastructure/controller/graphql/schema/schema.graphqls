@@ -5,6 +5,7 @@ input RequestTenant{
 type TenantResponse {
     id: String!
     name: String!
+    status: String!
     domain: String
     ownerId: String!
     createdAt: String!
@@ -28,4 +29,6 @@ extend type Query {
         limit: Int
         offset: Int
     ): PaginatedTenantResponse!
+
+    findTenant(id: String!): TenantResponse!
 }

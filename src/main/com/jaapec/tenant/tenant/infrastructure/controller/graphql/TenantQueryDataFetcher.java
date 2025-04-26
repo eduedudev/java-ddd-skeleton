@@ -14,6 +14,7 @@ import com.jaapec.tenant.shared.domain.criteria.PaginatedResponse;
 import com.jaapec.tenant.shared.domain.criteria.Pagination;
 import com.jaapec.tenant.shared.infrastructure.controller.graphql.GraphQLApiController;
 import com.jaapec.tenant.tenant.application.TenantResponse;
+import com.jaapec.tenant.tenant.application.find.FindTenantQuery;
 import com.jaapec.tenant.tenant.application.search.SearchTenantQuery;
 
 @Controller
@@ -35,5 +36,10 @@ public final class TenantQueryDataFetcher extends GraphQLApiController {
 			? Pagination.defaults()
 			: Pagination.fromValues(limit, offset);
 		return ask(new SearchTenantQuery(filters != null ? filters : List.of(), orderBy, orderType, pagination));
+	}
+
+	@QueryMapping("findTenant")
+	public TenantResponse findTenant(@Argument String id) {
+		return ask(new FindTenantQuery(id));
 	}
 }

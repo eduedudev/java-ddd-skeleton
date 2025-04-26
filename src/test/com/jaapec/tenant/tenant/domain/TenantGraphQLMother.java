@@ -60,4 +60,29 @@ public final class TenantGraphQLMother {
 			""";
 		return searchTenantsQuery;
 	}
+
+	public static String findTenantQuery() {
+		@Language("Graphql")
+		String findTenantQuery =
+			"""
+			query FindTenant
+			(
+			  $id: String!
+			)\s
+			{
+				findTenant(
+			    id:$id
+			  ){
+				id,
+			    name,
+			    status,
+			    domain,
+				ownerId,
+				createdAt,
+				updatedAt
+			  }
+			}
+			""";
+		return findTenantQuery;
+	}
 }

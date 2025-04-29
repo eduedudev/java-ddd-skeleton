@@ -41,11 +41,9 @@ public final class DomainVerificationCheckerImpl implements DomainVerificationCh
 	}
 
 	private boolean isExpectedCnameFound(Record[] records) {
-		for (Record record : records) {
-			if (record instanceof CNAMERecord cname) {
-				if (EXPECTED_CNAME.equalsIgnoreCase(cname.getTarget().toString())) {
-					return true;
-				}
+		for (Record rec : records) {
+			if (rec instanceof CNAMERecord cname && EXPECTED_CNAME.equalsIgnoreCase(cname.getTarget().toString())) {
+				return true;
 			}
 		}
 		return false;

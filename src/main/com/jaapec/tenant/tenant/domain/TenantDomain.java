@@ -5,6 +5,7 @@ import java.util.Objects;
 public final class TenantDomain {
 
 	private final String value;
+	private static final String DOMAIN_FIELD_NAME = "domain";
 
 	public TenantDomain(String value) {
 		this.value = value;
@@ -21,29 +22,29 @@ public final class TenantDomain {
 		}
 
 		if (value.startsWith("-") || value.startsWith(".") || value.endsWith("-") || value.endsWith(".")) {
-			throw new InvalidDomainException("domain", value);
+			throw new InvalidDomainException(DOMAIN_FIELD_NAME, value);
 		}
 
 		String[] parts = value.split("\\.");
 		if (parts.length < 2) {
-			throw new InvalidDomainException("domain", value);
+			throw new InvalidDomainException(DOMAIN_FIELD_NAME, value);
 		}
 
 		for (String part : parts) {
 			if (part.isEmpty() || part.length() > 63) {
-				throw new InvalidDomainException("domain", value);
+				throw new InvalidDomainException(DOMAIN_FIELD_NAME, value);
 			}
 			if (!part.matches("^[A-Za-z0-9-]+$")) {
-				throw new InvalidDomainException("domain", value);
+				throw new InvalidDomainException(DOMAIN_FIELD_NAME, value);
 			}
 			if (part.startsWith("-") || part.endsWith("-")) {
-				throw new InvalidDomainException("domain", value);
+				throw new InvalidDomainException(DOMAIN_FIELD_NAME, value);
 			}
 		}
 
 		String tld = parts[parts.length - 1];
 		if (!tld.matches("^[A-Za-z]{2,}$")) {
-			throw new InvalidDomainException("domain", value);
+			throw new InvalidDomainException(DOMAIN_FIELD_NAME, value);
 		}
 	}
 

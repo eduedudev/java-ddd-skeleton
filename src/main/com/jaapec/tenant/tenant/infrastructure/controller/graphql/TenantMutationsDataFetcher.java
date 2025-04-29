@@ -20,6 +20,7 @@ import com.jaapec.tenant.shared.infrastructure.controller.graphql.GraphQLExcepti
 import com.jaapec.tenant.shared.infrastructure.validation.ValidationResponse;
 import com.jaapec.tenant.shared.infrastructure.validation.Validator;
 import com.jaapec.tenant.shared.infrastructure.validation.ValidatorNotExist;
+import com.jaapec.tenant.tenant.application.change_domain.ChangeTenantDomainCommand;
 import com.jaapec.tenant.tenant.application.create.CreateTenantCommand;
 import com.jaapec.tenant.tenant.application.update.UpdateTenantCommand;
 import com.jaapec.tenant.tenant.domain.TenantId;
@@ -58,6 +59,12 @@ public final class TenantMutationsDataFetcher extends GraphQLApiController {
 		throws JsonProcessingException, ValidatorNotExist {
 		checkTenant(request);
 		dispatch(new UpdateTenantCommand(id, request.name()));
+		return true;
+	}
+
+	@MutationMapping
+	public boolean changeDomain(@Argument String id, @Argument RequestDomain request) {
+		dispatch(new ChangeTenantDomainCommand(id, request.domain()));
 		return true;
 	}
 

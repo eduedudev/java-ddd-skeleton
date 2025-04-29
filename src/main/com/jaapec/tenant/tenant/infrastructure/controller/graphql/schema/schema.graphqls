@@ -1,6 +1,9 @@
 input RequestTenant{
     name: String!
 }
+input RequestDomainInput{
+    domain: String!
+}
 
 type TenantResponse {
     id: String!
@@ -12,6 +15,11 @@ type TenantResponse {
     updatedAt: String!
 }
 
+type DomainVerificationResponse{
+    domain: String!
+    domainVerified: Boolean!
+}
+
 type PaginatedTenantResponse {
     data: [TenantResponse!]!
     pagination: PaginationMetadata!
@@ -20,6 +28,7 @@ type PaginatedTenantResponse {
 extend type Mutation {
     createTenant(request: RequestTenant!): Boolean!
     updateTenant(id:ID!, request:RequestTenant!):Boolean!
+    changeDomain(id:ID!, request:RequestDomainInput!):Boolean!
 }
 
 extend type Query {
@@ -32,4 +41,5 @@ extend type Query {
     ): PaginatedTenantResponse!
 
     findTenant(id: String!): TenantResponse!
+    checkDomainVerification(id: String!): DomainVerificationResponse!
 }

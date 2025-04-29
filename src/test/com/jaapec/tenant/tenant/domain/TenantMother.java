@@ -33,4 +33,8 @@ public final class TenantMother {
 	public static Tenant withNameAndOwnerId(String name, String ownerId) {
 		return create(TenantIdMother.random(), TenantNameMother.create(name), TenantOwnerIdMother.create(ownerId));
 	}
+
+	public static Tenant randomWithDomain(Tenant tenant, String domain) {
+		return tenant.changeDomain(TenantDomainMother.create(domain));
+	}
 }

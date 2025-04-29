@@ -14,6 +14,8 @@ import com.jaapec.tenant.shared.domain.criteria.PaginatedResponse;
 import com.jaapec.tenant.shared.domain.criteria.Pagination;
 import com.jaapec.tenant.shared.infrastructure.controller.graphql.GraphQLApiController;
 import com.jaapec.tenant.tenant.application.TenantResponse;
+import com.jaapec.tenant.tenant.application.check_domain_verification.CheckDomainVerificationQuery;
+import com.jaapec.tenant.tenant.application.check_domain_verification.DomainVerificationResponse;
 import com.jaapec.tenant.tenant.application.find.FindTenantQuery;
 import com.jaapec.tenant.tenant.application.search.SearchTenantQuery;
 
@@ -41,5 +43,10 @@ public final class TenantQueryDataFetcher extends GraphQLApiController {
 	@QueryMapping("findTenant")
 	public TenantResponse findTenant(@Argument String id) {
 		return ask(new FindTenantQuery(id));
+	}
+
+	@QueryMapping("checkDomainVerification")
+	public DomainVerificationResponse checkDomainVerification(@Argument String id) {
+		return ask(new CheckDomainVerificationQuery(id));
 	}
 }

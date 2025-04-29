@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mockito;
 
+import com.jaapec.tenant.shared.domain.bus.command.CommandBus;
 import com.jaapec.tenant.tenant.domain.Tenant;
 import com.jaapec.tenant.tenant.domain.TenantRepository;
 import com.jaapec.tenant.users.infrastructure.UnitTestCase;
@@ -14,6 +15,7 @@ import com.jaapec.tenant.users.infrastructure.UnitTestCase;
 public abstract class TenantModuleUnitTestCase extends UnitTestCase {
 
 	protected TenantRepository repository;
+	protected CommandBus command;
 
 	@Override
 	@BeforeEach
@@ -21,6 +23,7 @@ public abstract class TenantModuleUnitTestCase extends UnitTestCase {
 		super.setUp();
 
 		repository = mock(TenantRepository.class);
+		command = mock(CommandBus.class);
 	}
 
 	public void shouldHaveSaved(Tenant tenant) {

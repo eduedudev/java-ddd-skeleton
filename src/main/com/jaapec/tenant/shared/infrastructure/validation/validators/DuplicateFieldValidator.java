@@ -8,7 +8,7 @@ import jakarta.annotation.Nullable;
 import com.jaapec.tenant.shared.domain.Message;
 import com.jaapec.tenant.shared.domain.Repository;
 
-public class UniqueFieldValidator implements FieldValidator {
+public class DuplicateFieldValidator implements FieldValidator {
 
 	@Override
 	public Boolean isValid(
@@ -28,6 +28,6 @@ public class UniqueFieldValidator implements FieldValidator {
 
 	@Override
 	public Message errorMessage(String fieldName, @Nullable String rule) {
-		return new Message("error.unique.invalid", new Object[] { fieldName });
+		return new Message("error.field.duplicate", new Object[] { fieldName });
 	}
 }

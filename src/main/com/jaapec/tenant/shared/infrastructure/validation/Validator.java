@@ -29,7 +29,7 @@ public final class Validator {
 		Map.entry("string", new StringValidator()),
 		Map.entry("not_empty", new NotEmptyValidator()),
 		Map.entry("uuid", new UuidValidator()),
-		Map.entry("unique", new UniqueFieldValidator()),
+		Map.entry("unique", new DuplicateFieldValidator()),
 		Map.entry("enum", new EnumValidator()),
 		Map.entry("email", new EmailValidator()),
 		Map.entry("min", new MinValidation()),

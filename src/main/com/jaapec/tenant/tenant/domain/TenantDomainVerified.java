@@ -4,7 +4,11 @@ import com.jaapec.tenant.shared.domain.value_objects.BooleanValueObject;
 
 public class TenantDomainVerified extends BooleanValueObject {
 
-	protected TenantDomainVerified(Boolean value) {
+	public TenantDomainVerified(Boolean value) {
 		super(value);
+	}
+
+	public TenantDomainVerified() {
+		super(null);
 	}
 }

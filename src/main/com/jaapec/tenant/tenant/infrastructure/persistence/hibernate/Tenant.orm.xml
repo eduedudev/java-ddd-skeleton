@@ -13,17 +13,13 @@
         <component name="status" class="com.jaapec.tenant.tenant.domain.TenantStatus" access="field">
             <property name="value" column="status" not-null="true" access="field"/>
         </component>
-        <component name="customDomain" class="com.jaapec.tenant.tenant.domain.TenantCustomDomain"
+        <component name="domain" class="com.jaapec.tenant.tenant.domain.TenantDomain"
                    access="field">
             <property name="value" column="custom_domain" length="255" access="field" not-null="false"/>
         </component>
         <component name="domainVerified" class="com.jaapec.tenant.tenant.domain.TenantDomainVerified"
                    access="field">
             <property name="value" column="domain_verified" length="1" access="field" not-null="false"/>
-        </component>
-        <component name="domainHash" class="com.jaapec.tenant.tenant.domain.TenantDomainHash"
-                   access="field">
-            <property name="value" column="domain_hash" length="255" access="field" not-null="false"/>
         </component>
         <component name="ownerId" class="com.jaapec.tenant.tenant.domain.TenantOwnerId" access="field">
             <property name="value" column="owner_id" length="255" access="field" not-null="true"/>

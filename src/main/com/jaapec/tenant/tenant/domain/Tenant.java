@@ -4,7 +4,9 @@ import java.util.Objects;
 
 import com.jaapec.tenant.shared.domain.AggregateRoot;
 import com.jaapec.tenant.shared.domain.CurrentDate;
+import com.jaapec.tenant.tenant.domain.events.TenantChangedStatusDomainEvent;
 import com.jaapec.tenant.tenant.domain.events.TenantCreatedDomainEvent;
+import com.jaapec.tenant.tenant.domain.events.TenantDomainChangedEvent;
 import com.jaapec.tenant.tenant.domain.events.TenantUpdatedDomainEvent;
 
 public final class Tenant extends AggregateRoot {
@@ -12,9 +14,8 @@ public final class Tenant extends AggregateRoot {
 	private final TenantId id;
 	private final TenantName name;
 	private final TenantStatus status;
-	private final TenantCustomDomain customDomain;
+	private final TenantDomain domain;
 	private final TenantDomainVerified domainVerified;
-	private final TenantDomainHash domainHash;
 	private final TenantOwnerId ownerId;
 	private final TenantCreatedAt createdAt;
 	private final TenantUpdatedAt updatedAt;
@@ -23,9 +24,8 @@ public final class Tenant extends AggregateRoot {
 		TenantId id,
 		TenantName name,
 		TenantStatus status,
-		TenantCustomDomain customDomain,
+		TenantDomain domain,
 		TenantDomainVerified domainVerified,
-		TenantDomainHash domainHash,
 		TenantOwnerId ownerId,
 		TenantCreatedAt createdAt,
 		TenantUpdatedAt updatedAt
@@ -33,9 +33,8 @@ public final class Tenant extends AggregateRoot {
 		this.id = id;
 		this.name = name;
 		this.status = status;
-		this.customDomain = customDomain;
+		this.domain = domain;
 		this.domainVerified = domainVerified;
-		this.domainHash = domainHash;
 		this.ownerId = ownerId;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
@@ -45,9 +44,8 @@ public final class Tenant extends AggregateRoot {
 		this.id = null;
 		this.name = null;
 		this.status = null;
-		this.customDomain = null;
+		this.domain = null;
 		this.domainVerified = null;
-		this.domainHash = null;
 		this.ownerId = null;
 		this.createdAt = null;
 		this.updatedAt = null;
@@ -65,16 +63,12 @@ public final class Tenant extends AggregateRoot {
 		return status;
 	}
 
-	public TenantCustomDomain customDomain() {
-		return customDomain;
+	public TenantDomain domain() {
+		return domain;
 	}
 
 	public TenantDomainVerified domainVerified() {
 		return domainVerified;
-	}
-
-	public TenantDomainHash domainHash() {
-		return domainHash;
 	}
 
 	public TenantOwnerId ownerId() {
@@ -95,7 +89,6 @@ public final class Tenant extends AggregateRoot {
 			id,
 			name,
 			new TenantStatus(TenantStatus.Status.PENDING.toString()),
-			null,
 			null,
 			null,
 			ownerId,
@@ -120,14 +113,49 @@ public final class Tenant extends AggregateRoot {
 			this.id,
 			name,
 			this.status,
-			this.customDomain,
+			this.domain,
 			this.domainVerified,
-			this.domainHash,
 			this.ownerId,
 			this.createdAt,
 			new TenantUpdatedAt(now)
 		);
 		tenant.record(new TenantUpdatedDomainEvent(tenant.id().value(), tenant.name().value(), tenant.updatedAt().value()));
+		return tenant;
+	}
+
+	public Tenant changeDomain(TenantDomain domain) {
+		String now = CurrentDate.now();
+		Tenant tenant = new Tenant(
+			this.id,
+			this.name,
+			this.status,
+			domain,
+			new TenantDomainVerified(false),
+			this.ownerId,
+			this.createdAt,
+			new TenantUpdatedAt(now)
+		);
+		tenant.record(
+			new TenantDomainChangedEvent(tenant.id().value(), tenant.domain().value(), tenant.updatedAt().value())
+		);
+		return tenant;
+	}
+
+	public Tenant changeStatusDomainVerified(TenantDomainVerified domainVerified) {
+		String now = CurrentDate.now();
+		Tenant tenant = new Tenant(
+			this.id,
+			this.name,
+			this.status,
+			this.domain,
+			domainVerified,
+			this.ownerId,
+			this.createdAt,
+			new TenantUpdatedAt(now)
+		);
+		tenant.record(
+			new TenantChangedStatusDomainEvent(tenant.id().value(), tenant.domain().value(), tenant.updatedAt().value())
+		);
 		return tenant;
 	}
 
@@ -140,9 +168,8 @@ public final class Tenant extends AggregateRoot {
 			Objects.requireNonNull(id).equals(tenant.id) &&
 			Objects.requireNonNull(name).equals(tenant.name) &&
 			Objects.requireNonNull(status).equals(tenant.status) &&
-			Objects.equals(customDomain, tenant.customDomain) &&
+			Objects.equals(domain, tenant.domain) &&
 			Objects.equals(domainVerified, tenant.domainVerified) &&
-			Objects.equals(domainHash, tenant.domainHash) &&
 			Objects.requireNonNull(ownerId).equals(tenant.ownerId)
 		);
 	}
@@ -152,9 +179,8 @@ public final class Tenant extends AggregateRoot {
 		int result = Objects.requireNonNull(id).hashCode();
 		result = 31 * result + Objects.requireNonNull(name).hashCode();
 		result = 31 * result + Objects.requireNonNull(status).hashCode();
-		result = 31 * result + Objects.hashCode(customDomain);
+		result = 31 * result + Objects.hashCode(domain);
 		result = 31 * result + Objects.hashCode(domainVerified);
-		result = 31 * result + Objects.hashCode(domainHash);
 		result = 31 * result + Objects.requireNonNull(ownerId).hashCode();
 		return result;
 	}

@@ -105,4 +105,41 @@ public final class TenantGraphQLMother {
 		""";
 		return updateTenantMutation;
 	}
+
+	public static String changeDomainMutation() {
+		@Language("GraphQL")
+		String changeDomainMutation =
+			"""
+			mutation ChangeDomain(
+				$id: ID!,
+				$request: RequestDomainInput!,\s
+			  ) {
+				changeDomain(
+				  id: $id,
+				  request: $request
+				)
+			  }
+			""";
+		return changeDomainMutation;
+	}
+
+	public static String checkDomainVerificationQuery() {
+		@Language("Graphql")
+		String checkDomainVerificationQuery =
+			"""
+			query CheckDomainVerification
+			(
+			  $id: String!
+			)\s
+			{
+				checkDomainVerification(
+			    id:$id
+			  ){
+			    domain,
+			    domainVerified
+			  }
+			}
+			""";
+		return checkDomainVerificationQuery;
+	}
 }

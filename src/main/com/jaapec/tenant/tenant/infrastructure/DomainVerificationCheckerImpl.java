@@ -10,7 +10,7 @@ import com.jaapec.tenant.tenant.domain.Tenant;
 @Service
 public final class DomainVerificationCheckerImpl implements DomainVerificationChecker {
 
-	private static final String EXPECTED_CNAME = "custom.jaapec.com";
+	private static final String EXPECTED_CNAME = "custom.jaapec.com.";
 
 	@Override
 	public boolean isVerified(Tenant tenant) {

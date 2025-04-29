@@ -7,7 +7,7 @@ public final class TenantDomainMother {
 	}
 
 	public static TenantDomain random() {
-		String randomDomain = "tenant" + (int) (Math.random() * 1000) + ".example.com";
+		String randomDomain = String.format("tenant%d.example.com", (int) (Math.random() * 1000));
 		return new TenantDomain(randomDomain);
 	}
 }

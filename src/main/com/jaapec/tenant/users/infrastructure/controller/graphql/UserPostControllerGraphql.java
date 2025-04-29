@@ -25,7 +25,7 @@ import com.jaapec.tenant.users.infrastructure.controller.RequestUser;
 @Controller
 public final class UserPostControllerGraphql extends GraphQLApiController {
 
-	UserRepository repository;
+	private final UserRepository repository;
 	private final Validator validator;
 
 	public UserPostControllerGraphql(

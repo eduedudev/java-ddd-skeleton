@@ -22,11 +22,8 @@ class TenantGraphQLDomainVerificationDataFetcherShould extends ApplicationTestCa
 	@Autowired
 	private TenantRepository repository;
 
-	@Autowired
-	private DomainVerificationChecker domainVerificationChecker;
-
 	@Test
-	void check_domain_verification_and_return_updated_status() throws Exception {
+	void check_domain_verification_and_return_updated_status() {
 		Tenant tenant1 = TenantMother.random();
 		repository.save(tenant1);
 
@@ -36,10 +33,10 @@ class TenantGraphQLDomainVerificationDataFetcherShould extends ApplicationTestCa
 		CommandBus commandBus = Mockito.mock(CommandBus.class);
 		TenantRepository mockRepository = Mockito.mock(TenantRepository.class);
 
-		DomainVerificationChecker domainVerificationChecker = Mockito.mock(DomainVerificationChecker.class);
-		Mockito.when(domainVerificationChecker.isVerified(Mockito.any(Tenant.class))).thenReturn(true);
+		DomainVerificationChecker mockedDomainChecker = Mockito.mock(DomainVerificationChecker.class);
+		Mockito.when(mockedDomainChecker.isVerified(Mockito.any(Tenant.class))).thenReturn(true);
 
-		Tenant updatedTenant = tenant.changeStatusDomainVerified(new TenantDomainVerified(true)); // Crear nuevo Tenant con estado actualizado
+		Tenant updatedTenant = tenant.changeStatusDomainVerified(new TenantDomainVerified(true));
 
 		Mockito.when(mockRepository.find(tenant.id())).thenReturn(Optional.of(updatedTenant));
 

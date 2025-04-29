@@ -66,7 +66,11 @@ final class ChangeTenantDomainCommandHandlerShould extends TenantModuleUnitTestC
 	void should_throw_exception_when_domain_invalid() {
 		assertThrows(
 			InvalidDomainException.class,
-			() -> ChangeTenantDomainCommandMother.create(TenantIdMother.random(), TenantDomainMother.create("domain-custom"))
+			() -> {
+				TenantId randomTenantId = TenantIdMother.random();
+				TenantDomain invalidDomain = TenantDomainMother.create("domain-custom");
+				ChangeTenantDomainCommandMother.create(randomTenantId, invalidDomain);
+			}
 		);
 	}
 

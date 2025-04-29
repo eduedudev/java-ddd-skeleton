@@ -13,7 +13,7 @@ import com.jaapec.tenant.tenant.domain.DomainVerificationChecker;
 import com.jaapec.tenant.tenant.domain.Tenant;
 import com.jaapec.tenant.tenant.domain.TenantMother;
 
-public final class VerifyTenantDomainCommandHandlerShould extends TenantModuleUnitTestCase {
+class VerifyTenantDomainCommandHandlerShould extends TenantModuleUnitTestCase {
 
 	private VerifyTenantDomainCommandHandler handler;
 	private DomainVerificationChecker checker;

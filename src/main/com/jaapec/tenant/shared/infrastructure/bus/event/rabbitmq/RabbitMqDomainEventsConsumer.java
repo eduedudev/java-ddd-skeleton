@@ -28,7 +28,7 @@ public final class RabbitMqDomainEventsConsumer {
 	private final ApplicationContext context;
 	private final RabbitMqPublisher publisher;
 	private final HashMap<String, Object> domainEventSubscribers = new HashMap<>();
-	RabbitListenerEndpointRegistry registry;
+	private final RabbitListenerEndpointRegistry registry;
 	private DomainEventSubscribersInformation information;
 
 	public RabbitMqDomainEventsConsumer(

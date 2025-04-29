@@ -1,5 +1,7 @@
 package com.jaapec.tenant.tenant.domain;
 
+import java.util.Random;
+
 public final class TenantDomainMother {
 
 	public static TenantDomain create(String domain) {
@@ -7,7 +9,8 @@ public final class TenantDomainMother {
 	}
 
 	public static TenantDomain random() {
-		String randomDomain = String.format("tenant%d.example.com", (int) (Math.random() * 1000));
+		Random random = new Random();
+		String randomDomain = String.format("tenant%d.example.com", random.nextInt(1000));
 		return new TenantDomain(randomDomain);
 	}
 }

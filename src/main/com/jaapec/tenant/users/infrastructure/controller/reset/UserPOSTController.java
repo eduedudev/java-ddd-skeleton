@@ -31,7 +31,7 @@ import com.jaapec.tenant.users.infrastructure.controller.RequestUser;
 @RestController
 public final class UserPOSTController extends RestApiController {
 
-	UserRepository repository;
+	private final UserRepository repository;
 	private final Validator validator;
 	private final Logger logger;
 

@@ -1,7 +1,6 @@
 package com.jaapec.tenant.tenant.domain;
 
 import java.util.Objects;
-import java.util.regex.Pattern;
 
 public final class TenantDomain {
 
@@ -17,10 +16,33 @@ public final class TenantDomain {
 	}
 
 	private void ensureDomain() {
-		String regex = "^(?!-)([A-Za-z0-9-]{1,63}\\.)+[A-Za-z]{2,}$";
-		Pattern pattern = Pattern.compile(regex);
+		if (value == null) {
+			return;
+		}
 
-		if (value != null && !pattern.matcher(value).matches()) {
+		if (value.startsWith("-") || value.startsWith(".") || value.endsWith("-") || value.endsWith(".")) {
+			throw new InvalidDomainException("domain", value);
+		}
+
+		String[] parts = value.split("\\.");
+		if (parts.length < 2) {
+			throw new InvalidDomainException("domain", value);
+		}
+
+		for (String part : parts) {
+			if (part.isEmpty() || part.length() > 63) {
+				throw new InvalidDomainException("domain", value);
+			}
+			if (!part.matches("^[A-Za-z0-9-]+$")) {
+				throw new InvalidDomainException("domain", value);
+			}
+			if (part.startsWith("-") || part.endsWith("-")) {
+				throw new InvalidDomainException("domain", value);
+			}
+		}
+
+		String tld = parts[parts.length - 1];
+		if (!tld.matches("^[A-Za-z]{2,}$")) {
 			throw new InvalidDomainException("domain", value);
 		}
 	}

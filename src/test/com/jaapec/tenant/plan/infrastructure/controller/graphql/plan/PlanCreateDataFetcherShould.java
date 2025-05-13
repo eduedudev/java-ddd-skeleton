@@ -1,6 +1,5 @@
 package com.jaapec.tenant.plan.infrastructure.controller.graphql.plan;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import jakarta.transaction.Transactional;
@@ -14,14 +13,14 @@ import com.jaapec.tenant.shared.infrastructure.ApplicationTestCase;
 class PlanCreateDataFetcherShould extends ApplicationTestCase {
 
 	@Test
-	void createAValidPlan() throws Exception {
+	void create_a_valid_plan() throws Exception {
 		CreatePlanCommand command = CreatePlanCommandMother.random();
 
 		assertResponse(PlanGraphQLMother.createPlanMutation(), "$.data.createPlan", PlanGraphQLMother.fromCommand(command));
 	}
 
 	@Test
-	void shouldFailWhenCreatingPlanWithExistingName() throws Exception {
+	void should_fail_when_creating_plan_with_existing_name() throws Exception {
 		CreatePlanCommand command = CreatePlanCommandMother.random();
 
 		assertResponse(PlanGraphQLMother.createPlanMutation(), "$.data.createPlan", PlanGraphQLMother.fromCommand(command));
@@ -31,21 +30,6 @@ class PlanCreateDataFetcherShould extends ApplicationTestCase {
 			PlanGraphQLMother.fromCommand(command),
 			String.format("The plan with name %s already exists", command.name()),
 			Map.of("code", "E409", "reason", "name", "value", command.name())
-		);
-	}
-
-	@Test
-	void shouldFailWhenCreatingPlanWithInvalidPriceMonthly() throws Exception {
-		CreatePlanCommand command = CreatePlanCommandMother.random();
-
-		Map<String, Object> invalidInput = new HashMap<>(PlanGraphQLMother.fromCommand(command));
-		invalidInput.put("priceMonthly", -1);
-
-		assertErrorResponse(
-			PlanGraphQLMother.createPlanMutation(),
-			invalidInput,
-			"Field priceMonthly must be less than or equal to 0",
-			Map.of("field", "priceMonthly")
 		);
 	}
 }

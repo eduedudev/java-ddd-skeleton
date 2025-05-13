@@ -30,8 +30,6 @@ public final class PlanCreateDataFetcher extends GraphQLApiController {
 	private final Map<String, String> rules = Map.ofEntries(
 		Map.entry("name", "required|not_empty|max:255|min:3"),
 		Map.entry("description", "required|not_empty|max:255"),
-		Map.entry("priceMonthly", "required|not_empty|double|min:0"),
-		Map.entry("priceYearly", "required|not_empty|double|min:0"),
 		Map.entry("maxUsers", "required|not_empty|integer|min:1"),
 		Map.entry("maxRoles", "required|not_empty|integer|min:1"),
 		Map.entry("maxAccounts", "required|not_empty|integer|min:1"),
@@ -72,8 +70,6 @@ public final class PlanCreateDataFetcher extends GraphQLApiController {
 				new PlanId(uuid).value(),
 				request.name(),
 				request.description(),
-				request.priceMonthly(),
-				request.priceYearly(),
 				request.maxUsers(),
 				request.maxRoles(),
 				request.maxAccounts(),

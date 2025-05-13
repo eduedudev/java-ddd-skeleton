@@ -36,7 +36,7 @@ final class SearchPlanQueryHandlerShould extends PlanModuleUnitTestCase {
 	}
 
 	@Test
-	void shouldFilterByStatusActive() {
+	void should_filter_by_status_active() {
 		Filter filter = new Filter(new FilterField("status"), FilterOperator.EQUAL, new FilterValue("ACTIVE"));
 		SearchPlanQuery query = new SearchPlanQuery(List.of(filter), null, null, Pagination.defaults());
 		when(repository.matching(any())).thenReturn(List.of());
@@ -51,7 +51,7 @@ final class SearchPlanQueryHandlerShould extends PlanModuleUnitTestCase {
 	}
 
 	@Test
-	void shouldApplyPagination() {
+	void should_apply_pagination() {
 		Pagination pagination = new Pagination(10, 20);
 		SearchPlanQuery query = new SearchPlanQuery(List.of(), null, null, pagination);
 		when(repository.matching(any())).thenReturn(List.of());
@@ -64,7 +64,7 @@ final class SearchPlanQueryHandlerShould extends PlanModuleUnitTestCase {
 	}
 
 	@Test
-	void shouldOrderByNameDesc() {
+	void should_order_by_name_desc() {
 		SearchPlanQuery query = new SearchPlanQuery(List.of(), "name", "desc", Pagination.defaults());
 		when(repository.matching(any())).thenReturn(List.of());
 		handler.handle(query);
@@ -73,7 +73,7 @@ final class SearchPlanQueryHandlerShould extends PlanModuleUnitTestCase {
 	}
 
 	@Test
-	void shouldReturnAllPlans_IgnoringFilter() {
+	void should_return_all_plans_ignoring_filter() {
 		List<Plan> mockPlans = Stream
 			.concat(
 				IntStream.range(0, 10).mapToObj(i -> PlanMother.createWithStatus(PlanStatus.status.ACTIVE.toString())),

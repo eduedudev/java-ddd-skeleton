@@ -23,8 +23,6 @@ public final class PlanUpdater {
 		PlanId id,
 		PlanName name,
 		PlanDescription description,
-		PlanPriceMonthly priceMonthly,
-		PlanPriceYearly priceYearly,
 		PlanMaxUsers maxUsers,
 		PlanMaxRoles maxRoles,
 		PlanMaxAccounts maxAccounts,
@@ -42,8 +40,6 @@ public final class PlanUpdater {
 		Plan updatedPlan = plan.update(
 			name,
 			description,
-			priceMonthly,
-			priceYearly,
 			maxUsers,
 			maxRoles,
 			maxAccounts,

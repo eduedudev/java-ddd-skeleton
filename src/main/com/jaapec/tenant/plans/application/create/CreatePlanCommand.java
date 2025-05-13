@@ -6,8 +6,6 @@ public record CreatePlanCommand(
 	String id,
 	String name,
 	String description,
-	double priceMonthly,
-	double priceYearly,
 	int maxUsers,
 	int maxRoles,
 	int maxAccounts,

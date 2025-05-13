@@ -1,0 +1,32 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.jaapec.tenant.plans.domain.PlanPrice" table="prices">
+        <composite-id name="id" class="com.jaapec.tenant.plans.domain.value_objects.PlanPriceId" access="field">
+            <key-property column="id" name="value" access="field" type="string" length="255"/>
+        </composite-id>
+        <component name="billingInterval" class="com.jaapec.tenant.plans.domain.value_objects.BillingInterval"
+                   access="field">
+            <property name="value" column="billing_interval" length="255" access="field" not-null="true"/>
+        </component>
+        <component name="amount" class="com.jaapec.tenant.plans.domain.value_objects.Amount" access="field">
+            <property name="value" column="amount" length="255" access="field" not-null="true"/>
+        </component>
+        <component name="currency" class="com.jaapec.tenant.plans.domain.value_objects.Currency" access="field">
+            <property name="value" column="currency" length="255" access="field" not-null="true"/>
+        </component>
+        <component name="createdAt" class="com.jaapec.tenant.plans.domain.value_objects.PlanPriceCreatedAt"
+                   access="field">
+            <property name="value" column="created_at" length="255" access="field" not-null="true"/>
+        </component>
+        <component name="updatedAt" class="com.jaapec.tenant.plans.domain.value_objects.PlanPriceUpdatedAt"
+                   access="field">
+            <property name="value" column="updated_at" length="255" access="field" not-null="true"/>
+        </component>
+        <many-to-one name="plan" class="com.jaapec.tenant.plans.domain.Plan" fetch="join" lazy="false" access="field">
+            <column name="plan_id" not-null="true"/>
+        </many-to-one>
+    </class>
+</hibernate-mapping>

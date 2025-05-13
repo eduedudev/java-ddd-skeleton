@@ -30,8 +30,6 @@ class PlanUpdateShould extends ApplicationTestCase {
 		variables.put("id", command.id());
 		variables.put("name", command.name());
 		variables.put("description", command.description());
-		variables.put("priceMonthly", command.priceMonthly());
-		variables.put("priceYearly", command.priceYearly());
 		variables.put("maxUsers", command.maxUsers());
 		variables.put("maxRoles", command.maxRoles());
 		variables.put("maxAccounts", command.maxAccounts());
@@ -50,8 +48,6 @@ class PlanUpdateShould extends ApplicationTestCase {
 			plan.id().value(),
 			"Updated Name",
 			"Updated Description",
-			199.99,
-			1999.99,
 			50,
 			10,
 			25,
@@ -75,8 +71,6 @@ class PlanUpdateShould extends ApplicationTestCase {
 
 		assertEquals("Updated Name", updatedPlan.name());
 		assertEquals("Updated Description", updatedPlan.description());
-		assertEquals(199.99, updatedPlan.priceMonthly());
-		assertEquals(1999.99, updatedPlan.priceYearly());
 		assertEquals(50, updatedPlan.maxUsers());
 		assertEquals(10, updatedPlan.maxRoles());
 		assertEquals(25, updatedPlan.maxAccounts());
@@ -92,8 +86,6 @@ class PlanUpdateShould extends ApplicationTestCase {
 			null, // Missing id
 			"Name",
 			"Description",
-			99.99,
-			999.99,
 			10,
 			5,
 			20,
@@ -120,8 +112,6 @@ class PlanUpdateShould extends ApplicationTestCase {
 			PlanIdMother.random().value(), // Non-existing plan id
 			"Non-Existent Plan",
 			"Description for non-existent plan",
-			99.99,
-			999.99,
 			10,
 			5,
 			20,
@@ -152,8 +142,6 @@ class PlanUpdateShould extends ApplicationTestCase {
 			plan.id().value(),
 			plan1.name().value(),
 			"Updated Description",
-			199.99,
-			1999.99,
 			50,
 			10,
 			25,

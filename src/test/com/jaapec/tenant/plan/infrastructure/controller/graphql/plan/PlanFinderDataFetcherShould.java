@@ -40,8 +40,6 @@ class PlanFinderDataFetcherShould extends ApplicationTestCase {
 			.hasFieldOrPropertyWithValue("id", plan.id().value())
 			.hasFieldOrPropertyWithValue("name", plan.name().value())
 			.hasFieldOrPropertyWithValue("description", plan.description().value())
-			.hasFieldOrPropertyWithValue("priceMonthly", plan.priceMonthly().value().doubleValue())
-			.hasFieldOrPropertyWithValue("priceYearly", plan.priceYearly().value().doubleValue())
 			.hasFieldOrPropertyWithValue("maxUsers", plan.maxUsers().value())
 			.hasFieldOrPropertyWithValue("maxRoles", plan.maxRoles().value())
 			.hasFieldOrPropertyWithValue("maxAccounts", plan.maxAccounts().value())

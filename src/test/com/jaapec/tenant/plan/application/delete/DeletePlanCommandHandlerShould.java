@@ -67,7 +67,7 @@ class DeletePlanCommandHandlerShould extends PlanModuleUnitTestCase {
 	}
 
 	@Test
-	void notDeleteAPlanIfDoesNotExist() {
+	void not_delete_a_plan_if_does_not_exist() {
 		String nonExistentPlanId = PlanIdMother.random().value();
 
 		when(repository.find(new PlanId(nonExistentPlanId))).thenReturn(Optional.empty());

@@ -8,11 +8,18 @@ enum PlanVisibility{
     PRIVATE
 }
 
+enum Currency{
+    USD
+}
+
+enum BillingInterval {
+    MONTHLY
+    YEARLY
+}
+
 input RequestPlan {
     name: String!
     description: String!
-    priceMonthly: Float!
-    priceYearly: Float!
     maxUsers: Int!
     maxRoles: Int!
     maxAccounts: Int!
@@ -22,12 +29,26 @@ input RequestPlan {
     trialDays: Int!
 }
 
+input RequestPlanPrice{
+    billingInterval:BillingInterval!
+    amount: Int!
+    currency:Currency!
+}
+
+type PriceResponse{
+    id: String!
+    billingInterval:BillingInterval!
+    amount: Int!
+    currency:Currency!
+    createdAt: String!
+    updatedAt: String!
+}
+
 type PlanResponse {
     id: String!
     name: String!
     description: String!
-    priceMonthly: Float!
-    priceYearly: Float!
+    prices:[PriceResponse]!
     maxUsers: Int!
     maxRoles: Int!
     maxAccounts: Int!
@@ -47,6 +68,7 @@ type PaginatedPlanResponse {
 extend type Mutation {
     createPlan(request: RequestPlan!): Boolean!
     updatePlan(id:ID!,request: RequestPlan!):Boolean!
+    addPlanPrice(id:ID!,request: RequestPlanPrice!):Boolean!
     deletePlan(id:String!):Boolean!
     changeVisibilityPlan(id:String!,request: PlanVisibility!):Boolean!
 }

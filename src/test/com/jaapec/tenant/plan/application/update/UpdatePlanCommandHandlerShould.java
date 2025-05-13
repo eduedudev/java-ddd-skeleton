@@ -61,8 +61,6 @@ final class UpdatePlanCommandHandlerShould extends PlanModuleUnitTestCase {
 		Map<String, Serializable> body = capturedEvent.toPrimitives();
 		assertEquals(command.name(), body.get("name"));
 		assertEquals(command.description(), body.get("description"));
-		assertEquals(Double.toString(command.priceMonthly()), body.get("priceMonthly"));
-		assertEquals(Double.toString(command.priceYearly()), body.get("priceYearly"));
 		assertEquals(Integer.toString(command.maxUsers()), body.get("maxUsers"));
 		assertEquals(Integer.toString(command.maxRoles()), body.get("maxRoles"));
 		assertEquals(Integer.toString(command.maxAccounts()), body.get("maxAccounts"));
@@ -71,8 +69,6 @@ final class UpdatePlanCommandHandlerShould extends PlanModuleUnitTestCase {
 		assertEquals(command.id(), capturedPlan.id().value());
 		assertEquals(command.name(), capturedPlan.name().value());
 		assertEquals(command.description(), capturedPlan.description().value());
-		assertEquals(command.priceMonthly(), Double.parseDouble(capturedPlan.priceMonthly().value().toString()));
-		assertEquals(command.priceYearly(), Double.parseDouble(capturedPlan.priceYearly().value().toString()));
 		assertEquals(command.maxUsers(), capturedPlan.maxUsers().value());
 		assertEquals(command.maxRoles(), capturedPlan.maxRoles().value());
 	}
@@ -84,8 +80,6 @@ final class UpdatePlanCommandHandlerShould extends PlanModuleUnitTestCase {
 			originalPlan.id(),
 			originalPlan.name(),
 			PlanDescriptionMother.create("Description"),
-			originalPlan.priceMonthly(),
-			originalPlan.priceYearly(),
 			originalPlan.maxUsers(),
 			originalPlan.maxRoles(),
 			originalPlan.maxAccounts(),
@@ -106,8 +100,6 @@ final class UpdatePlanCommandHandlerShould extends PlanModuleUnitTestCase {
 		assertEquals(originalPlan.id().value(), capturedPlan.id().value());
 		assertEquals(originalPlan.name().value(), capturedPlan.name().value());
 		assertEquals("Description", capturedPlan.description().value());
-		assertEquals(originalPlan.priceMonthly().value(), capturedPlan.priceMonthly().value());
-		assertEquals(originalPlan.priceYearly().value(), capturedPlan.priceYearly().value());
 		assertEquals(originalPlan.maxUsers().value(), capturedPlan.maxUsers().value());
 		assertEquals(originalPlan.maxRoles().value(), capturedPlan.maxRoles().value());
 		assertEquals(originalPlan.maxAccounts().value(), capturedPlan.maxAccounts().value());

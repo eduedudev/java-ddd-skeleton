@@ -11,8 +11,6 @@ public abstract class PlanDomainEvent extends DomainEvent {
 
 	protected final String name;
 	protected final String description;
-	protected final String priceMonthly;
-	protected final String priceYearly;
 	protected final String maxUsers;
 	protected final String maxRoles;
 	protected final String maxAccounts;
@@ -26,8 +24,6 @@ public abstract class PlanDomainEvent extends DomainEvent {
 	protected PlanDomainEvent(
 		String name,
 		String description,
-		String priceMonthly,
-		String priceYearly,
 		String maxUsers,
 		String maxRoles,
 		String maxAccounts,
@@ -40,8 +36,6 @@ public abstract class PlanDomainEvent extends DomainEvent {
 	) {
 		this.name = name;
 		this.description = description;
-		this.priceMonthly = priceMonthly;
-		this.priceYearly = priceYearly;
 		this.maxUsers = maxUsers;
 		this.maxRoles = maxRoles;
 		this.maxAccounts = maxAccounts;
@@ -57,8 +51,6 @@ public abstract class PlanDomainEvent extends DomainEvent {
 		String aggregateId,
 		String name,
 		String description,
-		String priceMonthly,
-		String priceYearly,
 		String maxUsers,
 		String maxRoles,
 		String maxAccounts,
@@ -72,8 +64,6 @@ public abstract class PlanDomainEvent extends DomainEvent {
 		super(aggregateId);
 		this.name = name;
 		this.description = description;
-		this.priceMonthly = priceMonthly;
-		this.priceYearly = priceYearly;
 		this.maxUsers = maxUsers;
 		this.maxRoles = maxRoles;
 		this.maxAccounts = maxAccounts;
@@ -91,8 +81,6 @@ public abstract class PlanDomainEvent extends DomainEvent {
 		String occurredOn,
 		String name,
 		String description,
-		String priceMonthly,
-		String priceYearly,
 		String maxUsers,
 		String maxRoles,
 		String maxAccounts,
@@ -106,8 +94,6 @@ public abstract class PlanDomainEvent extends DomainEvent {
 		super(aggregateId, eventId, occurredOn);
 		this.name = name;
 		this.description = description;
-		this.priceMonthly = priceMonthly;
-		this.priceYearly = priceYearly;
 		this.maxUsers = maxUsers;
 		this.maxRoles = maxRoles;
 		this.maxAccounts = maxAccounts;
@@ -123,8 +109,6 @@ public abstract class PlanDomainEvent extends DomainEvent {
 		super(null);
 		this.name = null;
 		this.description = null;
-		this.priceMonthly = null;
-		this.priceYearly = null;
 		this.maxUsers = null;
 		this.maxRoles = null;
 		this.maxAccounts = null;
@@ -141,8 +125,6 @@ public abstract class PlanDomainEvent extends DomainEvent {
 		Map<String, Serializable> primitives = new HashMap<>();
 		primitives.put("name", name);
 		primitives.put("description", description);
-		primitives.put("priceMonthly", priceMonthly);
-		primitives.put("priceYearly", priceYearly);
 		primitives.put("maxUsers", maxUsers);
 		primitives.put("maxRoles", maxRoles);
 		primitives.put("maxAccounts", maxAccounts);
@@ -163,8 +145,6 @@ public abstract class PlanDomainEvent extends DomainEvent {
 		return (
 			Objects.equals(name, that.name) &&
 			Objects.equals(description, that.description) &&
-			Objects.equals(priceMonthly, that.priceMonthly) &&
-			Objects.equals(priceYearly, that.priceYearly) &&
 			Objects.equals(maxUsers, that.maxUsers) &&
 			Objects.equals(maxRoles, that.maxRoles) &&
 			Objects.equals(maxAccounts, that.maxAccounts) &&
@@ -179,8 +159,6 @@ public abstract class PlanDomainEvent extends DomainEvent {
 	public int hashCode() {
 		int result = Objects.hashCode(name);
 		result = 31 * result + Objects.hashCode(description);
-		result = 31 * result + Objects.hashCode(priceMonthly);
-		result = 31 * result + Objects.hashCode(priceYearly);
 		result = 31 * result + Objects.hashCode(maxUsers);
 		result = 31 * result + Objects.hashCode(maxRoles);
 		result = 31 * result + Objects.hashCode(maxAccounts);

@@ -1,7 +1,5 @@
 package com.jaapec.tenant.plans.application.create;
 
-import java.math.BigDecimal;
-
 import com.jaapec.tenant.plans.domain.value_objects.*;
 import com.jaapec.tenant.shared.domain.Service;
 import com.jaapec.tenant.shared.domain.bus.command.CommandHandler;
@@ -21,8 +19,6 @@ public final class CreatePlanCommandHandler implements CommandHandler<CreatePlan
 			new PlanId(command.id()),
 			new PlanName(command.name()),
 			new PlanDescription(command.description()),
-			new PlanPriceMonthly(BigDecimal.valueOf(command.priceMonthly())),
-			new PlanPriceYearly(BigDecimal.valueOf(command.priceYearly())),
 			new PlanMaxUsers(command.maxUsers()),
 			new PlanMaxRoles(command.maxRoles()),
 			new PlanMaxAccounts(command.maxAccounts()),

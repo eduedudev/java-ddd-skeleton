@@ -14,14 +14,6 @@
                    access="field">
             <property name="value" column="description" length="255" access="field" not-null="true"/>
         </component>
-        <component name="priceMonthly" class="com.jaapec.tenant.plans.domain.value_objects.PlanPriceMonthly"
-                   access="field">
-            <property name="value" column="price_monthly" length="255" access="field" not-null="true"/>
-        </component>
-        <component name="priceYearly" class="com.jaapec.tenant.plans.domain.value_objects.PlanPriceYearly"
-                   access="field">
-            <property name="value" column="price_yearly" length="255" access="field" not-null="true"/>
-        </component>
         <component name="maxUsers" class="com.jaapec.tenant.plans.domain.value_objects.PlanMaxUsers" access="field">
             <property name="value" column="max_users" length="255" access="field" not-null="true"/>
         </component>
@@ -51,5 +43,10 @@
         <component name="updatedAt" class="com.jaapec.tenant.plans.domain.value_objects.PlanUpdatedAt" access="field">
             <property name="value" column="updated_at" length="255" access="field" not-null="true"/>
         </component>
+        <list name="prices" cascade="all" access="field" fetch="join" lazy="false" inverse="true">
+            <key column="plan_id" not-null="true"/>
+            <list-index column="list_order"/>
+            <one-to-many class="com.jaapec.tenant.plans.domain.PlanPrice"/>
+        </list>
     </class>
 </hibernate-mapping>

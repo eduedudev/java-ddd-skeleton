@@ -10,8 +10,6 @@ public final class PlanCreatedDomainEvent extends PlanDomainEvent {
 	public PlanCreatedDomainEvent(
 		String name,
 		String description,
-		String priceMonthly,
-		String priceYearly,
 		String maxUsers,
 		String maxRoles,
 		String maxAccounts,
@@ -26,8 +24,6 @@ public final class PlanCreatedDomainEvent extends PlanDomainEvent {
 			null,
 			name,
 			description,
-			priceMonthly,
-			priceYearly,
 			maxUsers,
 			maxRoles,
 			maxAccounts,
@@ -44,8 +40,6 @@ public final class PlanCreatedDomainEvent extends PlanDomainEvent {
 		String aggregateId,
 		String name,
 		String description,
-		String priceMonthly,
-		String priceYearly,
 		String maxUsers,
 		String maxRoles,
 		String maxAccounts,
@@ -60,8 +54,6 @@ public final class PlanCreatedDomainEvent extends PlanDomainEvent {
 			aggregateId,
 			name,
 			description,
-			priceMonthly,
-			priceYearly,
 			maxUsers,
 			maxRoles,
 			maxAccounts,
@@ -80,8 +72,6 @@ public final class PlanCreatedDomainEvent extends PlanDomainEvent {
 		String occurredOn,
 		String name,
 		String description,
-		String priceMonthly,
-		String priceYearly,
 		String maxUsers,
 		String maxRoles,
 		String maxAccounts,
@@ -98,8 +88,6 @@ public final class PlanCreatedDomainEvent extends PlanDomainEvent {
 			occurredOn,
 			name,
 			description,
-			priceMonthly,
-			priceYearly,
 			maxUsers,
 			maxRoles,
 			maxAccounts,
@@ -113,7 +101,7 @@ public final class PlanCreatedDomainEvent extends PlanDomainEvent {
 	}
 
 	public PlanCreatedDomainEvent() {
-		super(null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+		super(null, null, null, null, null, null, null, null, null, null, null, null);
 	}
 
 	@Override
@@ -134,8 +122,6 @@ public final class PlanCreatedDomainEvent extends PlanDomainEvent {
 			occurredOn,
 			(String) body.get("name"),
 			(String) body.get("description"),
-			(String) body.get("priceMonthly"),
-			(String) body.get("priceYearly"),
 			(String) body.get("maxUsers"),
 			(String) body.get("maxRoles"),
 			(String) body.get("maxAccounts"),

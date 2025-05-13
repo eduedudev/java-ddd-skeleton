@@ -16,7 +16,7 @@ public final class PlanGraphQLMother {
 				mutation CreatePlan
 				(
 				  $name: String!, $description: String!,\s
-					$priceMonthly: Float!, $priceYearly: Float!, $maxUsers: Int!,
+					$maxUsers: Int!,
 					$maxRoles: Int!, $maxAccounts: Int!, $maxInvoices: Int!,\s
 					$status: PlanStatus!, $visibility: PlanVisibility!, $trialDays: Int!
 				)\s
@@ -24,7 +24,7 @@ public final class PlanGraphQLMother {
 					createPlan(
 				    request: {
 				      name: $name, description: $description,\s
-							priceMonthly: $priceMonthly, priceYearly: $priceYearly, maxUsers: $maxUsers,\s
+							maxUsers: $maxUsers,\s
 							maxRoles: $maxRoles, maxAccounts: $maxAccounts, maxInvoices: $maxInvoices,\s
 							status: $status, visibility: $visibility, trialDays: $trialDays
 				    }
@@ -39,8 +39,6 @@ public final class PlanGraphQLMother {
 		Map<String, Object> variables = new HashMap<>();
 		variables.put("name", command.name());
 		variables.put("description", command.description());
-		variables.put("priceMonthly", command.priceMonthly());
-		variables.put("priceYearly", command.priceYearly());
 		variables.put("maxUsers", command.maxUsers());
 		variables.put("maxRoles", command.maxRoles());
 		variables.put("maxAccounts", command.maxAccounts());
@@ -67,8 +65,12 @@ public final class PlanGraphQLMother {
 			    id,
 			    name,
 			    description,
-			    priceMonthly,
-			    priceYearly,
+			    prices{
+					   id,
+					   amount,
+					   billingInterval,
+					   currency
+				   },
 			    maxUsers,
 			    maxRoles,
 			    maxAccounts,
@@ -121,8 +123,6 @@ public final class PlanGraphQLMother {
 				$id: ID!,
 				$name: String!,\s
 				$description: String!,
-				$priceMonthly: Float!,\s
-				$priceYearly: Float!,\s
 				$maxUsers: Int!,
 				$maxRoles: Int!,\s
 				$maxAccounts: Int!,\s
@@ -136,8 +136,6 @@ public final class PlanGraphQLMother {
 				  request: {
 					name: $name,\s
 					description: $description,
-					priceMonthly: $priceMonthly,\s
-					priceYearly: $priceYearly,\s
 					maxUsers: $maxUsers,
 					maxRoles: $maxRoles,\s
 					maxAccounts: $maxAccounts,\s
@@ -151,6 +149,30 @@ public final class PlanGraphQLMother {
 
 		""";
 		return updatePlanMutation;
+	}
+
+	public static String addPlanPriceMutation() {
+		@Language("GraphQL")
+		String addPlanPriceMutation =
+			"""
+			mutation AddPlanPrice(
+				$id: ID!,
+				$billingInterval: BillingInterval!,\s
+				$amount: Int!,
+				$currency: Currency!,
+			  ) {
+				addPlanPrice(
+				  id: $id,
+				  request: {
+					billingInterval: $billingInterval,\s
+					amount: $amount,
+					currency: $currency
+				  }
+				)
+			  }
+
+		""";
+		return addPlanPriceMutation;
 	}
 
 	public static String deletePlanMutation() {

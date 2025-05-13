@@ -33,8 +33,6 @@ class MariaDBPlanRepositoryShould extends PlanModuleInfrastructureTestCase {
 		assertEquals(plan.id(), foundPlan.get().id());
 		assertEquals(plan.name(), foundPlan.get().name());
 		assertEquals(plan.description(), foundPlan.get().description());
-		assertEquals(plan.priceMonthly(), foundPlan.get().priceMonthly());
-		assertEquals(plan.priceYearly(), foundPlan.get().priceYearly());
 		assertEquals(plan.maxUsers(), foundPlan.get().maxUsers());
 		assertEquals(plan.maxRoles(), foundPlan.get().maxRoles());
 		assertEquals(plan.maxAccounts(), foundPlan.get().maxAccounts());

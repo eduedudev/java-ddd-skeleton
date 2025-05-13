@@ -1,5 +1,7 @@
 package com.jaapec.tenant.plans.application;
 
+import java.util.List;
+
 import com.jaapec.tenant.plans.domain.Plan;
 import com.jaapec.tenant.shared.domain.bus.query.Response;
 
@@ -7,8 +9,7 @@ public record PlanResponse(
 	String id,
 	String name,
 	String description,
-	double priceMonthly,
-	double priceYearly,
+	List<PriceResponse> prices,
 	int maxUsers,
 	int maxRoles,
 	int maxAccounts,
@@ -21,12 +22,25 @@ public record PlanResponse(
 )
 	implements Response {
 	public static PlanResponse fromAggregate(Plan plan) {
+		List<PriceResponse> prices = plan
+			.prices()
+			.stream()
+			.map(price ->
+				PriceResponse.fromAggregate(
+					price.id().value(),
+					price.billingInterval().value(),
+					price.amount().value(),
+					price.currency().value(),
+					price.createdAt().value(),
+					price.updatedAt().value()
+				)
+			)
+			.toList();
 		return new PlanResponse(
 			plan.id().value(),
 			plan.name().value(),
 			plan.description().value(),
-			plan.priceMonthly().value().doubleValue(),
-			plan.priceYearly().value().doubleValue(),
+			prices,
 			plan.maxUsers().value(),
 			plan.maxRoles().value(),
 			plan.maxAccounts().value(),

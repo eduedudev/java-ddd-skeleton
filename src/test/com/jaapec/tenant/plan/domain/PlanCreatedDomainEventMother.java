@@ -3,7 +3,7 @@ package com.jaapec.tenant.plan.domain;
 import com.jaapec.tenant.plans.domain.Plan;
 import com.jaapec.tenant.plans.domain.events.PlanCreatedDomainEvent;
 import com.jaapec.tenant.plans.domain.value_objects.*;
-import com.jaapec.tenant.shared.domain.CurrentDate;
+import com.jaapec.tenant.shared.domain.DateUtils;
 
 public final class PlanCreatedDomainEventMother {
 
@@ -55,7 +55,7 @@ public final class PlanCreatedDomainEventMother {
 	}
 
 	public static PlanCreatedDomainEvent random() {
-		final String now = CurrentDate.now();
+		final String now = DateUtils.nowAsString();
 		return create(
 			PlanIdMother.random(),
 			PlanNameMother.random(),

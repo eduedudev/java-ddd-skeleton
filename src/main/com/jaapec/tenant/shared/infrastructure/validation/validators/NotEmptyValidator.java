@@ -17,7 +17,8 @@ public final class NotEmptyValidator implements FieldValidator {
 		@Nullable Repository repository,
 		@Nullable String rule
 	) {
-		return fields.get(fieldName) != null && !fields.get(fieldName).toString().isEmpty();
+		Serializable fieldValue = fields.get(fieldName);
+		return fieldValue == null || !fieldValue.toString().isEmpty();
 	}
 
 	@Override

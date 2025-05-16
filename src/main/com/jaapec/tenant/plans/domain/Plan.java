@@ -10,7 +10,7 @@ import com.jaapec.tenant.plans.domain.events.PlanCreatedDomainEvent;
 import com.jaapec.tenant.plans.domain.events.PlanUpdatedDomainEvent;
 import com.jaapec.tenant.plans.domain.value_objects.*;
 import com.jaapec.tenant.shared.domain.AggregateRoot;
-import com.jaapec.tenant.shared.domain.CurrentDate;
+import com.jaapec.tenant.shared.domain.DateUtils;
 
 public final class Plan extends AggregateRoot {
 
@@ -138,7 +138,7 @@ public final class Plan extends AggregateRoot {
 		PlanVisibility visibility,
 		PlanTrialDays trialDays
 	) {
-		String now = CurrentDate.now();
+		String now = DateUtils.nowAsString();
 		Plan plan = new Plan(
 			id,
 			name,
@@ -184,7 +184,7 @@ public final class Plan extends AggregateRoot {
 		PlanVisibility visibility,
 		PlanTrialDays trialDays
 	) {
-		String now = CurrentDate.now();
+		String now = DateUtils.nowAsString();
 		Plan plan = new Plan(
 			this.id,
 			name,
@@ -220,7 +220,7 @@ public final class Plan extends AggregateRoot {
 	}
 
 	public Plan changeVisibility(PlanVisibility visibility) {
-		String now = CurrentDate.now();
+		String now = DateUtils.nowAsString();
 		Plan updatedPlan = new Plan(
 			this.id,
 			this.name,
@@ -247,7 +247,7 @@ public final class Plan extends AggregateRoot {
 	}
 
 	public Plan addPrice(PlanPriceId id, BillingInterval billingInterval, Amount amount, Currency currency) {
-		String now = CurrentDate.now();
+		String now = DateUtils.nowAsString();
 		List<PlanPrice> newPrices = new ArrayList<>(Optional.ofNullable(this.prices).map(List::copyOf).orElseGet(List::of));
 		PlanPrice newPrice = new PlanPrice(
 			id,

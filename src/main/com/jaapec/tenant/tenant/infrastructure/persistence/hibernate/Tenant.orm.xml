@@ -30,5 +30,10 @@
         <component name="updatedAt" class="com.jaapec.tenant.tenant.domain.TenantUpdatedAt" access="field">
             <property name="value" column="updated_at" length="255" access="field" not-null="true"/>
         </component>
+        <list name="subscriptions" cascade="all" access="field" fetch="join" lazy="false" inverse="true">
+            <key column="tenant_id" not-null="false"/>
+            <list-index column="list_order"/>
+            <one-to-many class="com.jaapec.tenant.subscription.domain.TenantPlanSubscription"/>
+        </list>
     </class>
 </hibernate-mapping>

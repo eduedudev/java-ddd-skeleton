@@ -5,6 +5,15 @@ input RequestDomainInput{
     domain: String!
 }
 
+input RequestSubscription{
+    planId: String!,
+    billingInterval: BillingInterval!,
+    pricing: Int!,
+    currency: Currency!,
+    coupon: String,
+    autoRenew: Boolean!
+}
+
 type TenantResponse {
     id: String!
     name: String!
@@ -29,6 +38,7 @@ extend type Mutation {
     createTenant(request: RequestTenant!): Boolean!
     updateTenant(id:ID!, request:RequestTenant!):Boolean!
     changeDomain(id:ID!, request:RequestDomainInput!):Boolean!
+    addSubscription(id:ID!,request: RequestSubscription!):Boolean!
 }
 
 extend type Query {

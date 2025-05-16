@@ -1,4 +1,4 @@
-package com.jaapec.tenant.subcriptions.domain;
+package com.jaapec.tenant.subscription.domain;
 
 import java.util.Objects;
 
@@ -8,6 +8,14 @@ public final class SubscriptionPaymentStatus {
 
 	public SubscriptionPaymentStatus(String value) {
 		this.value = value;
+	}
+
+	public SubscriptionPaymentStatus() {
+		this.value = null;
+	}
+
+	public boolean isPending() {
+		return SubscriptionPaymentStatus.status.PENDING.equals(SubscriptionPaymentStatus.status.valueOf(value));
 	}
 
 	public enum status {

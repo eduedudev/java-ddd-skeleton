@@ -3,6 +3,7 @@ package com.jaapec.tenant.shared.domain.value_objects;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public abstract class DateTimeValueObject {
@@ -30,6 +31,10 @@ public abstract class DateTimeValueObject {
 		}
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSSSS");
 		return dateFormat.format(dateTime);
+	}
+
+	public LocalDateTime valueAsDateTime() {
+		return (value != null) ? value.toLocalDateTime() : null;
 	}
 
 	public static Timestamp currentDateTime() {

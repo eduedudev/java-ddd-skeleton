@@ -23,6 +23,14 @@ public abstract class DomainError extends RuntimeException {
 		this.value = value;
 	}
 
+	protected DomainError(String errorCode, Message errorMessage) {
+		super(errorMessage.messageKey());
+		this.errorCode = errorCode;
+		this.errorMessage = errorMessage;
+		this.reason = null;
+		this.value = null;
+	}
+
 	public String errorCode() {
 		return errorCode;
 	}

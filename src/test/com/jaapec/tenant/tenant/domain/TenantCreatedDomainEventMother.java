@@ -1,6 +1,6 @@
 package com.jaapec.tenant.tenant.domain;
 
-import com.jaapec.tenant.shared.domain.CurrentDate;
+import com.jaapec.tenant.shared.domain.DateUtils;
 import com.jaapec.tenant.tenant.domain.events.TenantCreatedDomainEvent;
 
 public final class TenantCreatedDomainEventMother {
@@ -22,13 +22,11 @@ public final class TenantCreatedDomainEventMother {
 	}
 
 	public static TenantCreatedDomainEvent fromTenant(Tenant tenant) {
-		System.out.println(tenant.createdAt().toString());
-		System.out.println(tenant.updatedAt().toString());
 		return create(tenant.id(), tenant.name(), tenant.ownerId(), tenant.createdAt(), tenant.updatedAt());
 	}
 
 	public static TenantCreatedDomainEvent random() {
-		final String now = CurrentDate.now();
+		final String now = DateUtils.nowAsString();
 		return create(
 			TenantIdMother.random(),
 			TenantNameMother.random(),

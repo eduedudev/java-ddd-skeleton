@@ -1,0 +1,67 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="com.jaapec.tenant.subscription.domain.TenantPlanSubscription" table="subscriptions">
+        <composite-id name="id" class="com.jaapec.tenant.subscription.domain.SubscriptionId" access="field">
+            <key-property column="id" name="value" access="field" type="string" length="255"/>
+        </composite-id>
+        <component name="billingInterval" class="com.jaapec.tenant.plans.domain.value_objects.BillingInterval" access="field">
+            <property name="value" column="billing_interval"  access="field" not-null="true"/>
+        </component>
+        <component name="status" class="com.jaapec.tenant.subscription.domain.SubscriptionStatus" access="field">
+            <property name="value" column="status" length="255" access="field" not-null="true"/>
+        </component>
+        <component name="dateSubscribed" class="com.jaapec.tenant.subscription.domain.SubscriptionDateSubscribed"
+                   access="field">
+            <property name="value" column="date_subscribed" length="255" access="field" not-null="false"/>
+        </component>
+        <component name="initDate" class="com.jaapec.tenant.subscription.domain.SubscriptionInitDate" access="field">
+            <property name="value" column="init_date" length="255" access="field" not-null="false"/>
+        </component>
+        <component name="expirationDate" class="com.jaapec.tenant.subscription.domain.SubscriptionExpirationDate"
+                   access="field">
+            <property name="value" column="expiration_date" length="255" access="field" not-null="false"/>
+        </component>
+        <component name="pricing" class="com.jaapec.tenant.subscription.domain.SubscriptionPricing" access="field">
+            <property name="value" column="pricing" length="255" access="field" not-null="true"/>
+        </component>
+        <component name="currency" class="com.jaapec.tenant.plans.domain.value_objects.Currency" access="field">
+            <property name="value" column="currency" length="255" access="field" not-null="true"/>
+        </component>
+        <component name="coupon" class="com.jaapec.tenant.subscription.domain.SubscriptionCoupon" access="field">
+            <property name="value" column="coupon" length="255" access="field" not-null="false"/>
+        </component>
+        <component name="source" class="com.jaapec.tenant.subscription.domain.SubscriptionSource" access="field">
+            <property name="value" column="source" length="255" access="field" not-null="true"/>
+        </component>
+        <component name="paymentStatus" class="com.jaapec.tenant.subscription.domain.SubscriptionPaymentStatus"
+                   access="field">
+            <property name="value" column="payment_status" length="255" access="field" not-null="true"/>
+        </component>
+        <component name="paymentMethod" class="com.jaapec.tenant.subscription.domain.SubscriptionPaymentMethod"
+                   access="field">
+            <property name="value" column="payment_method" length="255" access="field" not-null="false"/>
+        </component>
+        <component name="paymentReference" class="com.jaapec.tenant.subscription.domain.SubscriptionPaymentReference"
+                   access="field">
+            <property name="value" column="payment_reference" length="255" access="field" not-null="false"/>
+        </component>
+        <component name="autoRenew" class="com.jaapec.tenant.subscription.domain.SubscriptionAutoRenew" access="field">
+            <property name="value" column="auto_renew" length="255" access="field" not-null="true"/>
+        </component>
+        <component name="createdAt" class="com.jaapec.tenant.subscription.domain.SubscriptionCreateAt" access="field">
+            <property name="value" column="created_at" length="255" access="field" not-null="true"/>
+        </component>
+        <component name="updatedAt" class="com.jaapec.tenant.subscription.domain.SubscriptionUpdateAt" access="field">
+            <property name="value" column="updated_at" length="255" access="field" not-null="true"/>
+        </component>
+        <many-to-one name="plan" class="com.jaapec.tenant.plans.domain.Plan" fetch="join" lazy="false" access="field">
+            <column name="plan_id" not-null="true"/>
+        </many-to-one>
+        <many-to-one name="tenant" class="com.jaapec.tenant.tenant.domain.Tenant" fetch="join" lazy="false" access="field">
+            <column name="tenant_id" not-null="true"/>
+        </many-to-one>
+    </class>
+</hibernate-mapping>

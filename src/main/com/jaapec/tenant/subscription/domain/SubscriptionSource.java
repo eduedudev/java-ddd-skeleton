@@ -1,33 +1,33 @@
-package com.jaapec.tenant.plans.domain.value_objects;
+package com.jaapec.tenant.subscription.domain;
 
 import java.util.Objects;
 
-public final class PlanStatus {
+public final class SubscriptionSource {
 
 	private final String value;
 
-	public PlanStatus(String value) {
+	public SubscriptionSource(String value) {
 		this.value = value;
 	}
 
-	public PlanStatus() {
+	public SubscriptionSource() {
 		this.value = null;
 	}
 
 	public String value() {
-		return PlanStatus.status.valueOf(value).toString();
+		return SubscriptionSource.source.valueOf(value).toString();
 	}
 
-	public enum status {
-		ACTIVE,
-		INACTIVE,
+	public enum source {
+		BACKOFFICE,
+		SELF_SERVICE,
 	}
 
 	@Override
 	public boolean equals(Object o) {
 		if (o == null || getClass() != o.getClass()) return false;
 
-		final PlanStatus that = (PlanStatus) o;
+		SubscriptionSource that = (SubscriptionSource) o;
 		return Objects.equals(value, that.value);
 	}
 

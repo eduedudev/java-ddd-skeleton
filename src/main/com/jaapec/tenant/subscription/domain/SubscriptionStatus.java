@@ -1,4 +1,4 @@
-package com.jaapec.tenant.subcriptions.domain;
+package com.jaapec.tenant.subscription.domain;
 
 import java.util.Objects;
 
@@ -14,9 +14,18 @@ public final class SubscriptionStatus {
 		this.value = null;
 	}
 
+	public boolean isActive() {
+		return SubscriptionStatus.status.ACTIVE.equals(SubscriptionStatus.status.valueOf(value));
+	}
+
+	public boolean isExpired() {
+		return SubscriptionStatus.status.EXPIRED.equals(SubscriptionStatus.status.valueOf(value));
+	}
+
 	public enum status {
 		ACTIVE,
 		INACTIVE,
+		EXPIRED,
 	}
 
 	public String value() {

@@ -3,7 +3,7 @@ package com.jaapec.tenant.plans.domain;
 import java.util.Objects;
 
 import com.jaapec.tenant.plans.domain.value_objects.*;
-import com.jaapec.tenant.shared.domain.CurrentDate;
+import com.jaapec.tenant.shared.domain.DateUtils;
 
 public final class PlanPrice {
 
@@ -72,7 +72,7 @@ public final class PlanPrice {
 	}
 
 	public static PlanPrice create(PlanPriceId id, BillingInterval billingInterval, Amount amount, Currency currency) {
-		String now = CurrentDate.now();
+		String now = DateUtils.nowAsString();
 		return new PlanPrice(
 			id,
 			billingInterval,

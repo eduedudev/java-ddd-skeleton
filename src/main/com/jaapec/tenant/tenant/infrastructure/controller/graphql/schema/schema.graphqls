@@ -39,6 +39,7 @@ extend type Mutation {
     updateTenant(id:ID!, request:RequestTenant!):Boolean!
     changeDomain(id:ID!, request:RequestDomainInput!):Boolean!
     addSubscription(id:ID!,request: RequestSubscription!):Boolean!
+    cancelAutoRenew(tenantId:ID!,subscriptionId:ID!):Boolean!
 }
 
 extend type Query {

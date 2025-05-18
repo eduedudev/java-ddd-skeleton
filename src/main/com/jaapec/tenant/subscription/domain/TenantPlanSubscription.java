@@ -92,75 +92,6 @@ public final class TenantPlanSubscription {
 		this.updatedAt = null;
 	}
 
-	public static TenantPlanSubscription create(
-		SubscriptionId subscriptionId,
-		Tenant tenant,
-		Plan plan,
-		BillingInterval interval,
-		SubscriptionPricing pricing,
-		Currency currency,
-		SubscriptionCoupon coupon,
-		SubscriptionSource source,
-		SubscriptionAutoRenew autoRenew
-	) {
-		String now = DateUtils.nowAsString();
-		return new TenantPlanSubscription(
-			subscriptionId,
-			tenant,
-			plan,
-			interval,
-			new SubscriptionStatus(SubscriptionStatus.status.INACTIVE.name()),
-			null,
-			null,
-			null,
-			pricing,
-			currency,
-			coupon,
-			source,
-			new SubscriptionPaymentStatus(SubscriptionPaymentStatus.status.PENDING.name()),
-			null,
-			null,
-			autoRenew,
-			new SubscriptionCreateAt(now),
-			new SubscriptionUpdateAt(now)
-		);
-	}
-
-	public TenantPlanSubscription makePayment(
-		SubscriptionPaymentMethod paymentMethod,
-		SubscriptionPaymentReference paymentReference,
-		SubscriptionInitDate startDate
-	) {
-		String now = DateUtils.nowAsString();
-		LocalDateTime startDateTime = startDate.valueAsDateTime();
-
-		LocalDateTime expirationDateTime = BillingIntervalHelper.calculateExpiration(
-			startDateTime,
-			Objects.requireNonNull(this.billingInterval)
-		);
-		String formattedDateTime = expirationDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-		return new TenantPlanSubscription(
-			this.id,
-			this.tenant,
-			this.plan,
-			this.billingInterval,
-			new SubscriptionStatus(SubscriptionStatus.status.ACTIVE.name()),
-			new SubscriptionDateSubscribed(now),
-			startDate,
-			new SubscriptionExpirationDate(formattedDateTime),
-			this.pricing,
-			this.currency,
-			this.coupon,
-			this.source,
-			new SubscriptionPaymentStatus(SubscriptionPaymentStatus.status.PAID.toString()),
-			paymentMethod,
-			paymentReference,
-			this.autoRenew,
-			this.createdAt,
-			new SubscriptionUpdateAt(now)
-		);
-	}
-
 	public SubscriptionId id() {
 		return id;
 	}
@@ -231,6 +162,100 @@ public final class TenantPlanSubscription {
 
 	public SubscriptionUpdateAt updatedAt() {
 		return updatedAt;
+	}
+
+	public static TenantPlanSubscription create(
+		SubscriptionId subscriptionId,
+		Tenant tenant,
+		Plan plan,
+		BillingInterval interval,
+		SubscriptionPricing pricing,
+		Currency currency,
+		SubscriptionCoupon coupon,
+		SubscriptionSource source,
+		SubscriptionAutoRenew autoRenew
+	) {
+		String now = DateUtils.nowAsString();
+		return new TenantPlanSubscription(
+			subscriptionId,
+			tenant,
+			plan,
+			interval,
+			new SubscriptionStatus(SubscriptionStatus.status.INACTIVE.name()),
+			null,
+			null,
+			null,
+			pricing,
+			currency,
+			coupon,
+			source,
+			new SubscriptionPaymentStatus(SubscriptionPaymentStatus.status.PENDING.name()),
+			null,
+			null,
+			autoRenew,
+			new SubscriptionCreateAt(now),
+			new SubscriptionUpdateAt(now)
+		);
+	}
+
+	public TenantPlanSubscription makePayment(
+		SubscriptionPaymentMethod paymentMethod,
+		SubscriptionPaymentReference paymentReference,
+		SubscriptionInitDate startDate
+	) {
+		String now = DateUtils.nowAsString();
+		LocalDateTime startDateTime = startDate.valueAsDateTime();
+
+		LocalDateTime expirationDateTime = BillingIntervalHelper.calculateExpiration(
+			startDateTime,
+			Objects.requireNonNull(this.billingInterval)
+		);
+		String formattedDateTime = expirationDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+		return new TenantPlanSubscription(
+			this.id,
+			this.tenant,
+			this.plan,
+			this.billingInterval,
+			new SubscriptionStatus(SubscriptionStatus.status.ACTIVE.name()),
+			new SubscriptionDateSubscribed(now),
+			startDate,
+			new SubscriptionExpirationDate(formattedDateTime),
+			this.pricing,
+			this.currency,
+			this.coupon,
+			this.source,
+			new SubscriptionPaymentStatus(SubscriptionPaymentStatus.status.PAID.toString()),
+			paymentMethod,
+			paymentReference,
+			this.autoRenew,
+			this.createdAt,
+			new SubscriptionUpdateAt(now)
+		);
+	}
+
+	public TenantPlanSubscription cancelAutoRenew() {
+		if (!this.isActive()) throw new SubscriptionIsInactiveException();
+		String now = DateUtils.nowAsString();
+		return new TenantPlanSubscription(
+			this.id,
+			this.tenant,
+			this.plan,
+			this.billingInterval,
+			this.status,
+			this.dateSubscribed,
+			this.initDate,
+			this.expirationDate,
+			this.pricing,
+			this.currency,
+			this.coupon,
+			this.source,
+			this.paymentStatus,
+			this.paymentMethod,
+			this.paymentReference,
+			new SubscriptionAutoRenew(false),
+			this.createdAt,
+			new SubscriptionUpdateAt(now)
+		);
 	}
 
 	private static class BillingIntervalHelper {

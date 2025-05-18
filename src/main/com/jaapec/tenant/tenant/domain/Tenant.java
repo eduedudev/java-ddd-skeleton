@@ -14,10 +14,7 @@ import com.jaapec.tenant.plans.domain.value_objects.Currency;
 import com.jaapec.tenant.shared.domain.AggregateRoot;
 import com.jaapec.tenant.shared.domain.DateUtils;
 import com.jaapec.tenant.subscription.domain.*;
-import com.jaapec.tenant.tenant.domain.events.TenantChangedStatusDomainEvent;
-import com.jaapec.tenant.tenant.domain.events.TenantCreatedDomainEvent;
-import com.jaapec.tenant.tenant.domain.events.TenantDomainChangedEvent;
-import com.jaapec.tenant.tenant.domain.events.TenantUpdatedDomainEvent;
+import com.jaapec.tenant.tenant.domain.events.*;
 
 public final class Tenant extends AggregateRoot {
 
@@ -233,7 +230,7 @@ public final class Tenant extends AggregateRoot {
 			.concat(Optional.ofNullable(this.subscriptions).orElse(List.of()).stream(), Stream.of(subscription))
 			.toList();
 
-		return new Tenant(
+		Tenant tenantWithSubscription = new Tenant(
 			this.id,
 			this.name,
 			this.status,
@@ -245,6 +242,17 @@ public final class Tenant extends AggregateRoot {
 			this.createdAt,
 			new TenantUpdatedAt(now)
 		);
+		tenantWithSubscription.record(
+			new TenantSubscribeToPlanEvent(
+				Objects.requireNonNull(this.id).value(),
+				subscriptionId.value(),
+				plan.id().value(),
+				interval.value(),
+				pricing.value(),
+				currency.value()
+			)
+		);
+		return tenantWithSubscription;
 	}
 
 	public Tenant activateSubscription(
@@ -305,6 +313,49 @@ public final class Tenant extends AggregateRoot {
 			this.createdAt,
 			new TenantUpdatedAt(DateUtils.nowAsString())
 		);
+	}
+
+	public Tenant cancelAutoRenew(SubscriptionId subscriptionId) {
+		List<TenantPlanSubscription> updatedSubscriptions = Optional
+			.ofNullable(this.subscriptions)
+			.orElseThrow(SubscriptionNotFound::new)
+			.stream()
+			.map(subscription -> {
+				if (subscription.id().equals(subscriptionId)) {
+					return subscription.cancelAutoRenew();
+				}
+				return subscription;
+			})
+			.toList();
+
+		TenantPlanSubscription modifiedSubscription = updatedSubscriptions
+			.stream()
+			.filter(subscription -> subscription.id().equals(subscriptionId))
+			.findFirst()
+			.orElseThrow(SubscriptionNotFound::new);
+
+		Tenant tenant = new Tenant(
+			this.id,
+			this.name,
+			this.status,
+			updatedSubscriptions,
+			this.activeSubscriptionId,
+			this.domain,
+			this.domainVerified,
+			this.ownerId,
+			this.createdAt,
+			new TenantUpdatedAt(DateUtils.nowAsString())
+		);
+		tenant.record(
+			new TenantSubscriptionAutoRenewCanceledEvent(
+				Objects.requireNonNull(this.id).value(),
+				modifiedSubscription.id().value(),
+				modifiedSubscription.plan().id().value(),
+				modifiedSubscription.plan().name().value(),
+				modifiedSubscription.plan().description().value()
+			)
+		);
+		return tenant;
 	}
 
 	@Override

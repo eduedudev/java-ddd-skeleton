@@ -142,4 +142,21 @@ public final class TenantGraphQLMother {
 			""";
 		return checkDomainVerificationQuery;
 	}
+
+	public static String cancelAutoRenewMutation() {
+		@Language("GraphQL")
+		String cancelAutoRenewMutation =
+			"""
+			mutation CancelAutoRenew(
+				$tenantId: ID!,
+				$subscriptionId: ID!
+			) {
+				cancelAutoRenew(
+					tenantId: $tenantId,
+					subscriptionId: $subscriptionId
+				)
+			}
+			""";
+		return cancelAutoRenewMutation;
+	}
 }

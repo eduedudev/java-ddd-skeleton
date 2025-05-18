@@ -20,6 +20,7 @@ import com.jaapec.tenant.shared.infrastructure.controller.graphql.GraphQLExcepti
 import com.jaapec.tenant.shared.infrastructure.validation.ValidationResponse;
 import com.jaapec.tenant.shared.infrastructure.validation.Validator;
 import com.jaapec.tenant.shared.infrastructure.validation.ValidatorNotExist;
+import com.jaapec.tenant.tenant.application.cancel_auto_renew.CancelAutoRenewCommand;
 import com.jaapec.tenant.tenant.application.change_domain.ChangeTenantDomainCommand;
 import com.jaapec.tenant.tenant.application.create.CreateTenantCommand;
 import com.jaapec.tenant.tenant.application.update.UpdateTenantCommand;
@@ -65,6 +66,12 @@ public final class TenantMutationsDataFetcher extends GraphQLApiController {
 	@MutationMapping
 	public boolean changeDomain(@Argument String id, @Argument RequestDomain request) {
 		dispatch(new ChangeTenantDomainCommand(id, request.domain()));
+		return true;
+	}
+
+	@MutationMapping
+	public boolean cancelAutoRenew(@Argument String tenantId, @Argument String subscriptionId) {
+		dispatch(new CancelAutoRenewCommand(tenantId, subscriptionId));
 		return true;
 	}
 

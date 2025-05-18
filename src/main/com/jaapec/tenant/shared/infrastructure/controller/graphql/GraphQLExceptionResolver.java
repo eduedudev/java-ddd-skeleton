@@ -15,7 +15,7 @@ import com.jaapec.tenant.shared.infrastructure.config.Parameter;
 import com.jaapec.tenant.shared.infrastructure.config.ParameterNotExist;
 
 @Service
-public class GraphQLExceptionResolver extends DataFetcherExceptionResolverAdapter {
+public final class GraphQLExceptionResolver extends DataFetcherExceptionResolverAdapter {
 
 	private final Parameter config;
 	private final MessageTranslator translator;

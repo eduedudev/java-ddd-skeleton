@@ -4,7 +4,7 @@ import com.jaapec.tenant.plans.domain.Plan;
 import com.jaapec.tenant.plans.domain.events.PlanUpdatedDomainEvent;
 import com.jaapec.tenant.plans.domain.value_objects.*;
 
-public class PlanUpdateDomainEventMother {
+public final class PlanUpdateDomainEventMother {
 
 	public static PlanUpdatedDomainEvent create(
 		PlanId id,

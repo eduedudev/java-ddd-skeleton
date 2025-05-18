@@ -8,7 +8,7 @@ import jakarta.annotation.Nullable;
 import com.jaapec.tenant.shared.domain.Message;
 import com.jaapec.tenant.shared.domain.Repository;
 
-public class DateValidator implements FieldValidator {
+public final class DateValidator implements FieldValidator {
 
 	@Override
 	public Boolean isValid(

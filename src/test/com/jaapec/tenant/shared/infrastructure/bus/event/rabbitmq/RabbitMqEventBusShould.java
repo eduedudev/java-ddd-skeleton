@@ -12,8 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.jaapec.tenant.shared.infrastructure.InfrastructureTestCase;
 import com.jaapec.tenant.shared.infrastructure.bus.event.DomainEventSubscriberInformation;
 import com.jaapec.tenant.shared.infrastructure.bus.event.DomainEventSubscribersInformation;
-import com.jaapec.tenant.users.domain.UserCreatedDomainEventMother;
-import com.jaapec.tenant.users.domain.events.UserCreatedDomainEvent;
+import com.jaapec.tenant.tenant.domain.TenantCreatedDomainEventMother;
+import com.jaapec.tenant.tenant.domain.events.TenantCreatedDomainEvent;
 
 final class RabbitMqEventBusShould extends InfrastructureTestCase {
 
@@ -38,7 +38,7 @@ final class RabbitMqEventBusShould extends InfrastructureTestCase {
 							TestAllWorksOnRabbitMqEventsPublished.class,
 							new DomainEventSubscriberInformation(
 								TestAllWorksOnRabbitMqEventsPublished.class,
-								Collections.singletonList(UserCreatedDomainEvent.class)
+								Collections.singletonList(TenantCreatedDomainEvent.class)
 							)
 						);
 					}
@@ -49,7 +49,7 @@ final class RabbitMqEventBusShould extends InfrastructureTestCase {
 
 	@Test
 	void publish_and_consume_domain_events_from_rabbitmq() throws Exception {
-		UserCreatedDomainEvent domainEvent = UserCreatedDomainEventMother.random();
+		TenantCreatedDomainEvent domainEvent = TenantCreatedDomainEventMother.random();
 
 		eventBus.publish(Collections.singletonList(domainEvent));
 

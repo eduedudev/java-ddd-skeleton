@@ -9,7 +9,7 @@ import jakarta.annotation.Nullable;
 import com.jaapec.tenant.shared.domain.Message;
 import com.jaapec.tenant.shared.domain.Repository;
 
-public class EnumValidator implements FieldValidator {
+public final class EnumValidator implements FieldValidator {
 
 	@Override
 	public Boolean isValid(

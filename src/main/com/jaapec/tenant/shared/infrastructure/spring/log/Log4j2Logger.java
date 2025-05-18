@@ -9,7 +9,7 @@ import com.jaapec.tenant.shared.domain.Logger;
 import com.jaapec.tenant.shared.domain.Service;
 
 @Service
-public class Log4j2Logger implements Logger {
+public final class Log4j2Logger implements Logger {
 
 	private static final org.apache.logging.log4j.Logger logger = LogManager.getLogger(Log4j2Logger.class);
 

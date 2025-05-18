@@ -3,7 +3,7 @@ package com.jaapec.tenant.plans.domain;
 import com.jaapec.tenant.shared.domain.DomainError;
 import com.jaapec.tenant.shared.domain.Message;
 
-public class NonNegativeNumberException extends DomainError {
+public final class NonNegativeNumberException extends DomainError {
 
 	private static final String ERROR_CODE = "E422";
 	private static final String MESSAGE_KEY = "error.resource.negative";

@@ -8,9 +8,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.mockito.Mockito;
 
 import com.jaapec.tenant.shared.domain.bus.command.CommandBus;
+import com.jaapec.tenant.shared.infrastructure.UnitTestCase;
 import com.jaapec.tenant.tenant.domain.Tenant;
 import com.jaapec.tenant.tenant.domain.TenantRepository;
-import com.jaapec.tenant.users.infrastructure.UnitTestCase;
 
 public abstract class TenantModuleUnitTestCase extends UnitTestCase {
 

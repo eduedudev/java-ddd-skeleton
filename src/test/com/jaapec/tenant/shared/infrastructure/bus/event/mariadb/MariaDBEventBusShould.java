@@ -14,8 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.jaapec.tenant.shared.domain.bus.event.DomainEvent;
 import com.jaapec.tenant.shared.infrastructure.InfrastructureTestCase;
-import com.jaapec.tenant.users.domain.UserCreatedDomainEventMother;
-import com.jaapec.tenant.users.domain.events.UserCreatedDomainEvent;
+import com.jaapec.tenant.tenant.domain.TenantCreatedDomainEventMother;
+import com.jaapec.tenant.tenant.domain.events.TenantCreatedDomainEvent;
 
 @Transactional
 class MariaDBEventBusShould extends InfrastructureTestCase {
@@ -31,7 +31,7 @@ class MariaDBEventBusShould extends InfrastructureTestCase {
 
 	@Test
 	void publish_and_consume_domain_events_from_mariadb() throws Exception {
-		UserCreatedDomainEvent domainEvent = UserCreatedDomainEventMother.random();
+		TenantCreatedDomainEvent domainEvent = TenantCreatedDomainEventMother.random();
 
 		eventBus.publish(Collections.singletonList(domainEvent));
 
@@ -51,7 +51,7 @@ class MariaDBEventBusShould extends InfrastructureTestCase {
 
 	@Test
 	void throw_persistence_exception_when_publishing_event_fails() {
-		UserCreatedDomainEvent invalidEvent = new UserCreatedDomainEvent(null, null, null);
+		TenantCreatedDomainEvent invalidEvent = new TenantCreatedDomainEvent(null, null, null, null, null);
 		List<DomainEvent> events = List.of(invalidEvent);
 		PersistenceException exception = assertThrows(PersistenceException.class, () -> eventBus.publish(events));
 

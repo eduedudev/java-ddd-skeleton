@@ -2,7 +2,7 @@ package com.jaapec.tenant.tenant.domain;
 
 import java.util.Objects;
 
-public class TenantStatus {
+public final class TenantStatus {
 
 	private final String value;
 

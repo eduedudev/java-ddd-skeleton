@@ -11,7 +11,7 @@ import jakarta.annotation.Nullable;
 import com.jaapec.tenant.shared.domain.Message;
 import com.jaapec.tenant.shared.domain.Repository;
 
-public class RegexValidation implements FieldValidator {
+public final class RegexValidation implements FieldValidator {
 
 	@Override
 	public Boolean isValid(

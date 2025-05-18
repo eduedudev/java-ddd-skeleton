@@ -4,12 +4,19 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.jaapec.tenant.plan.domain.PlanMother;
+import com.jaapec.tenant.plans.domain.Plan;
+import com.jaapec.tenant.plans.domain.PlanRepository;
+import com.jaapec.tenant.plans.domain.value_objects.BillingInterval;
+import com.jaapec.tenant.plans.domain.value_objects.Currency;
 import com.jaapec.tenant.shared.infrastructure.ApplicationTestCase;
+import com.jaapec.tenant.subscription.domain.*;
 import com.jaapec.tenant.tenant.application.TenantResponse;
 import com.jaapec.tenant.tenant.application.change_domain.ChangeTenantDomainCommand;
 import com.jaapec.tenant.tenant.application.create.CreateTenantCommand;
@@ -21,6 +28,9 @@ class TenantMutationsDataFetcherShould extends ApplicationTestCase {
 
 	@Autowired
 	private TenantRepository repository;
+
+	@Autowired
+	private PlanRepository planRepository;
 
 	@Test
 	void create_a_valid_tenant() throws Exception {
@@ -135,5 +145,46 @@ class TenantMutationsDataFetcherShould extends ApplicationTestCase {
 			String.format("The domain %s already exists", command.domain()),
 			Map.of("code", "E410", "reason", "domain", "value", command.domain())
 		);
+	}
+
+	@Test
+	void should_cancel_auto_renew_for_subscription() throws Exception {
+		// Given a tenant
+		Tenant tenant = TenantMother.random();
+		repository.save(tenant);
+
+		// And a plan
+		Plan plan = PlanMother.random();
+		planRepository.save(plan);
+
+		// And a subscription with auto-renew enabled
+		SubscriptionId subscriptionId = new SubscriptionId(UUID.randomUUID().toString());
+		Tenant tenantWithSubscription = tenant.subscribeToPlan(
+			subscriptionId,
+			plan,
+			new BillingInterval(BillingInterval.intervals.MONTHLY.toString()),
+			new SubscriptionPricing(2596),
+			new Currency(Currency.currency.USD.toString()),
+			null,
+			new SubscriptionSource(SubscriptionSource.source.BACKOFFICE.toString()),
+			new SubscriptionAutoRenew(true)
+		);
+		repository.update(tenantWithSubscription);
+
+		// And an activated subscription
+		Tenant tenantWithActiveSubscription = tenantWithSubscription.activateSubscription(
+			subscriptionId,
+			new SubscriptionPaymentMethod("test"),
+			new SubscriptionPaymentReference("12312")
+		);
+		repository.update(tenantWithActiveSubscription);
+
+		// When canceling auto-renew
+		Map<String, Object> variables = new HashMap<>();
+		variables.put("tenantId", tenant.id().value());
+		variables.put("subscriptionId", subscriptionId.value());
+
+		// Then it should be successful
+		assertResponse(TenantGraphQLMother.cancelAutoRenewMutation(), "$.data.cancelAutoRenew", variables);
 	}
 }

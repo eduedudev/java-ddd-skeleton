@@ -9,7 +9,7 @@ import org.mockito.Mockito;
 
 import com.jaapec.tenant.plans.domain.Plan;
 import com.jaapec.tenant.plans.domain.PlanRepository;
-import com.jaapec.tenant.users.infrastructure.UnitTestCase;
+import com.jaapec.tenant.shared.infrastructure.UnitTestCase;
 
 public abstract class PlanModuleUnitTestCase extends UnitTestCase {
 

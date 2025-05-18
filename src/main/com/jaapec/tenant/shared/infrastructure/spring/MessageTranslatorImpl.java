@@ -8,7 +8,7 @@ import com.jaapec.tenant.shared.domain.MessageTranslator;
 import com.jaapec.tenant.shared.domain.Service;
 
 @Service
-public class MessageTranslatorImpl implements MessageTranslator {
+public final class MessageTranslatorImpl implements MessageTranslator {
 
 	private final MessageSource messageSource;
 

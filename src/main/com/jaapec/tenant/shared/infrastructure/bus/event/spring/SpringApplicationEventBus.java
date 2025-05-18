@@ -9,7 +9,7 @@ import com.jaapec.tenant.shared.domain.bus.event.DomainEvent;
 import com.jaapec.tenant.shared.domain.bus.event.EventBus;
 
 @Service
-public class SpringApplicationEventBus implements EventBus {
+public final class SpringApplicationEventBus implements EventBus {
 
 	private final ApplicationEventPublisher publisher;
 

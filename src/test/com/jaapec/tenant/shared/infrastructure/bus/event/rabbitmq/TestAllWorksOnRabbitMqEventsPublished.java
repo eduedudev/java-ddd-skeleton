@@ -2,15 +2,15 @@ package com.jaapec.tenant.shared.infrastructure.bus.event.rabbitmq;
 
 import com.jaapec.tenant.shared.domain.Service;
 import com.jaapec.tenant.shared.infrastructure.bus.event.DomainEventSubscriber;
-import com.jaapec.tenant.users.domain.events.UserCreatedDomainEvent;
+import com.jaapec.tenant.tenant.domain.events.TenantCreatedDomainEvent;
 
 @Service
-@DomainEventSubscriber({ UserCreatedDomainEvent.class })
+@DomainEventSubscriber({ TenantCreatedDomainEvent.class })
 public final class TestAllWorksOnRabbitMqEventsPublished {
 
 	public Boolean hasBeenExecuted = false;
 
-	public void on(UserCreatedDomainEvent event) {
+	public void on(TenantCreatedDomainEvent event) {
 		hasBeenExecuted = true;
 	}
 }

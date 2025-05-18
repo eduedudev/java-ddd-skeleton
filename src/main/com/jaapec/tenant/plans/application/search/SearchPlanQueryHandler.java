@@ -8,7 +8,7 @@ import com.jaapec.tenant.shared.domain.criteria.Order;
 import com.jaapec.tenant.shared.domain.criteria.PaginatedResponse;
 
 @Service
-public class SearchPlanQueryHandler implements QueryHandler<SearchPlanQuery, PaginatedResponse<PlanResponse>> {
+public final class SearchPlanQueryHandler implements QueryHandler<SearchPlanQuery, PaginatedResponse<PlanResponse>> {
 
 	private final PlanSearcher searcher;
 

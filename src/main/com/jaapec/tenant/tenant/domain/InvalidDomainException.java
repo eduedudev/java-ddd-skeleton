@@ -3,7 +3,7 @@ package com.jaapec.tenant.tenant.domain;
 import com.jaapec.tenant.shared.domain.DomainError;
 import com.jaapec.tenant.shared.domain.Message;
 
-public class InvalidDomainException extends DomainError {
+public final class InvalidDomainException extends DomainError {
 
 	private static final String ERROR_CODE = "E423";
 	private static final String MESSAGE_KEY = "error.invalid.domain";

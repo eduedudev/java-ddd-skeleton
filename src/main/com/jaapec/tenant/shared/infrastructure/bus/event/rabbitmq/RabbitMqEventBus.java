@@ -13,7 +13,7 @@ import com.jaapec.tenant.shared.infrastructure.bus.event.mariadb.MariaDBEventBus
 
 @Service
 @Primary
-public class RabbitMqEventBus implements EventBus {
+public final class RabbitMqEventBus implements EventBus {
 
 	private final RabbitMqPublisher publisher;
 	private final MariaDBEventBus failoverPublisher;

@@ -10,8 +10,10 @@ public abstract class Email {
 	protected Email(String value) {
 		if (value != null) {
 			ensureValidEmail(value);
+			this.value = value.toLowerCase();
+		} else {
+			this.value = null;
 		}
-		this.value = value;
 	}
 
 	public String value() {
@@ -19,9 +21,25 @@ public abstract class Email {
 	}
 
 	private void ensureValidEmail(String value) {
-		final String EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
-		if (value == null || !Pattern.matches(EMAIL_REGEX, value)) {
+		final String EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
+		if (value == null || !Pattern.matches(EMAIL_REGEX, value) || value.contains("..")) {
 			throw new IllegalArgumentException("The email is invalid");
+		}
+
+		String domain = value.substring(value.indexOf('@') + 1);
+
+		if (domain.startsWith(".") || domain.endsWith(".")) {
+			throw new IllegalArgumentException("The email is invalid");
+		}
+
+		if (domain.startsWith("-") || domain.endsWith("-")) {
+			throw new IllegalArgumentException("The email is invalid");
+		}
+
+		for (String part : domain.split("\\.")) {
+			if (part.startsWith("-") || part.endsWith("-")) {
+				throw new IllegalArgumentException("The email is invalid");
+			}
 		}
 	}
 

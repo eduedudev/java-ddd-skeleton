@@ -2,7 +2,7 @@ package com.jaapec.tenant.plans.domain.value_objects;
 
 import java.util.Objects;
 
-public class PlanVisibility {
+public final class PlanVisibility {
 
 	private final String value;
 

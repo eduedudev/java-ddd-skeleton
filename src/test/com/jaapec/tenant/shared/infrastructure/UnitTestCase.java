@@ -1,4 +1,4 @@
-package com.jaapec.tenant.users.infrastructure;
+package com.jaapec.tenant.shared.infrastructure;
 
 import static org.mockito.Mockito.*;
 

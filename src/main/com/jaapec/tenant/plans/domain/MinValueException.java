@@ -3,7 +3,7 @@ package com.jaapec.tenant.plans.domain;
 import com.jaapec.tenant.shared.domain.DomainError;
 import com.jaapec.tenant.shared.domain.Message;
 
-public class MinValueException extends DomainError {
+public final class MinValueException extends DomainError {
 
 	private static final String ERROR_CODE = "E421";
 	private static final String MESSAGE_KEY = "error.min.invalid";

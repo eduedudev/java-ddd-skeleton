@@ -8,7 +8,8 @@ import com.jaapec.tenant.shared.domain.criteria.PaginatedResponse;
 import com.jaapec.tenant.tenant.application.TenantResponse;
 
 @Service
-public class SearchTenantQueryHandler implements QueryHandler<SearchTenantQuery, PaginatedResponse<TenantResponse>> {
+public final class SearchTenantQueryHandler
+	implements QueryHandler<SearchTenantQuery, PaginatedResponse<TenantResponse>> {
 
 	private final TenantSearcher searcher;
 

@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 public abstract class Email {
 
 	protected final String value;
+	private static final String INVALID_EMAIL_MESSAGE = "The email is invalid";
 
 	protected Email(String value) {
 		if (value != null) {
@@ -23,22 +24,22 @@ public abstract class Email {
 	private void ensureValidEmail(String value) {
 		final String EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
 		if (value == null || !Pattern.matches(EMAIL_REGEX, value) || value.contains("..")) {
-			throw new IllegalArgumentException("The email is invalid");
+			throw new IllegalArgumentException(INVALID_EMAIL_MESSAGE);
 		}
 
 		String domain = value.substring(value.indexOf('@') + 1);
 
 		if (domain.startsWith(".") || domain.endsWith(".")) {
-			throw new IllegalArgumentException("The email is invalid");
+			throw new IllegalArgumentException(INVALID_EMAIL_MESSAGE);
 		}
 
 		if (domain.startsWith("-") || domain.endsWith("-")) {
-			throw new IllegalArgumentException("The email is invalid");
+			throw new IllegalArgumentException(INVALID_EMAIL_MESSAGE);
 		}
 
 		for (String part : domain.split("\\.")) {
 			if (part.startsWith("-") || part.endsWith("-")) {
-				throw new IllegalArgumentException("The email is invalid");
+				throw new IllegalArgumentException(INVALID_EMAIL_MESSAGE);
 			}
 		}
 	}

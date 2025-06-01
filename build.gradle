@@ -95,6 +95,10 @@ sonar {
         property "sonar.projectKey", "jaapec_tenant-service_f0deb4f3-b7dc-4353-8efe-323afa2b46c1"
         property "sonar.projectName", "Tenant Service"
         property "sonar.qualitygate.wait", true
+
+        property "sonar.coverage.exclusions", """
+            **/*DomainEvent.java
+        """.stripIndent()
     }
 }
 

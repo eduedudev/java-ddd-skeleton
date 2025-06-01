@@ -27,7 +27,7 @@ public final class DomainVerificationCheckerImpl implements DomainVerificationCh
 
 			return isExpectedCnameFound(records);
 		} catch (TextParseException e) {
-			throw new RuntimeException("Error occurred during DNS lookup", e);
+			throw new IllegalStateException("Error occurred during DNS lookup", e);
 		}
 	}
 

@@ -1,0 +1,10 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tenant-service
+spec:
+  template:
+    spec:
+      containers:
+        - name: tenant-service
+          image: git.devsoftec.com:5050/jaapec/tenant-service:0.0.1-dev

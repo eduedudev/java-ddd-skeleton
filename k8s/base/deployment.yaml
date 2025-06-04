@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tenant-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tenant-service
+  template:
+    metadata:
+      labels:
+        app: tenant-service
+    spec:
+      containers:
+        - name: tenant-service
+          image: git.devsoftec.com:5050/jaapec/tenant-service
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - secretRef:
+                name: tenant-service-secret
+      imagePullSecrets:
+        - name: gitlab-registry-secret

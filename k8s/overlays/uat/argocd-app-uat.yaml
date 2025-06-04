@@ -1,0 +1,29 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: tenant-service-uat
+  namespace: argocd
+  annotations:
+    argocd-image-updater.argoproj.io/image-list: tenant=git.devsoftec.com:5050/jaapec/tenant-service
+    argocd-image-updater.argoproj.io/tenant.allow-tags: '.*dev$'
+    argocd-image-updater.argoproj.io/git-branch: dev
+    argocd-image-updater.argoproj.io/write-back-method: git
+    argocd-image-updater.argoproj.io/git-commit-user: Argo Image Updater
+    argocd-image-updater.argoproj.io/git-commit-email: argo@jaapec.com
+    argocd-image-updater.argoproj.io/git-commit-template: "[ci skip] Update image {{ .image }} to {{ .new_tag }}"
+    argocd-image-updater.argoproj.io/image-update-strategy: latest
+spec:
+  project: jaapec-uat
+  source:
+    repoURL: git@git.devsoftec.com:jaapec/tenant-service.git
+    targetRevision: dev
+    path: k8s/overlays/uat
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: jaapec-uat
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

@@ -1,0 +1,10 @@
+namespace: jaapec-uat
+
+resources:
+  - ../../base
+
+patches:
+  - path: patch-deployment.yaml
+    target:
+      kind: Deployment
+      name: tenant-service

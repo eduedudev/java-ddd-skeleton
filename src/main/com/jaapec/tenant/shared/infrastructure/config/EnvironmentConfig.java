@@ -9,10 +9,6 @@ public class EnvironmentConfig {
 
 	@Bean
 	public Dotenv dotenv() {
-		try {
-			return Dotenv.configure().directory("/").filename(".env").load();
-		} catch (Exception e) {
-			return null;
-		}
+		return Dotenv.configure().directory("/").filename(".env").ignoreIfMissing().load();
 	}
 }

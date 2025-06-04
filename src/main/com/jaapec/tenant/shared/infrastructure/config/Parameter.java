@@ -10,7 +10,7 @@ public final class Parameter {
 	private final Dotenv dotenv;
 
 	public Parameter(Dotenv dotenv) {
-		this.dotenv = dotenv;
+		this.dotenv = dotenv != null ? dotenv : Dotenv.configure().ignoreIfMissing().load();
 	}
 
 	public String get(String key) throws ParameterNotExist {

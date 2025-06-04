@@ -1,19 +1,12 @@
-FROM openjdk:21-jdk-slim AS build
-
+# Build stage
+FROM gradle:8.5-jdk21-alpine AS build
 WORKDIR /app
-
 COPY . .
+RUN chmod +x gradlew && ./gradlew clean bootJar -x test
 
-RUN chmod +x gradlew
-
-RUN ./gradlew clean build -x test -x spotlessJavaCheck
-
-FROM openjdk:21-jdk-slim
-
+# Runtime stage
+FROM amazoncorretto:8u452-alpine3.21-jre
 WORKDIR /app
-
-COPY --from=build /app/build/libs/*.jar /app/service.jar
-
+COPY --from=build /app/build/libs/*.jar app.jar
 EXPOSE 8080
-
-CMD ["java", "-jar", "service.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]

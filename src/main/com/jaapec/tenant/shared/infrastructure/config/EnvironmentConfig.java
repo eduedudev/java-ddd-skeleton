@@ -9,6 +9,10 @@ public class EnvironmentConfig {
 
 	@Bean
 	public Dotenv dotenv() {
-		return Dotenv.configure().directory("/").filename(".env").load();
+		try {
+			return Dotenv.configure().directory("/").filename(".env").load();
+		} catch (Exception e) {
+			return null;
+		}
 	}
 }

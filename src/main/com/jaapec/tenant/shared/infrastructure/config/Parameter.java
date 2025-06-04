@@ -10,13 +10,13 @@ public final class Parameter {
 	private final Dotenv dotenv;
 
 	public Parameter(Dotenv dotenv) {
-		this.dotenv = dotenv != null ? dotenv : Dotenv.configure().ignoreIfMissing().load();
+		this.dotenv = dotenv!= null ? dotenv : Dotenv.configure().ignoreIfMissing().load();
 	}
 
 	public String get(String key) throws ParameterNotExist {
 		String value = System.getenv(key); // <-- First, look in environment (K8s)
 
-		if (value == null) {
+		if (value == null && dotenv != null) {
 			value = dotenv.get(key); // <-- Then .env (only local dev)
 		}
 

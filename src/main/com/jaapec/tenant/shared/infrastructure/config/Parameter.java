@@ -14,7 +14,11 @@ public final class Parameter {
 	}
 
 	public String get(String key) throws ParameterNotExist {
-		String value = dotenv.get(key);
+		String value = System.getenv(key); // <-- First, look in environment (K8s)
+
+		if (value == null) {
+			value = dotenv.get(key); // <-- Then .env (only local dev)
+		}
 
 		if (null == value) {
 			throw new ParameterNotExist(key);

@@ -1,4 +1,11 @@
-image: openjdk:21-jdk-slim
+cache:
+  paths:
+    - .gradle/
+
+.config:
+  image: openjdk:21-jdk-slim
+  before_script:
+    - chmod +x ./gradlew
 
 services:
   - name: mariadb:10.7
@@ -33,24 +40,22 @@ stages:
   - build
   - test
   - package
-  - review
-  - deploy
 
 build:
   stage: build
+  extends:
+    .config
   script:
-    - chmod +x gradlew
     - ./gradlew assemble -x test
   artifacts:
     paths:
-      - build/libs/
-      - build/classes/
+      - build/libs/*.jar
     expire_in: 1 days
-  rules:
-    - if: $CI_COMMIT_BRANCH == "dev"
 
 tests:
   stage: test
+  extends:
+    .config
   needs:
     - job: build
   script:
@@ -68,7 +73,6 @@ tests:
     - echo "RABBITMQ_MAX_RETRIES=5" >> src/main/resources/.env
     - echo "RABBITMQ_VHOST=$RABBITMQ_VHOST" >> src/main/resources/.env
     - cat src/main/resources/.env
-    - chmod +x gradlew
     - ./gradlew test jacocoTestReport
   artifacts:
     paths:
@@ -77,13 +81,12 @@ tests:
     reports:
       junit: build/test-results/test/**/*.xml
     expire_in: 1 days
-  rules:
-    - if: $CI_COMMIT_BRANCH == "dev"
 
 build-sonar:
   stage: test
+  extends:
+    .config
   needs:
-    - job: build
     - job: tests
   cache:
     policy: pull-push
@@ -92,56 +95,53 @@ build-sonar:
       - "${SONAR_USER_HOME}/cache"
       - sonar-scanner/
   script:
-    - chmod +x gradlew
-    - ls build/reports/jacoco/test
     - ./gradlew sonar -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/test/jacocoTestReport.xml
   allow_failure: true
   rules:
     - if: $CI_COMMIT_BRANCH == "dev"
 
-qodana:
-  stage: test
-  image:
-    name: jetbrains/qodana-jvm:2024.3
-    entrypoint: [""]
-  cache:
-    - key: qodana-2024.3-$CI_DEFAULT_BRANCH-$CI_COMMIT_REF_SLUG
-      fallback_keys:
-        - qodana-2024.3-$CI_DEFAULT_BRANCH-
-        - qodana-2024.3-
-      paths:
-        - .qodana/cache
-  variables:
-    QODANA_TOKEN: $QODANA_TOKEN
-    QODANA_ENDPOINT: "https://qodana.cloud"
-  script:
-    - qodana --cache-dir=$CI_PROJECT_DIR/.qodana/cache
-  allow_failure: true
-  rules:
-    - if: $CI_COMMIT_BRANCH == "master"
-
-package:
+docker_build_uat:
   stage: package
   image: docker:latest
+  needs:
+    - tests
+    - build
   services:
     - docker:dind
+  variables:
+    DOCKER_TLS_CERTDIR: ""
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  cache: {}
   script:
-    - echo "package."
+    - export VERSION=$(cat version.txt)
+    - export DEV_IMAGE_TAG="${CI_REGISTRY_IMAGE}:${VERSION}-dev"
+    - docker build -t "$DEV_IMAGE_TAG" .
+    - docker push "$DEV_IMAGE_TAG"
   rules:
-    - if: $CI_COMMIT_BRANCH == "master"
-    # Aquí puedes agregar docker build/push si lo necesitas
+    - if: '$CI_COMMIT_BRANCH == "dev"'
 
-review:
-  stage: review
+docker_build_prod:
+  stage: package
+  image: docker:latest
+  needs:
+    - build
+  services:
+    - docker:dind
+  variables:
+    DOCKER_TLS_CERTDIR: ""
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  cache: {}
   script:
-    - echo "Preview environment would be deployed here."
+    - export VERSION=$(cat version.txt)
+    - export IMAGE_TAG="${CI_REGISTRY_IMAGE}:${VERSION}"
+    - docker build -t "$IMAGE_TAG" .
+    - docker push "$IMAGE_TAG"
+    - echo "Docker image $IMAGE_TAG built and pushed successfully."
+    - export IMAGE_TAG="${CI_REGISTRY_IMAGE}:latest"
+    - docker tag "$CI_REGISTRY_IMAGE:$VERSION" "$IMAGE_TAG"
+    - docker push "$IMAGE_TAG"
+    - echo "Docker image $IMAGE_TAG tagged as latest and pushed successfully."
   rules:
-    - if: $CI_COMMIT_BRANCH == "master"
-
-deploy:
-  stage: deploy
-  when: manual
-  script:
-    - echo "Deployment to production triggered manually"
-  rules:
-    - if: $CI_COMMIT_BRANCH == "master"
+    - if: '$CI_COMMIT_BRANCH == "master"'

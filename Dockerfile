@@ -5,7 +5,7 @@ COPY . .
 RUN chmod +x gradlew && ./gradlew clean bootJar -x test
 
 # Runtime stage
-FROM amazoncorretto:8u452-alpine3.21-jre
+FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 COPY --from=build /app/build/libs/*.jar app.jar
 EXPOSE 8080

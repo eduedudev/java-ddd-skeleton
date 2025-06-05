@@ -1,6 +1,7 @@
 package com.jaapec.tenant.shared.infrastructure;
 
 import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -27,20 +28,24 @@ public abstract class Config {
 	private List<Resource> searchMappingFilesInJar(String segments, String extension) {
 		List<Resource> mappingResources = new ArrayList<>();
 		String path = "com/jaapec/tenant";
-		try (
-			JarFile jarFile = new JarFile(new File(Objects.requireNonNull(Starter.class.getResource("/" + path)).toURI()))
-		) {
-			Enumeration<JarEntry> entries = jarFile.entries();
-			while (entries.hasMoreElements()) {
-				JarEntry entry = entries.nextElement();
-				String entryName = entry.getName();
+		try {
+			URL url = Starter.class.getResource("/" + path);
+			if (url != null) {
+				String jarPath = url.getFile().substring(5, url.getFile().indexOf("!"));
+				try (JarFile jarFile = new JarFile(jarPath)) {
+					Enumeration<JarEntry> entries = jarFile.entries();
+					while (entries.hasMoreElements()) {
+						JarEntry entry = entries.nextElement();
+						String entryName = entry.getName();
 
-				if (entryName.startsWith(path + "/") && entryName.contains(segments) && entryName.endsWith(extension)) {
-					mappingResources.add(new ClassPathResource(entryName));
+						if (entryName.startsWith(path + "/") && entryName.contains(segments) && entryName.endsWith(extension)) {
+							mappingResources.add(new ClassPathResource(entryName));
+						}
+					}
 				}
 			}
 		} catch (Exception e) {
-			throw new IllegalStateException("Error while searching mapping files in JAR", e);
+			e.printStackTrace();
 		}
 
 		return mappingResources;

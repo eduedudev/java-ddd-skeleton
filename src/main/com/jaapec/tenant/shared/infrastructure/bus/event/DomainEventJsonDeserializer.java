@@ -34,7 +34,9 @@ public final class DomainEventJsonDeserializer {
 		}
 
 		Class<?> domainEventClass = information.forName(type);
-		DomainEvent nullInstance = (DomainEvent) domainEventClass.getConstructor().newInstance();
+		java.lang.reflect.Constructor<?> constructor = domainEventClass.getDeclaredConstructor();
+		constructor.setAccessible(true);
+		DomainEvent nullInstance = (DomainEvent) constructor.newInstance();
 
 		Method fromPrimitivesMethod = domainEventClass.getMethod(
 			"fromPrimitives",

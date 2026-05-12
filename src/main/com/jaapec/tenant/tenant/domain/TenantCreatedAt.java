@@ -8,7 +8,6 @@ public final class TenantCreatedAt extends DateTimeValueObject {
 		super(value);
 	}
 
-	public TenantCreatedAt() {
-		super(null);
+	TenantCreatedAt() {
 	}
 }

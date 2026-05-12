@@ -10,6 +10,10 @@ public abstract class DateTimeValueObject {
 
 	private final Timestamp value;
 
+	protected DateTimeValueObject() {
+		this.value = null;
+	}
+
 	protected DateTimeValueObject(String value) {
 		if (value == null) {
 			throw new IllegalArgumentException("DateTime value cannot be null");

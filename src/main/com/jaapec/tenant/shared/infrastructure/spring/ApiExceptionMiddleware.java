@@ -42,6 +42,11 @@ public final class ApiExceptionMiddleware implements Filter {
 
 		Object possibleController = getHandlerController(httpRequest);
 
+		if (possibleController == null) {
+			httpResponse.setStatus(HttpStatus.METHOD_NOT_ALLOWED.value());
+			return;
+		}
+
 		try {
 			chain.doFilter(request, response);
 		} catch (Exception exception) {
@@ -51,12 +56,16 @@ public final class ApiExceptionMiddleware implements Filter {
 		}
 	}
 
-	private Object getHandlerController(HttpServletRequest request) throws ServletException {
+	private Object getHandlerController(HttpServletRequest request) {
 		try {
-			HandlerMethod handlerMethod = (HandlerMethod) Objects.requireNonNull(mapping.getHandler(request)).getHandler();
+			var handler = mapping.getHandler(request);
+			if (handler == null) {
+				return null;
+			}
+			HandlerMethod handlerMethod = (HandlerMethod) handler.getHandler();
 			return handlerMethod.getBean();
 		} catch (Exception e) {
-			throw new ServletException("Error retrieving handler controller", e);
+			return null;
 		}
 	}
 

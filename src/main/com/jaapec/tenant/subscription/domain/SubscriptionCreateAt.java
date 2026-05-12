@@ -8,7 +8,6 @@ public final class SubscriptionCreateAt extends DateTimeValueObject {
 		super(value);
 	}
 
-	public SubscriptionCreateAt() {
-		super(null);
+	SubscriptionCreateAt() {
 	}
 }

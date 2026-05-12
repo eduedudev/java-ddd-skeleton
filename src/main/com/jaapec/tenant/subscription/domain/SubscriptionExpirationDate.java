@@ -8,7 +8,6 @@ public final class SubscriptionExpirationDate extends DateTimeValueObject {
 		super(value);
 	}
 
-	public SubscriptionExpirationDate() {
-		super(null);
+	SubscriptionExpirationDate() {
 	}
 }

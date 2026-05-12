@@ -8,7 +8,6 @@ public final class PlanUpdatedAt extends DateTimeValueObject {
 		super(value);
 	}
 
-	public PlanUpdatedAt() {
-		super(null);
+	PlanUpdatedAt() {
 	}
 }

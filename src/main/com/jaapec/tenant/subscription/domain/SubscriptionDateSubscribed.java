@@ -8,7 +8,6 @@ public final class SubscriptionDateSubscribed extends DateTimeValueObject {
 		super(value);
 	}
 
-	public SubscriptionDateSubscribed() {
-		super(null);
+	SubscriptionDateSubscribed() {
 	}
 }

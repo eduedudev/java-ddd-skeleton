@@ -1,20 +1,23 @@
 package com.jaapec.tenant.shared.infrastructure.persistence.hibernate;
 
+import java.util.List;
 import java.util.Properties;
 import javax.sql.DataSource;
-
-import org.hibernate.cfg.AvailableSettings;
-import org.springframework.boot.jdbc.DataSourceBuilder;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.orm.jpa.JpaTransactionManager;
-import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
-import org.springframework.transaction.PlatformTransactionManager;
 
 import com.jaapec.tenant.shared.infrastructure.Config;
 import com.jaapec.tenant.shared.infrastructure.config.Parameter;
 import com.jaapec.tenant.shared.infrastructure.config.ParameterNotExist;
+import org.hibernate.cfg.AvailableSettings;
+import org.springframework.boot.jdbc.DataSourceBuilder;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.Resource;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.hibernate.HibernateTransactionManager;
+import org.springframework.orm.jpa.hibernate.LocalSessionFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.transaction.PlatformTransactionManager;
+
 
 @Configuration
 public class HibernateConfiguration extends Config {
@@ -23,6 +26,16 @@ public class HibernateConfiguration extends Config {
 
 	public HibernateConfiguration(Parameter config) {
 		this.config = config;
+	}
+
+	@Bean
+	public LocalSessionFactoryBean sessionFactory() throws ParameterNotExist {
+		LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
+		sessionFactory.setDataSource(dataSource());
+		sessionFactory.setHibernateProperties(hibernateProperties());
+		List<Resource> mappingFiles = searchMappingFiles("/infrastructure/persistence/hibernate/", ".orm.xml");
+		sessionFactory.setMappingLocations(mappingFiles.toArray(new Resource[0]));
+		return sessionFactory;
 	}
 
 	@Bean
@@ -43,9 +56,9 @@ public class HibernateConfiguration extends Config {
 	}
 
 	@Bean
-	public PlatformTransactionManager transactionManager() throws ParameterNotExist {
-		JpaTransactionManager transactionManager = new JpaTransactionManager();
-		transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
+	public PlatformTransactionManager hibernateTransactionManager() throws ParameterNotExist {
+		HibernateTransactionManager transactionManager = new HibernateTransactionManager();
+		transactionManager.setSessionFactory(sessionFactory().getObject());
 		return transactionManager;
 	}
 
@@ -54,6 +67,7 @@ public class HibernateConfiguration extends Config {
 		Properties hibernateProperties = new Properties();
 		hibernateProperties.put(AvailableSettings.HBM2DDL_AUTO, "update");
 		hibernateProperties.put(AvailableSettings.SHOW_SQL, debug ? "true" : "false");
+
 		return hibernateProperties;
 	}
 
@@ -61,7 +75,7 @@ public class HibernateConfiguration extends Config {
 	public LocalContainerEntityManagerFactoryBean entityManagerFactory() throws ParameterNotExist {
 		LocalContainerEntityManagerFactoryBean entityManagerFactory = new LocalContainerEntityManagerFactoryBean();
 		entityManagerFactory.setDataSource(dataSource());
-		entityManagerFactory.setPackagesToScan("com.jaapec.tenant");
+		entityManagerFactory.setPackagesToScan("com.devsoftec.jaap.users");
 		entityManagerFactory.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
 		entityManagerFactory.setJpaProperties(hibernateProperties());
 		return entityManagerFactory;

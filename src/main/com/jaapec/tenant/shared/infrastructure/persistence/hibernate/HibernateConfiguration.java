@@ -1,6 +1,5 @@
 package com.jaapec.tenant.shared.infrastructure.persistence.hibernate;
 
-import java.util.List;
 import java.util.Properties;
 import javax.sql.DataSource;
 
@@ -8,9 +7,7 @@ import org.hibernate.cfg.AvailableSettings;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.Resource;
-import org.springframework.orm.hibernate5.HibernateTransactionManager;
-import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -26,16 +23,6 @@ public class HibernateConfiguration extends Config {
 
 	public HibernateConfiguration(Parameter config) {
 		this.config = config;
-	}
-
-	@Bean
-	public LocalSessionFactoryBean sessionFactory() throws ParameterNotExist {
-		LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
-		sessionFactory.setDataSource(dataSource());
-		sessionFactory.setHibernateProperties(hibernateProperties());
-		List<Resource> mappingFiles = searchMappingFiles("/infrastructure/persistence/hibernate/", ".orm.xml");
-		sessionFactory.setMappingLocations(mappingFiles.toArray(new Resource[0]));
-		return sessionFactory;
 	}
 
 	@Bean
@@ -56,9 +43,9 @@ public class HibernateConfiguration extends Config {
 	}
 
 	@Bean
-	public PlatformTransactionManager hibernateTransactionManager() throws ParameterNotExist {
-		HibernateTransactionManager transactionManager = new HibernateTransactionManager();
-		transactionManager.setSessionFactory(sessionFactory().getObject());
+	public PlatformTransactionManager transactionManager() throws ParameterNotExist {
+		JpaTransactionManager transactionManager = new JpaTransactionManager();
+		transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
 		return transactionManager;
 	}
 
@@ -67,7 +54,6 @@ public class HibernateConfiguration extends Config {
 		Properties hibernateProperties = new Properties();
 		hibernateProperties.put(AvailableSettings.HBM2DDL_AUTO, "update");
 		hibernateProperties.put(AvailableSettings.SHOW_SQL, debug ? "true" : "false");
-
 		return hibernateProperties;
 	}
 

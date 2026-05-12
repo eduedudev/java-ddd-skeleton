@@ -1,11 +1,11 @@
 package com.jaapec.tenant.shared.infrastructure.spring;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.json.bind.Jsonb;
+import jakarta.json.bind.JsonbBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -24,16 +24,14 @@ public abstract class RestApiController extends ApiController {
 		ResponseEntity.BodyBuilder status,
 		Integer code,
 		Object data
-	) throws IOException {
-		ObjectMapper objectMapper = new ObjectMapper();
+	) {
+		Jsonb jsonb = JsonbBuilder.create();
 
 		HashMap<String, Serializable> responseMap = new HashMap<>();
 		responseMap.put("error", error);
 		responseMap.put("code", code);
-		HashMap<String, Serializable> dataMap = objectMapper.readValue(
-			objectMapper.writeValueAsString(data),
-			HashMap.class
-		);
+		String dataJson = jsonb.toJson(data);
+		HashMap<String, Serializable> dataMap = jsonb.fromJson(dataJson, HashMap.class);
 		responseMap.put("data", dataMap);
 
 		if (code == 201) return ResponseEntity.status(201).build();

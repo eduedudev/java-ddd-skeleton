@@ -4,7 +4,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.json.bind.Jsonb;
+import jakarta.json.bind.JsonbBuilder;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -137,8 +138,9 @@ public final class ApiExceptionMiddleware implements Filter {
 		errorResponse.put("data", data);
 
 		try (PrintWriter writer = response.getWriter()) {
-			ObjectMapper mapper = new ObjectMapper();
-			writer.write(mapper.writerWithDefaultPrettyPrinter().writeValueAsString(errorResponse));
+			Jsonb jsonb = JsonbBuilder.create();
+			String jsonResponse = jsonb.toJson(errorResponse);
+			writer.write(jsonResponse);
 		}
 	}
 

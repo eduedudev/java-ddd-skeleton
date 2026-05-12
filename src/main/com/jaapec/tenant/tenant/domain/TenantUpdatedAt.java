@@ -8,6 +8,5 @@ public final class TenantUpdatedAt extends DateTimeValueObject {
 		super(value);
 	}
 
-	TenantUpdatedAt() {
-	}
+	TenantUpdatedAt() {}
 }

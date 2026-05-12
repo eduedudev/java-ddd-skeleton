@@ -1,15 +1,15 @@
 package com.jaapec.tenant.shared.domain;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.CaseFormat;
+import jakarta.json.bind.Jsonb;
+import jakarta.json.bind.JsonbBuilder;
+import jakarta.json.bind.JsonbException;
 
 public final class Utils {
 
@@ -25,8 +25,9 @@ public final class Utils {
 
 	public static String jsonEncode(Map<String, Serializable> map) {
 		try {
-			return new ObjectMapper().writeValueAsString(map);
-		} catch (JsonProcessingException e) {
+			Jsonb jsonb = JsonbBuilder.create();
+			return jsonb.toJson(map);
+		} catch (JsonbException e) {
 			return "";
 		}
 	}
@@ -34,8 +35,9 @@ public final class Utils {
 	@SuppressWarnings("unchecked")
 	public static Map<String, Serializable> jsonDecode(String body) {
 		try {
-			return new ObjectMapper().readValue(body, Map.class);
-		} catch (IOException e) {
+			Jsonb jsonb = JsonbBuilder.create();
+			return (Map<String, Serializable>) jsonb.fromJson(body, Map.class);
+		} catch (JsonbException e) {
 			throw new IllegalArgumentException("Failed to decode JSON string", e);
 		}
 	}

@@ -203,7 +203,8 @@ public final class TenantPlanSubscription {
 		SubscriptionInitDate startDate
 	) {
 		String now = DateUtils.nowAsString();
-		LocalDateTime expirationDateTime = Objects.requireNonNull(this.billingInterval)
+		LocalDateTime expirationDateTime = Objects
+			.requireNonNull(this.billingInterval)
 			.calculateExpiration(startDate.valueAsDateTime());
 		return new TenantPlanSubscription(
 			this.id,
@@ -251,7 +252,6 @@ public final class TenantPlanSubscription {
 			new SubscriptionUpdateAt(now)
 		);
 	}
-
 
 	public boolean isActive() {
 		return Objects.requireNonNull(this.status).value().equals(SubscriptionStatus.status.ACTIVE.name());

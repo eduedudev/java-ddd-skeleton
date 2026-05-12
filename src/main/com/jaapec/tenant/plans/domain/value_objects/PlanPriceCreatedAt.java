@@ -8,6 +8,5 @@ public final class PlanPriceCreatedAt extends DateTimeValueObject {
 		super(value);
 	}
 
-	PlanPriceCreatedAt() {
-	}
+	PlanPriceCreatedAt() {}
 }

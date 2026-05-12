@@ -211,7 +211,15 @@ public final class Tenant extends AggregateRoot {
 		}
 
 		TenantPlanSubscription subscription = TenantPlanSubscription.create(
-			subscriptionId, this, plan, interval, pricing, currency, coupon, source, autoRenew
+			subscriptionId,
+			this,
+			plan,
+			interval,
+			pricing,
+			currency,
+			coupon,
+			source,
+			autoRenew
 		);
 
 		List<TenantPlanSubscription> updatedSubscriptions = Stream
@@ -219,8 +227,16 @@ public final class Tenant extends AggregateRoot {
 			.toList();
 
 		Tenant tenantWithSubscription = new Tenant(
-			this.id, this.name, this.status, updatedSubscriptions, this.activeSubscriptionId,
-			this.domain, this.domainVerified, this.ownerId, this.createdAt, new TenantUpdatedAt(now)
+			this.id,
+			this.name,
+			this.status,
+			updatedSubscriptions,
+			this.activeSubscriptionId,
+			this.domain,
+			this.domainVerified,
+			this.ownerId,
+			this.createdAt,
+			new TenantUpdatedAt(now)
 		);
 		tenantWithSubscription.record(
 			new TenantSubscribeToPlanEvent(
@@ -277,8 +293,15 @@ public final class Tenant extends AggregateRoot {
 			.toList();
 
 		return new Tenant(
-			this.id, this.name, this.status, updatedSubscriptions, subscriptionId,
-			this.domain, this.domainVerified, this.ownerId, this.createdAt,
+			this.id,
+			this.name,
+			this.status,
+			updatedSubscriptions,
+			subscriptionId,
+			this.domain,
+			this.domainVerified,
+			this.ownerId,
+			this.createdAt,
 			new TenantUpdatedAt(DateUtils.nowAsString())
 		);
 	}

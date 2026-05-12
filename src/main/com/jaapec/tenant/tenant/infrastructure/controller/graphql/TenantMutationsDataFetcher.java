@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.json.bind.Jsonb;
+import jakarta.json.bind.JsonbBuilder;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.stereotype.Controller;
@@ -46,18 +46,16 @@ public final class TenantMutationsDataFetcher extends GraphQLApiController {
 	}
 
 	@MutationMapping
-	public boolean createTenant(@Argument RequestTenant request) throws ValidatorNotExist, JsonProcessingException {
+	public boolean createTenant(@Argument RequestTenant request) throws ValidatorNotExist {
 		checkTenant(request);
 		String uuid = UUID.randomUUID().toString();
-		// TODO: Replace mock-owner-id with actual ownerId from authenticated user (JWT claim "sub")
 		String ownerId = new TenantId(uuid).value();
 		dispatch(new CreateTenantCommand(uuid, request.name(), ownerId));
 		return true;
 	}
 
 	@MutationMapping
-	public boolean updateTenant(@Argument String id, @Argument RequestTenant request)
-		throws JsonProcessingException, ValidatorNotExist {
+	public boolean updateTenant(@Argument String id, @Argument RequestTenant request) throws ValidatorNotExist {
 		checkTenant(request);
 		dispatch(new UpdateTenantCommand(id, request.name()));
 		return true;
@@ -75,9 +73,9 @@ public final class TenantMutationsDataFetcher extends GraphQLApiController {
 		return true;
 	}
 
-	private void checkTenant(RequestTenant request) throws JsonProcessingException, ValidatorNotExist {
-		ObjectMapper objectMapper = new ObjectMapper();
-		String requestJson = objectMapper.writeValueAsString(request);
+	private void checkTenant(RequestTenant request) throws ValidatorNotExist {
+		Jsonb jsonb = JsonbBuilder.create();
+		String requestJson = jsonb.toJson(request);
 		ValidationResponse validationResponse = validator.validate(requestJson, rules, repository);
 		List<GraphQLCustomException> errors = new ArrayList<>();
 		Boolean hasErrors = validationResponse.hasErrors();

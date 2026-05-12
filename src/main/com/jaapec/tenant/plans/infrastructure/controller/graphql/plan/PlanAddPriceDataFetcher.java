@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.json.bind.Jsonb;
+import jakarta.json.bind.JsonbBuilder;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.stereotype.Controller;
@@ -48,10 +48,9 @@ public final class PlanAddPriceDataFetcher extends GraphQLApiController {
 	}
 
 	@MutationMapping
-	public boolean addPlanPrice(@Argument String id, @Argument RequestPlanPrice request)
-		throws ValidatorNotExist, JsonProcessingException {
-		ObjectMapper objectMapper = new ObjectMapper();
-		String requestJson = objectMapper.writeValueAsString(request);
+	public boolean addPlanPrice(@Argument String id, @Argument RequestPlanPrice request) throws ValidatorNotExist {
+		Jsonb jsonb = JsonbBuilder.create();
+		String requestJson = jsonb.toJson(request);
 		ValidationResponse validationResponse = validator.validate(requestJson, rules, repository);
 		validationResponse.addError(validator.validate("{\"id\":\"" + id + "\"}", rules2, repository).errors());
 		List<GraphQLCustomException> errors = new ArrayList<>();

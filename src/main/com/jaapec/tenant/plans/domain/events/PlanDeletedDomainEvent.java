@@ -8,7 +8,7 @@ import com.jaapec.tenant.shared.domain.bus.event.DomainEvent;
 
 public final class PlanDeletedDomainEvent extends DomainEvent {
 
-	public PlanDeletedDomainEvent() {
+	PlanDeletedDomainEvent() {
 		super(null);
 	}
 

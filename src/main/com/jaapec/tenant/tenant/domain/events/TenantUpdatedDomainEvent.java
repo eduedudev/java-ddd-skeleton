@@ -11,7 +11,7 @@ public final class TenantUpdatedDomainEvent extends DomainEvent {
 	private final String name;
 	private final String updateAt;
 
-	public TenantUpdatedDomainEvent() {
+	TenantUpdatedDomainEvent() {
 		super(null);
 		this.name = null;
 		this.updateAt = null;

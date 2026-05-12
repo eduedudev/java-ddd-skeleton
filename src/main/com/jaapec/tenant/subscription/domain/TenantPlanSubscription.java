@@ -1,7 +1,6 @@
 package com.jaapec.tenant.subscription.domain;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 import com.jaapec.tenant.plans.domain.Plan;
@@ -71,7 +70,7 @@ public final class TenantPlanSubscription {
 		this.updatedAt = updatedAt;
 	}
 
-	public TenantPlanSubscription() {
+	TenantPlanSubscription() {
 		this.id = null;
 		this.tenant = null;
 		this.plan = null;
@@ -204,13 +203,8 @@ public final class TenantPlanSubscription {
 		SubscriptionInitDate startDate
 	) {
 		String now = DateUtils.nowAsString();
-		LocalDateTime startDateTime = startDate.valueAsDateTime();
-
-		LocalDateTime expirationDateTime = BillingIntervalHelper.calculateExpiration(
-			startDateTime,
-			Objects.requireNonNull(this.billingInterval)
-		);
-		String formattedDateTime = expirationDateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+		LocalDateTime expirationDateTime = Objects.requireNonNull(this.billingInterval)
+			.calculateExpiration(startDate.valueAsDateTime());
 		return new TenantPlanSubscription(
 			this.id,
 			this.tenant,
@@ -219,7 +213,7 @@ public final class TenantPlanSubscription {
 			new SubscriptionStatus(SubscriptionStatus.status.ACTIVE.name()),
 			new SubscriptionDateSubscribed(now),
 			startDate,
-			new SubscriptionExpirationDate(formattedDateTime),
+			new SubscriptionExpirationDate(DateUtils.format(expirationDateTime)),
 			this.pricing,
 			this.currency,
 			this.coupon,
@@ -258,16 +252,6 @@ public final class TenantPlanSubscription {
 		);
 	}
 
-	private static class BillingIntervalHelper {
-
-		public static LocalDateTime calculateExpiration(LocalDateTime initDateTime, BillingInterval interval) {
-			return switch (interval.value()) {
-				case "MONTHLY" -> initDateTime.plusMonths(1);
-				case "YEARLY" -> initDateTime.plusYears(1);
-				default -> throw new IllegalArgumentException("Unsupported interval: " + interval.value());
-			};
-		}
-	}
 
 	public boolean isActive() {
 		return Objects.requireNonNull(this.status).value().equals(SubscriptionStatus.status.ACTIVE.name());

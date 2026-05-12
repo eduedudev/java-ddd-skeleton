@@ -1,7 +1,6 @@
 package com.jaapec.tenant.tenant.domain;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -54,7 +53,7 @@ public final class Tenant extends AggregateRoot {
 		this.updatedAt = updatedAt;
 	}
 
-	public Tenant() {
+	Tenant() {
 		this.id = null;
 		this.name = null;
 		this.status = null;
@@ -202,45 +201,26 @@ public final class Tenant extends AggregateRoot {
 		SubscriptionAutoRenew autoRenew
 	) {
 		String now = DateUtils.nowAsString();
-		TenantPlanSubscription subscription = TenantPlanSubscription.create(
-			subscriptionId,
-			this,
-			plan,
-			interval,
-			pricing,
-			currency,
-			coupon,
-			source,
-			autoRenew
-		);
 		List<TenantPlanSubscription> currentSubs = Optional.ofNullable(this.subscriptions).orElse(List.of());
-		boolean hasActiveSubscription = currentSubs.stream().anyMatch(TenantPlanSubscription::isActive);
 
-		if (hasActiveSubscription) {
+		if (currentSubs.stream().anyMatch(TenantPlanSubscription::isActive)) {
 			throw new ActiveSubscriptionAlreadyExistsException();
 		}
-
-		boolean paymentPending = currentSubs.stream().anyMatch(s -> s.paymentStatus().isPending());
-
-		if (paymentPending) {
+		if (currentSubs.stream().anyMatch(s -> s.paymentStatus().isPending())) {
 			throw new PendingSubscriptionExistsException();
 		}
 
+		TenantPlanSubscription subscription = TenantPlanSubscription.create(
+			subscriptionId, this, plan, interval, pricing, currency, coupon, source, autoRenew
+		);
+
 		List<TenantPlanSubscription> updatedSubscriptions = Stream
-			.concat(Optional.ofNullable(this.subscriptions).orElse(List.of()).stream(), Stream.of(subscription))
+			.concat(currentSubs.stream(), Stream.of(subscription))
 			.toList();
 
 		Tenant tenantWithSubscription = new Tenant(
-			this.id,
-			this.name,
-			this.status,
-			updatedSubscriptions,
-			this.activeSubscriptionId,
-			this.domain,
-			this.domainVerified,
-			this.ownerId,
-			this.createdAt,
-			new TenantUpdatedAt(now)
+			this.id, this.name, this.status, updatedSubscriptions, this.activeSubscriptionId,
+			this.domain, this.domainVerified, this.ownerId, this.createdAt, new TenantUpdatedAt(now)
 		);
 		tenantWithSubscription.record(
 			new TenantSubscribeToPlanEvent(
@@ -272,18 +252,15 @@ public final class Tenant extends AggregateRoot {
 
 		SubscriptionInitDate startDate;
 
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
 		if (latestSubscription != null) {
 			LocalDateTime expirationDateTime = latestSubscription.expirationDate().valueAsDateTime();
-
 			if (!now.isAfter(expirationDateTime.plusDays(GRACE_PERIOD_DAYS_TO_SUBSCRIPTION))) {
-				startDate = new SubscriptionInitDate(expirationDateTime.format(formatter));
+				startDate = new SubscriptionInitDate(DateUtils.format(expirationDateTime));
 			} else {
-				startDate = new SubscriptionInitDate(now.format(formatter));
+				startDate = new SubscriptionInitDate(DateUtils.format(now));
 			}
 		} else {
-			startDate = new SubscriptionInitDate(now.format(formatter));
+			startDate = new SubscriptionInitDate(DateUtils.format(now));
 		}
 
 		List<TenantPlanSubscription> updatedSubscriptions = Optional
@@ -292,9 +269,7 @@ public final class Tenant extends AggregateRoot {
 			.stream()
 			.map(subscription -> {
 				if (subscription.id().equals(subscriptionId)) {
-					if (subscription.isActive()) {
-						throw new SubscriptionAlreadyActive();
-					}
+					if (subscription.isActive()) throw new SubscriptionAlreadyActive();
 					return subscription.makePayment(paymentMethod, paymentReference, startDate);
 				}
 				return subscription;
@@ -302,15 +277,8 @@ public final class Tenant extends AggregateRoot {
 			.toList();
 
 		return new Tenant(
-			this.id,
-			this.name,
-			this.status,
-			updatedSubscriptions,
-			subscriptionId,
-			this.domain,
-			this.domainVerified,
-			this.ownerId,
-			this.createdAt,
+			this.id, this.name, this.status, updatedSubscriptions, subscriptionId,
+			this.domain, this.domainVerified, this.ownerId, this.createdAt,
 			new TenantUpdatedAt(DateUtils.nowAsString())
 		);
 	}

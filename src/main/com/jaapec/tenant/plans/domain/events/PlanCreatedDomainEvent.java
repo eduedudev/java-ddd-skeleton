@@ -100,7 +100,7 @@ public final class PlanCreatedDomainEvent extends PlanDomainEvent {
 		);
 	}
 
-	public PlanCreatedDomainEvent() {
+	PlanCreatedDomainEvent() {
 		super(null, null, null, null, null, null, null, null, null, null, null, null);
 	}
 

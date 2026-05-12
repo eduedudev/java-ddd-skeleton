@@ -35,7 +35,7 @@ public final class ChangeVisibilityPlanDomainEvent extends DomainEvent {
 		this.updatedAt = updatedAt;
 	}
 
-	public ChangeVisibilityPlanDomainEvent() {
+	ChangeVisibilityPlanDomainEvent() {
 		super(null);
 		this.visibility = null;
 		this.updatedAt = null;

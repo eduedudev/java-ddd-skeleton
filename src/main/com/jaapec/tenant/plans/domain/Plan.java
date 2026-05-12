@@ -58,7 +58,7 @@ public final class Plan extends AggregateRoot {
 		this.updatedAt = updatedAt;
 	}
 
-	public Plan() {
+	Plan() {
 		this.id = null;
 		this.name = null;
 		this.description = null;

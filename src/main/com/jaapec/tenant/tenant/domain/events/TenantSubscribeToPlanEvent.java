@@ -15,7 +15,7 @@ public final class TenantSubscribeToPlanEvent extends DomainEvent {
 	private final int pricing;
 	private final String currency;
 
-	public TenantSubscribeToPlanEvent() {
+	TenantSubscribeToPlanEvent() {
 		super(null);
 		this.subscriptionId = null;
 		this.planId = null;

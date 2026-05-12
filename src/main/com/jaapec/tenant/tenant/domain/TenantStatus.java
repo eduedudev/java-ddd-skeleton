@@ -7,10 +7,11 @@ public final class TenantStatus {
 	private final String value;
 
 	public TenantStatus(String value) {
+		Status.valueOf(value); // validates on construction
 		this.value = value;
 	}
 
-	public TenantStatus() {
+	TenantStatus() {
 		this.value = null;
 	}
 

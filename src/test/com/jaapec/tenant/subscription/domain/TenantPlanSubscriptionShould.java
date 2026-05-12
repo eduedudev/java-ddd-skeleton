@@ -63,6 +63,9 @@ class TenantPlanSubscriptionShould extends SubscriptionModuleUnitTestCase {
 		Plan plan = Mockito.mock(Plan.class);
 		BillingInterval billingInterval = Mockito.mock(BillingInterval.class);
 		Mockito.when(billingInterval.value()).thenReturn("MONTHLY");
+		Mockito.when(billingInterval.calculateExpiration(Mockito.any())).thenAnswer(inv ->
+			((java.time.LocalDateTime) inv.getArgument(0)).plusMonths(1)
+		);
 		Currency currency = Mockito.mock(Currency.class);
 
 		TenantPlanSubscription subscription = new TenantPlanSubscription(

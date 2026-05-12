@@ -14,7 +14,7 @@ public final class TenantSubscriptionAutoRenewCanceledEvent extends DomainEvent 
 	private final String planName;
 	private final String planDescription;
 
-	public TenantSubscriptionAutoRenewCanceledEvent() {
+	TenantSubscriptionAutoRenewCanceledEvent() {
 		super(null);
 		this.subscriptionId = null;
 		this.planId = null;

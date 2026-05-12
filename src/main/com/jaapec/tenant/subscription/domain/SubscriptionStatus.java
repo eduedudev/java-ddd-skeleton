@@ -7,10 +7,11 @@ public final class SubscriptionStatus {
 	private final String value;
 
 	public SubscriptionStatus(String value) {
+		status.valueOf(value); // validates on construction
 		this.value = value;
 	}
 
-	public SubscriptionStatus() {
+	SubscriptionStatus() {
 		this.value = null;
 	}
 

@@ -11,6 +11,9 @@ public abstract class DateTimeValueObject {
 	private final Timestamp value;
 
 	protected DateTimeValueObject(String value) {
+		if (value == null) {
+			throw new IllegalArgumentException("DateTime value cannot be null");
+		}
 		this.value = convertToDateTime(value);
 	}
 

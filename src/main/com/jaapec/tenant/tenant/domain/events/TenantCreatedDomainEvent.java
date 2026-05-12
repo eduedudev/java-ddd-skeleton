@@ -14,7 +14,7 @@ public final class TenantCreatedDomainEvent extends DomainEvent {
 	private final String createAt;
 	private final String updateAt;
 
-	public TenantCreatedDomainEvent() {
+	TenantCreatedDomainEvent() {
 		super(null);
 		this.name = null;
 		this.ownerId = null;

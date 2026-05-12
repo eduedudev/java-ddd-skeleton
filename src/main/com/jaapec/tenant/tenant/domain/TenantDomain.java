@@ -12,7 +12,7 @@ public final class TenantDomain {
 		ensureDomain();
 	}
 
-	public TenantDomain() {
+	TenantDomain() {
 		this.value = null;
 	}
 

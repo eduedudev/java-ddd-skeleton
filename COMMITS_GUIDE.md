@@ -99,5 +99,3 @@ For automation, consider using:
 - [`commitlint`](https://commitlint.js.org/) to enforce commit message format.
 - [`semantic-release`](https://semantic-release.gitbook.io/) for automated versioning.
 
-By following this guide, your commit history will remain consistent and maintainable. 🚀
-

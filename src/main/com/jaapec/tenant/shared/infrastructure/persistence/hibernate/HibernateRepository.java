@@ -61,7 +61,10 @@ public abstract class HibernateRepository<T> {
 	 *     given id exists
 	 */
 	protected Optional<T> byId(Identifier id) {
-		return Optional.ofNullable(sessionFactory.getCurrentSession().byId(aggregateClass).load(id));
+		return Optional.ofNullable(
+			sessionFactory
+				.getCurrentSession()
+				.find(aggregateClass, id));
 	}
 
 	/**

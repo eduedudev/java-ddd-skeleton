@@ -1,6 +1,7 @@
 package com.jaapec.tenant.shared.infrastructure.validation.validators;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Map;
 
 import org.jetbrains.annotations.Nullable;
@@ -17,7 +18,13 @@ public final class IntegerValidator implements FieldValidator {
 		@Nullable Repository repository,
 		@Nullable String rule
 	) {
-		return fields.get(fieldName) instanceof Integer;
+		Object value = fields.get(fieldName);
+
+		if (value instanceof BigDecimal bd) {
+			return bd.stripTrailingZeros().scale() <= 0;
+		}
+
+		return value instanceof Integer;
 	}
 
 	@Override

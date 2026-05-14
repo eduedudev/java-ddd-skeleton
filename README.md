@@ -1,315 +1,402 @@
 
-# Users Service 🚀
+# Tenant Service 🚀
 
 ## Overview
-The **Users Service** is a microservice built with **Java Spring Boot**, following **Domain-Driven Design (DDD)** principles based on the **CodelyTV Java DDD Example** ([repository](https://github.com/CodelyTV/java-ddd-example)).
-This project was optimized by **removing monorepo configurations**, **fixing issues preventing .jar generation**, and **adding support for GraphQL**, among other improvements.
+El **Tenant Service** es un microservicio construido con **Java Spring Boot** que gestiona tenants (inquilinos), planes de suscripción y suscripciones en una arquitectura multi-tenant. Sigue los principios de **Domain-Driven Design (DDD)** y está basado en el ejemplo de **CodelyTV Java DDD** ([repositorio](https://github.com/CodelyTV/java-ddd-example)).
 
-## 📌 Key Features
-- **Domain-Driven Design (DDD)** architecture
-- **CQRS pattern** with Command & Query separation
-- **GraphQL API** for user and tenant management
-- **Event-driven architecture** using RabbitMQ
-- **MariaDB** with **Hibernate** for persistence
-- **Hexagonal Architecture** for better modularity
-- **Fixed Gradle build issues** that required executing the app without a .jar
+Este servicio permite la gestión completa del ciclo de vida de tenants, incluyendo la creación de planes de suscripción con diferentes precios, la suscripción de tenants a planes, verificación de dominios personalizados, y gestión de pagos y renovaciones automáticas.
 
-## 📂 Project Structure
+## 📌 Características Principales
+- **Arquitectura Domain-Driven Design (DDD)** con separación clara de capas
+- **Patrón CQRS** con separación de Commands y Queries
+- **API GraphQL** para gestión de tenants, planes y suscripciones
+- **Arquitectura orientada a eventos** usando RabbitMQ
+- **Persistencia con MariaDB** y **Hibernate ORM**
+- **Arquitectura Hexagonal** para mejor modularidad y testabilidad
+- **Gestión de suscripciones** con soporte para períodos de prueba, renovación automática y cupones
+- **Verificación de dominios personalizados** para tenants
 
-```
-├── main
-│   ├── com
-│   │   └── devsoftec
-│   │       └── jaap
-│   │           └── users
-│   │               ├── healt_checker
-│   │               │   └── infrastructure
-│   │               │       └── rest
-│   │               │           └── HealthCheckGetController.java
-│   │               ├── shared
-│   │               │   ├── domain
-│   │               │   │   ├── AggregateRoot.java
-│   │               │   │   ├── bus
-│   │               │   │   │   ├── command
-│   │               │   │   │   │   ├── CommandBus.java
-│   │               │   │   │   │   ├── CommandHandlerExecutionError.java
-│   │               │   │   │   │   ├── CommandHandler.java
-│   │               │   │   │   │   ├── Command.java
-│   │               │   │   │   │   └── CommandNotRegisteredError.java
-│   │               │   │   │   ├── event
-│   │               │   │   │   │   ├── DomainEvent.java
-│   │               │   │   │   │   └── EventBus.java
-│   │               │   │   │   └── query
-│   │               │   │   │       ├── QueryBus.java
-│   │               │   │   │       ├── QueryHandlerExecutionError.java
-│   │               │   │   │       ├── QueryHandler.java
-│   │               │   │   │       ├── Query.java
-│   │               │   │   │       ├── QueryNotRegisteredError.java
-│   │               │   │   │       └── Response.java
-│   │               │   │   ├── criteria
-│   │               │   │   │   ├── Criteria.java
-│   │               │   │   │   ├── FilterField.java
-│   │               │   │   │   ├── Filter.java
-│   │               │   │   │   ├── FilterOperator.java
-│   │               │   │   │   ├── Filters.java
-│   │               │   │   │   ├── FilterValue.java
-│   │               │   │   │   ├── OrderBy.java
-│   │               │   │   │   ├── Order.java
-│   │               │   │   │   └── OrderType.java
-│   │               │   │   ├── DomainError.java
-│   │               │   │   ├── Logger.java
-│   │               │   │   ├── Repository.java
-│   │               │   │   ├── ResourceAlreadyExists.java
-│   │               │   │   ├── ResourceNotExist.java
-│   │               │   │   ├── Service.java
-│   │               │   │   ├── Utils.java
-│   │               │   │   ├── UuidGenerator.java
-│   │               │   │   └── ValueObjects
-│   │               │   │       ├── BigDecimalValueObject.java
-│   │               │   │       ├── BooleanValueObject.java
-│   │               │   │       ├── CreatedAt.java
-│   │               │   │       ├── DateTimeValueObject.java
-│   │               │   │       ├── DateValueObject.java
-│   │               │   │       ├── Email.java
-│   │               │   │       ├── Identifier.java
-│   │               │   │       ├── IntValueObject.java
-│   │               │   │       ├── StringValueObject.java
-│   │               │   │       └── UpdatedAt.java
-│   │               │   └── infrastructure
-│   │               │       ├── bus
-│   │               │       │   ├── command
-│   │               │       │   │   ├── CommandHandlersInformation.java
-│   │               │       │   │   └── InMemoryCommandBus.java
-│   │               │       │   ├── event
-│   │               │       │   │   ├── DomainEventJsonDeserializer.java
-│   │               │       │   │   ├── DomainEventJsonSerializer.java
-│   │               │       │   │   ├── DomainEventsInformation.java
-│   │               │       │   │   ├── DomainEventSubscriberInformation.java
-│   │               │       │   │   ├── DomainEventSubscriber.java
-│   │               │       │   │   ├── DomainEventSubscribersInformation.java
-│   │               │       │   │   ├── mariadb
-│   │               │       │   │   │   ├── MariaDBDomainEventsConsumer.java
-│   │               │       │   │   │   ├── MariaDBDomainEventsScheduler.java
-│   │               │       │   │   │   └── MariaDBEventBus.java
-│   │               │       │   │   ├── rabbitmq
-│   │               │       │   │   │   ├── RabbitMqDomainEventsConsumer.java
-│   │               │       │   │   │   ├── RabbitMQDomainEventsScheduler.java
-│   │               │       │   │   │   ├── RabbitMqEventBusConfiguration.java
-│   │               │       │   │   │   ├── RabbitMqEventBus.java
-│   │               │       │   │   │   ├── RabbitMqExchangeNameFormatter.java
-│   │               │       │   │   │   ├── RabbitMqPublisher.java
-│   │               │       │   │   │   └── RabbitMqQueueNameFormatter.java
-│   │               │       │   │   └── spring
-│   │               │       │   │       └── SpringApplicationEventBus.java
-│   │               │       │   └── query
-│   │               │       │       ├── InMemoryQueryBus.java
-│   │               │       │       └── QueryHandlersInformation.java
-│   │               │       ├── cli
-│   │               │       │   └── ConsoleCommand.java
-│   │               │       ├── config
-│   │               │       │   ├── EnvironmentConfig.java
-│   │               │       │   ├── Parameter.java
-│   │               │       │   └── ParameterNotExist.java
-│   │               │       ├── Config.java
-│   │               │       ├── controller
-│   │               │       │   └── graphql
-│   │               │       │       ├── CustomDGSConfiguration.java
-│   │               │       │       ├── GraphQLCustomException.java
-│   │               │       │       ├── GraphQLExceptionList.java
-│   │               │       │       ├── GraphQLExceptionResolver.java
-│   │               │       │       └── schema
-│   │               │       │           └── schema.graphqls
-│   │               │       ├── JavaUuidGenerator.java
-│   │               │       ├── persistence
-│   │               │       │   └── hibernate
-│   │               │       │       ├── HibernateConfiguration.java
-│   │               │       │       ├── HibernateCriteriaConverter.java
-│   │               │       │       └── HibernateRepository.java
-│   │               │       ├── spring
-│   │               │       │   ├── ApiController.java
-│   │               │       │   ├── ApiExceptionMiddleware.java
-│   │               │       │   └── log
-│   │               │       │       ├── Log4j2Logger.java
-│   │               │       │       └── LoggerConfig.java
-│   │               │       └── validation
-│   │               │           ├── ValidationResponse.java
-│   │               │           ├── Validator.java
-│   │               │           ├── ValidatorNotExist.java
-│   │               │           └── validators
-│   │               │               ├── BigDecimalValidator.java
-│   │               │               ├── DateTimeValidator.java
-│   │               │               ├── DateValidator.java
-│   │               │               ├── DoubleValidator.java
-│   │               │               ├── EmailValidator.java
-│   │               │               ├── EnumValidator.java
-│   │               │               ├── FieldValidator.java
-│   │               │               ├── MaxValidation.java
-│   │               │               ├── MinValidation.java
-│   │               │               ├── NotEmptyValidator.java
-│   │               │               ├── RegexValidation.java
-│   │               │               ├── RequiredValidator.java
-│   │               │               ├── StringValidator.java
-│   │               │               ├── UniqueFieldValidator.java
-│   │               │               └── UuidValidator.java
-│   │               ├── Starter.java
-│   │               ├── template
-│   │               │   ├── application
-│   │               │   ├── domain
-│   │               │   │   ├── events
-│   │               │   │   └── ValueObjects
-│   │               │   └── infrastructure
-│   │               │       ├── controller
-│   │               │       │   ├── graphql
-│   │               │       │   └── reset
-│   │               │       └── persistence
-│   │               │           └── hibernate
-│   │               └── users
-│   │                   ├── application
-│   │                   │   └── create
-│   │                   │       ├── CreateUserCommandHandler.java
-│   │                   │       ├── CreateUserCommand.java
-│   │                   │       └── UserCreator.java
-│   │                   ├── domain
-│   │                   │   ├── events
-│   │                   │   │   └── UserCreatedDomainEvent.java
-│   │                   │   ├── UserEmail.java
-│   │                   │   ├── UserId.java
-│   │                   │   ├── User.java
-│   │                   │   ├── UserName.java
-│   │                   │   └── UserRepository.java
-│   │                   └── infrastructure
-│   │                       ├── controller
-│   │                       │   ├── graphql
-│   │                       │   │   ├── schema
-│   │                       │   │   │   └── schema.graphqls
-│   │                       │   │   └── UserPostControllerGraphql.java
-│   │                       │   ├── RequestUser.java
-│   │                       │   └── reset
-│   │                       │       └── UserPOSTController.java
-│   │                       └── persistence
-│   │                           ├── hibernate
-│   │                           │   └── User.orm.xml
-│   │                           └── MariaDBUserRepository.java
-│   └── resources
-│       ├── application.properties
-│       └── schema.sql
-└── test
-    ├── com
-    │   └── devsoftec
-    │       └── jaap
-    │           └── users
-    │               ├── healt_checker
-    │               │   └── infrastructure
-    │               │       └── rest
-    │               │           └── HealthCheckGetControllerShould.java
-    │               ├── RequestTestCase.java
-    │               ├── shared
-    │               │   ├── domain
-    │               │   │   ├── MotherCreator.java
-    │               │   │   ├── UuidMother.java
-    │               │   │   └── WordMother.java
-    │               │   └── infrastructure
-    │               │       ├── ApplicationTestCase.java
-    │               │       ├── bus
-    │               │       │   └── event
-    │               │       │       ├── mariadb
-    │               │       │       │   └── MariaDBEventBusShould.java
-    │               │       │       └── rabbitmq
-    │               │       │           ├── RabbitMqEventBusShould.java
-    │               │       │           └── TestAllWorksOnRabbitMqEventsPublished.java
-    │               │       └── InfrastructureTestCase.java
-    │               ├── users
-    │               │   ├── application
-    │               │   │   └── create
-    │               │   │       ├── CreateUserCommandHandlerShould.java
-    │               │   │       └── CreateUserCommandMother.java
-    │               │   ├── domain
-    │               │   │   ├── UserCreatedDomainEventMother.java
-    │               │   │   ├── UserEmailMother.java
-    │               │   │   ├── UserIdMother.java
-    │               │   │   ├── UserMother.java
-    │               │   │   └── UserNameMother.java
-    │               │   ├── infrastructure
-    │               │   │   ├── controller
-    │               │   │   │   ├── grapghql
-    │               │   │   │   │   └── UserPostControllerGraphqlShould.java
-    │               │   │   │   └── reset
-    │               │   │   │       └── UserPOSTControllerShould.java
-    │               │   │   ├── persistence
-    │               │   │   │   └── hibernate
-    │               │   │   │       └── MariaDBUserRepositoryShould.java
-    │               │   │   └── UnitTestCase.java
-    │               │   ├── UsersModuleInfrastructureTestCase.java
-    │               │   └── UsersModuleUnitTestCase.java
-    │               └── UsersServiceApplicationTests.java
-    └── resources
-```
+## 📂 Estructura del Proyecto
 
-## 🛠 Technologies Used
-- **Java 21+**
-- **Spring Boot**
-- **GraphQL**
-- **MariaDB** + **Hibernate**
-- **RabbitMQ** (for event-driven communication)
-- **Docker** (for containerized deployment)
-
-## ⚙️ Configuration
-
-### 1️⃣ Prerequisites
-Ensure you have the following installed:
-- **Java 21+**
-- **Gradle**
-- **Docker & Docker Compose** (for MariaDB & RabbitMQ setup)
-
-### 2️⃣ Environment Variables
-Create a `.env` file with the following:
+El proyecto está organizado siguiendo los principios de DDD y Arquitectura Hexagonal:
 
 ```
+src/main/com/jaapec/tenant/
+├── plans/                          # Módulo de Planes de Suscripción
+│   ├── application/                # Casos de uso (Commands & Queries)
+│   │   ├── create/                 # Crear plan
+│   │   ├── update/                 # Actualizar plan
+│   │   ├── delete/                 # Eliminar plan
+│   │   ├── find/                   # Buscar plan por ID
+│   │   ├── search/                 # Buscar planes con filtros
+│   │   ├── add_price/              # Agregar precio a plan
+│   │   └── change_visibility/      # Cambiar visibilidad del plan
+│   ├── domain/                     # Lógica de negocio
+│   │   ├── Plan.java               # Agregado raíz
+│   │   ├── PlanPrice.java          # Entidad de precio
+│   │   ├── PlanRepository.java     # Interfaz del repositorio
+│   │   ├── events/                 # Eventos de dominio
+│   │   └── value_objects/          # Value Objects
+│   └── infrastructure/             # Adaptadores
+│       ├── controller/graphql/     # Controladores GraphQL
+│       └── persistence/            # Repositorio MariaDB
+│
+├── tenant/                         # Módulo de Tenants
+│   ├── application/                # Casos de uso
+│   │   ├── create/                 # Crear tenant
+│   │   ├── update/                 # Actualizar tenant
+│   │   ├── find/                   # Buscar tenant
+│   │   ├── search/                 # Buscar tenants con filtros
+│   │   ├── change_domain/          # Cambiar dominio personalizado
+│   │   ├── subscribe_to_plan/      # Suscribir tenant a plan
+│   │   ├── activate_subscription/  # Activar suscripción
+│   │   └── cancel_auto_renew/      # Cancelar renovación automática
+│   ├── domain/                     # Lógica de negocio
+│   │   ├── Tenant.java             # Agregado raíz
+│   │   ├── TenantRepository.java   # Interfaz del repositorio
+│   │   └── events/                 # Eventos de dominio
+│   └── infrastructure/             # Adaptadores
+│       ├── controller/graphql/     # Controladores GraphQL
+│       └── persistence/            # Repositorio MariaDB
+│
+├── subscription/                   # Módulo de Suscripciones
+│   ├── domain/                     # Lógica de negocio
+│   │   └── TenantPlanSubscription.java  # Entidad de suscripción
+│   └── infrastructure/             # Adaptadores
+│
+└── shared/                         # Código compartido
+    ├── domain/                     # Abstracciones de dominio
+    │   ├── bus/                    # Command, Query y Event Bus
+    │   ├── criteria/               # Sistema de filtros y búsqueda
+    │   └── ValueObjects/           # Value Objects base
+    └── infrastructure/             # Infraestructura compartida
+        ├── bus/                    # Implementaciones de buses
+        ├── persistence/            # Configuración Hibernate
+        └── controller/graphql/     # Configuración GraphQL
+```
+
+## 🛠 Tecnologías Utilizadas
+- **Java 25** con toolchain
+- **Spring Boot 4.0.6**
+- **Netflix DGS GraphQL 12.0.0** (GraphQL para Spring Boot)
+- **MariaDB 10.7** con **Hibernate 7.3.4**
+- **RabbitMQ 3** (comunicación orientada a eventos)
+- **Docker & Docker Compose** (despliegue containerizado)
+- **Gradle 8** (gestión de dependencias y build)
+- **JUnit 5** y **Mockito** (testing)
+
+## ⚙️ Configuración
+
+### 1️⃣ Prerequisitos
+Asegúrate de tener instalado:
+- **Java 25+**
+- **Gradle 9+**
+- **Docker & Docker Compose** (para MariaDB y RabbitMQ)
+
+### 2️⃣ Variables de Entorno
+Crea un archivo `.env` con las siguientes variables:
+
+```env
 # DATABASE MARIADB
 DATABASE_HOST=localhost
 DATABASE_PORT=3306
-DATABASE_NAME=skeleton
-DATABASE_USER=root
-DATABASE_PASSWORD=
+DATABASE_NAME=jaapec_tenant_service
+DATABASE_USER=dbuser
+DATABASE_PASSWORD=dbpasss
 
 # RabbitMQ
-RABBITMQ_HOST=
+RABBITMQ_HOST=localhost
 RABBITMQ_PORT=5672
-RABBITMQ_LOGIN=
-RABBITMQ_PASSWORD=
-RABBITMQ_EXCHANGE="domain_events"
+RABBITMQ_LOGIN=kcrqwise
+RABBITMQ_PASSWORD=I3SCFxjoQT8zExp7vrx6k5Xr9uOaGx6a
+RABBITMQ_EXCHANGE=domain_events
 RABBITMQ_MAX_RETRIES=5
-RABBITMQ_VHOST=
+RABBITMQ_VHOST=kcrqwise
 ```
 
-### 3️⃣ Running the Application
+### 3️⃣ Ejecutar la Aplicación
 
-#### Start the database and RabbitMQ
+#### Iniciar la base de datos y RabbitMQ
 ```sh
 docker-compose up -d
 ```
 
-#### Build & Run
+#### Compilar y Ejecutar
 ```sh
-git clone https://github.com/your-repo/users-service.git
-cd users-service
 ./gradlew clean build
-./gradlew bootRun --args='--spring.profiles.active=local'
+./gradlew bootRun
 ```
 
-## 🔗 API Endpoints
+#### Generar JAR ejecutable
+```sh
+./gradlew bootJar
+java -jar build/libs/tenant-service-0.0.1.jar
+```
 
-### GraphQL API
-- `createUser(username: String, email: String): User` → Create a new user
-- `getUser(id: String): User` → Get user details
-- `searchUsers(criteria: SearchCriteria): [User]` → Search users with filters
+## 🔗 API GraphQL
 
-## 🛠 Contributing
-1. Fork the repo
-2. Create a new branch (`git checkout -b feature-xyz`)
-3. Commit your changes (`git commit -m 'Added feature xyz'`)
-4. Push to the branch (`git push origin feature-xyz`)
-5. Create a Pull Request
+El servicio expone una API GraphQL con las siguientes operaciones:
+
+### 📋 Planes (Plans)
+
+#### Mutations
+```graphql
+# Crear un nuevo plan
+createPlan(request: RequestPlan!): Boolean!
+
+# Actualizar un plan existente
+updatePlan(id: ID!, request: RequestPlan!): Boolean!
+
+# Agregar precio a un plan
+addPlanPrice(id: ID!, request: RequestPlanPrice!): Boolean!
+
+# Eliminar un plan
+deletePlan(id: String!): Boolean!
+
+# Cambiar visibilidad del plan (PUBLIC/PRIVATE)
+changeVisibilityPlan(id: String!, request: PlanVisibility!): Boolean!
+```
+
+#### Queries
+```graphql
+# Buscar un plan por ID
+findPlan(id: String!): PlanResponse!
+
+# Buscar planes con filtros y paginación
+searchPlans(
+    filters: [FilterInput!]
+    orderBy: String
+    orderType: OrderType
+    limit: Int
+    offset: Int
+): PaginatedPlanResponse!
+```
+
+#### Tipos
+```graphql
+type PlanResponse {
+    id: String!
+    name: String!
+    description: String!
+    prices: [PriceResponse]!
+    maxUsers: Int!
+    maxRoles: Int!
+    maxAccounts: Int!
+    maxInvoices: Int!
+    status: PlanStatus!
+    visibility: PlanVisibility!
+    trialDays: Int!
+    createdAt: String!
+    updatedAt: String!
+}
+
+type PriceResponse {
+    id: String!
+    billingInterval: BillingInterval!
+    amount: Int!
+    currency: Currency!
+    createdAt: String!
+    updatedAt: String!
+}
+```
+
+### 🏢 Tenants
+
+#### Mutations
+```graphql
+# Crear un nuevo tenant
+createTenant(request: RequestTenant!): Boolean!
+
+# Actualizar un tenant
+updateTenant(id: ID!, request: RequestTenant!): Boolean!
+
+# Cambiar dominio personalizado
+changeDomain(id: ID!, request: RequestDomainInput!): Boolean!
+
+# Suscribir tenant a un plan
+addSubscription(id: ID!, request: RequestSubscription!): Boolean!
+
+# Cancelar renovación automática
+cancelAutoRenew(tenantId: ID!, subscriptionId: ID!): Boolean!
+```
+
+#### Queries
+```graphql
+# Buscar un tenant por ID
+findTenant(id: String!): TenantResponse!
+
+# Buscar tenants con filtros y paginación
+searchTenants(
+    filters: [FilterInput!]
+    orderBy: String
+    orderType: OrderType
+    limit: Int
+    offset: Int
+): PaginatedTenantResponse!
+
+# Verificar estado de dominio personalizado
+checkDomainVerification(id: String!): DomainVerificationResponse!
+```
+
+#### Tipos
+```graphql
+type TenantResponse {
+    id: String!
+    name: String!
+    status: String!
+    domain: String
+    ownerId: String!
+    createdAt: String!
+    updatedAt: String!
+}
+```
+
+### 🔍 Sistema de Filtros
+
+El servicio incluye un sistema avanzado de filtros para búsquedas:
+
+```graphql
+input FilterInput {
+    field: String!
+    operator: Operator!
+    value: String!
+}
+
+enum Operator {
+    EQUAL
+    NOT_EQUAL
+    GT
+    LT
+    CONTAINS
+    NOT_CONTAINS
+}
+
+enum OrderType {
+    ASC
+    DESC
+    NONE
+}
+```
+
+### Ejemplo de uso:
+```graphql
+query {
+  searchPlans(
+    filters: [
+      { field: "status", operator: EQUAL, value: "ACTIVE" }
+      { field: "visibility", operator: EQUAL, value: "PUBLIC" }
+    ]
+    orderBy: "createdAt"
+    orderType: DESC
+    limit: 10
+    offset: 0
+  ) {
+    data {
+      id
+      name
+      description
+      prices {
+        billingInterval
+        amount
+        currency
+      }
+    }
+    pagination {
+      currentPage
+      totalPages
+      totalItems
+      hasNext
+      hasPrevious
+    }
+  }
+}
+```
+
+## 🏗️ Arquitectura
+
+### Patrón CQRS
+El servicio separa las operaciones de lectura (Queries) y escritura (Commands):
+- **Commands**: Modifican el estado del sistema y publican eventos de dominio
+- **Queries**: Solo leen datos sin efectos secundarios
+
+### Event-Driven Architecture
+Los cambios en el dominio publican eventos a RabbitMQ:
+- `PlanCreatedDomainEvent`
+- `PlanUpdatedDomainEvent`
+- `TenantCreatedDomainEvent`
+- `TenantSubscribeToPlanEvent`
+- `TenantSubscriptionAutoRenewCanceledEvent`
+
+### Value Objects
+El dominio utiliza Value Objects para garantizar invariantes:
+- `PlanId`, `PlanName`, `PlanDescription`
+- `TenantId`, `TenantName`, `TenantDomain`
+- `Amount`, `Currency`, `BillingInterval`
+
+## 🧪 Testing
+
+Ejecutar todos los tests:
+```sh
+./gradlew test
+```
+
+Generar reporte de cobertura:
+```sh
+./gradlew jacocoTestReport
+```
+
+El proyecto incluye:
+- Tests unitarios con Mockito
+- Tests de integración con base de datos
+- Tests de controladores GraphQL
+- Tests de repositorios Hibernate
+
+## 🐳 Docker
+
+### Construir imagen
+```sh
+docker build -t tenant-service:latest .
+```
+
+### Ejecutar con Docker Compose
+```sh
+docker-compose up -d
+```
+
+Esto levantará:
+- MariaDB en puerto 3306
+- RabbitMQ en puerto 5672 (Management UI en 15672)
+- Tenant Service
+
+## 📊 Monitoreo
+
+El servicio incluye Spring Boot Actuator para monitoreo:
+- Health check: `/actuator/health`
+- Métricas: `/actuator/metrics`
+
+## 🛠 Contribuir
+
+1. Fork el repositorio
+2. Crea una rama para tu feature (`git checkout -b feature/nueva-funcionalidad`)
+3. Commit tus cambios (`git commit -m 'Agrega nueva funcionalidad'`)
+4. Push a la rama (`git push origin feature/nueva-funcionalidad`)
+5. Abre un Pull Request
+
+## 📝 Convenciones de Código
+
+El proyecto utiliza:
+- **Spotless** para formateo automático de código
+- **SonarQube** para análisis de calidad de código
+- **JaCoCo** para cobertura de tests
+
+Formatear código:
+```sh
+./gradlew spotlessApply
+```
+
+## 📄 Licencia
+
+Este proyecto está bajo la Licencia MIT. Ver el archivo [LICENSE](LICENSE) para más detalles.
 
 ---
-🚀 **Built with ❤️ using Java & Spring Boot** 🚀 by [Eduardo Guastay](https://eduedu.dev)
+🚀 **Construido con ❤️ usando Java & Spring Boot** 🚀 por [Eduardo Guastay](https://eduedu.dev)

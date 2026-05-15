@@ -28,6 +28,13 @@ public final class RabbitMqEventBus implements EventBus {
 		this.circuitBreaker = new SimpleCircuitBreaker(3, 30_000, 1);
 	}
 
+	RabbitMqEventBus(RabbitMqPublisher publisher, MariaDBEventBus failoverPublisher, CircuitBreaker circuitBreaker) {
+		this.publisher = publisher;
+		this.failoverPublisher = failoverPublisher;
+		this.exchangeName = "domain_events";
+		this.circuitBreaker = circuitBreaker;
+	}
+
 	@Override
 	public void publish(List<DomainEvent> events) {
 		events.forEach(this::publish);

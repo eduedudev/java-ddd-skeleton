@@ -4,9 +4,6 @@ import java.util.List;
 import java.util.Properties;
 import javax.sql.DataSource;
 
-import com.jaapec.tenant.shared.infrastructure.Config;
-import com.jaapec.tenant.shared.infrastructure.config.Parameter;
-import com.jaapec.tenant.shared.infrastructure.config.ParameterNotExist;
 import org.hibernate.cfg.AvailableSettings;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
@@ -18,6 +15,9 @@ import org.springframework.orm.jpa.hibernate.LocalSessionFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import com.jaapec.tenant.shared.infrastructure.Config;
+import com.jaapec.tenant.shared.infrastructure.config.Parameter;
+import com.jaapec.tenant.shared.infrastructure.config.ParameterNotExist;
 
 @Configuration
 public class HibernateConfiguration extends Config {

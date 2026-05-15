@@ -3,6 +3,7 @@ package com.jaapec.tenant.shared.infrastructure.bus.event.rabbitmq;
 import java.util.Collections;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 
 import com.jaapec.tenant.shared.domain.Service;
@@ -21,6 +22,7 @@ public final class RabbitMqEventBus implements EventBus {
 	private final String exchangeName;
 	private final CircuitBreaker circuitBreaker;
 
+	@Autowired
 	public RabbitMqEventBus(RabbitMqPublisher publisher, MariaDBEventBus failoverPublisher) {
 		this.publisher = publisher;
 		this.failoverPublisher = failoverPublisher;

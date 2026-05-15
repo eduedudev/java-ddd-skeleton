@@ -4,6 +4,8 @@ import org.xbill.DNS.*;
 import org.xbill.DNS.Record;
 
 import com.jaapec.tenant.shared.domain.Service;
+import com.jaapec.tenant.shared.domain.circuit_breaker.CircuitBreaker;
+import com.jaapec.tenant.shared.infrastructure.circuit_breaker.SimpleCircuitBreaker;
 import com.jaapec.tenant.tenant.domain.DomainVerificationChecker;
 import com.jaapec.tenant.tenant.domain.Tenant;
 
@@ -11,6 +13,11 @@ import com.jaapec.tenant.tenant.domain.Tenant;
 public final class DomainVerificationCheckerImpl implements DomainVerificationChecker {
 
 	private static final String EXPECTED_CNAME = "custom.jaapec.com.";
+	private final CircuitBreaker circuitBreaker;
+
+	public DomainVerificationCheckerImpl() {
+		this.circuitBreaker = new SimpleCircuitBreaker(2, 60_000, 1);
+	}
 
 	@Override
 	public boolean isVerified(Tenant tenant) {
@@ -18,6 +25,10 @@ public final class DomainVerificationCheckerImpl implements DomainVerificationCh
 			return false;
 		}
 
+		return circuitBreaker.call(() -> lookupCname(tenant), () -> false);
+	}
+
+	private boolean lookupCname(Tenant tenant) {
 		try {
 			Record[] records = getCnameRecords(tenant.domain().value());
 

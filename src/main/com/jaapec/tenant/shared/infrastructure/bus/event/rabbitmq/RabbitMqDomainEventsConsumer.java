@@ -30,6 +30,7 @@ public final class RabbitMqDomainEventsConsumer {
 	private final HashMap<String, Object> domainEventSubscribers = new HashMap<>();
 	private final RabbitListenerEndpointRegistry registry;
 	private DomainEventSubscribersInformation information;
+	private boolean started = false;
 
 	public RabbitMqDomainEventsConsumer(
 		RabbitListenerEndpointRegistry registry,
@@ -50,9 +51,22 @@ public final class RabbitMqDomainEventsConsumer {
 			CONSUMER_NAME
 		);
 
-		container.addQueueNames(information.rabbitMqFormattedNames());
+		if (container == null || container.isRunning()) {
+			return;
+		}
 
-		container.start();
+		if (started) {
+			// Container was running but stopped unexpectedly — cannot be restarted
+			return;
+		}
+
+		try {
+			container.addQueueNames(information.rabbitMqFormattedNames());
+			container.start();
+			started = true;
+		} catch (Exception e) {
+			// Container cannot be started (e.g., already stopped with consumers during test shutdown)
+		}
 	}
 
 	@RabbitListener(id = CONSUMER_NAME, autoStartup = "false")

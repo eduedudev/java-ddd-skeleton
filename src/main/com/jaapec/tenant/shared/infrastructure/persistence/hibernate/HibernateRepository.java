@@ -88,8 +88,8 @@ public abstract class HibernateRepository<T> {
 	 * @return The total count of entities matching the given criteria.
 	 */
 	protected long countByCriteria(Criteria criteria) {
-		CriteriaQuery<T> hibernateCriteria = criteriaConverter.convert(criteria, aggregateClass);
-		return sessionFactory.getCurrentSession().createQuery(hibernateCriteria).getResultStream().count();
+		CriteriaQuery<Long> countQuery = criteriaConverter.convertCount(criteria, aggregateClass);
+		return sessionFactory.getCurrentSession().createQuery(countQuery).getSingleResult();
 	}
 
 	/**

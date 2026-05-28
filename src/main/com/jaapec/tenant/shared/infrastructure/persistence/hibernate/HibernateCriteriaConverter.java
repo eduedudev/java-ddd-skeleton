@@ -48,6 +48,16 @@ public final class HibernateCriteriaConverter<T> {
 		return hibernateCriteria;
 	}
 
+	public CriteriaQuery<Long> convertCount(Criteria criteria, Class<T> aggregateClass) {
+		CriteriaQuery<Long> countQuery = builder.createQuery(Long.class);
+		Root<T> root = countQuery.from(aggregateClass);
+
+		countQuery.select(builder.count(root));
+		countQuery.where(formatPredicates(criteria.filters().filters(), root));
+
+		return countQuery;
+	}
+
 	private Predicate[] formatPredicates(List<Filter> filters, Root<T> root) {
 		List<Predicate> predicates = filters.stream().map(filter -> formatPredicate(filter, root)).toList();
 
